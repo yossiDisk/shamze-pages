@@ -1,0 +1,38 @@
+/* Styling for the buttons */
+.button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background-color: #2196F3;
+  color: white;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 150px;
+  text-align: center;
+}
+
+.toggle-button {
+  display: inline-block; /* Change to inline-block to make them side by side */
+  margin: 0 2px; /* Add spacing between the top buttons */
+  padding: 10px 20px;
+  background-color: #5f5d5dbd;
+  color: white;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 90px;
+  text-align: center;
+}
+
+.toggle-button.selected {
+  background-color: #2196F3;
+  border: 2px solid #000;
+}
+
+/* Center the top buttons horizontally */
+.top-buttons {
+  text-align: center;
+}
