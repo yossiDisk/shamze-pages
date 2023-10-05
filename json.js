@@ -88,6 +88,13 @@ const compereData = [
 
     const kuponData = 
       [
+{
+    "site": "רייזאפ - חודש חינם וחודשיים בחצי בחיר",
+    "KUPON": "***",
+    "KUPON_DEATAILS": "ללא תוקף",
+    "LINK": "https://riseup-friends.link/cmr?icrc=kcoh7Cor",
+    "URL": "https://www.riseup.co.il/"
+  },
   {
     "site": "המשביר 365",
     "KUPON": "TSF8",
