@@ -1,6 +1,6 @@
 const compereData = [
       {
-        "link": ["https://www.bestore.co.il/*"],
+        "link": ["https://www.bestore.co.il/"],
         "name" : "BE פארם"
 
       },
