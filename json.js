@@ -5,9 +5,8 @@ const compereData = [
 
       },
       {
-        "link": ["https://glam42.co.il/?ref=Shamze"],
-        "name" : "GLAM42"
-
+        "link": ["https://www.guilty.co.il/"],
+        "name" : "Guilty"
       },
       {
         "link": ["https://track.wesell.co.il/click/SQg3190VCM05tfx/B9LBwvEVBst7kfk/TsSQg3190VCM05tfxtS"],
