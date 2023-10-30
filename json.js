@@ -77,11 +77,7 @@ const compereData = [
         "ç": ["https://www.idigital.co.il/"],
         "name" : "iDigital"
 
-      },
-      {
-        "link": ["https://ksp.co.il/item/F15500AX&homepage&param=SZZY"],
-        "name" : "KSP"
-      },
+      }
     ]
 
 
