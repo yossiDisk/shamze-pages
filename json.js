@@ -74,9 +74,20 @@ const compereData = [
 
       },
       {
-        "ç": ["https://www.idigital.co.il/"],
-        "name" : "iDigital"
-
+        "link": ["https://www.steimatzky.co.il/"],
+        "name" : "סטימצקי"
+      },
+      {
+        "link": ["https://www.booknet.co.il/"],
+        "name" : "צומת ספרים"
+      },
+      {
+        "link": ["https://www.b-unique.co.il/"],
+        "name" : "b-unique"
+      },
+      {
+        "link": ["https://shoesonline.co.il/"],
+        "name" : "shoes online"
       }
     ]
 
