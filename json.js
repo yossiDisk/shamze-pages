@@ -9,11 +9,6 @@ const compereData = [
         "name" : "Guilty"
       },
       {
-        "link": ["https://track.wesell.co.il/click/SQg3190VCM05tfx/B9LBwvEVBst7kfk/TsSQg3190VCM05tfxtS"],
-        "name" : "סופר פארם"
-
-      },
-      {
         "link": ["https://toysrus.co.il/"],
         "name" : "טויס אר אס"
 
