@@ -1,21 +1,33 @@
-/* Styling for the buttons */
+body {
+  font-family: Arial, sans-serif;
+  direction: rtl; /* Right-to-left language direction */
+  background-color: #f0f0f0; /* Add a light background color */
+}
+
 .button {
   display: block;
   margin: 10px auto;
   padding: 10px 20px;
   background-color: #2196F3;
-  color: white;
+  color: #fff; /* Change text color to white */
   text-decoration: none;
   border: none;
   cursor: pointer;
   border-radius: 5px;
   width: 150px;
   text-align: center;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.button:hover {
+  background-color: #1976D2;
+  transform: scale(1.05); /* Add a slight scale effect on hover */
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .toggle-button {
-  display: inline-block; /* Change to inline-block to make them side by side */
-  margin: 0 2px; /* Add spacing between the top buttons */
+  display: inline-block;
+  margin: 0 5px; /* Reduce the spacing between buttons */
   padding: 10px 20px;
   background-color: #5f5d5dbd;
   color: white;
@@ -23,8 +35,7 @@
   border: none;
   cursor: pointer;
   border-radius: 5px;
-  width: 90px;
-  text-align: center;
+  width: 120px;
 }
 
 .toggle-button.selected {
@@ -32,7 +43,13 @@
   border: 2px solid #000;
 }
 
-/* Center the top buttons horizontally */
 .top-buttons {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.button-container {
+  background-color: #f5f5f5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add box shadow */
 }

@@ -7,13 +7,13 @@ let currentData = [];
 compareButton.addEventListener('click', () => {
     compareButton.classList.add('selected');
     couponButton.classList.remove('selected');
-    generateButtons(kuponData); // Use kuponData from json.js
+    generateButtons(compereData); // Use compereData from json.js
 });
 
 couponButton.addEventListener('click', () => {
     couponButton.classList.add('selected');
     compareButton.classList.remove('selected');
-    generateButtons(compereData); // Use compereData from json.js
+    generateButtons(kuponData); // Use kuponData from json.js
 });
 
 function generateButtons(data) {
