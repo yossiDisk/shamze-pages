@@ -83,6 +83,10 @@ const compereData = [
       {
         "link": ["https://shoesonline.co.il/"],
         "name" : "shoes online"
+      },
+      {
+        "link": ["https://weshoes.co.il/?ref=Shamze"],
+        "name" : "WeShoes"
       }
     ]
 
