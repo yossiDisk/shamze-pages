@@ -21,7 +21,7 @@ body {
 
 .button:hover {
   background-color: #1976D2;
-  transform: scale(1.05); /* Add a slight scale effect on hover */
+  transform: scale(1.40); /* Add a slight scale effect on hover */
   transition: background-color 0.3s, transform 0.3s;
 }
 
