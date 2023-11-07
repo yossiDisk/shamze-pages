@@ -2,44 +2,58 @@ const compareButton = document.getElementById('compareButton');
 const couponButton = document.getElementById('couponButton');
 const content = document.getElementById('content');
 
-let currentData = [];
-
-compareButton.addEventListener('click', () => {
-    compareButton.classList.add('selected');
-    couponButton.classList.remove('selected');
-    generateButtons(compereData); // Use compereData from json.js
-});
-
-couponButton.addEventListener('click', () => {
-    couponButton.classList.add('selected');
-    compareButton.classList.remove('selected');
-    generateButtons(kuponData); // Use kuponData from json.js
-});
+// Fetch data from the provided URL
+fetch('https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/sites')
+  .then((response) => response.json())
+  .then((data) => {
+    generateButtons(data);
+  })
+  .catch((error) => {
+    console.error('Error fetching data:', error);
+  });
 
 function generateButtons(data) {
-    content.innerHTML = ''; // Clear existing buttons
+  content.innerHTML = ''; // Clear existing buttons
+  const compereData = data.filter((item) => item.compareWith.kupon !== 'cupons');
+  const kuponData = data.filter((item) => item.compareWith.kupon === 'cupons');
 
-    data.forEach((item) => {
-        // Check if the URL is not an empty string
-        if (item.URL || (item.link && item.link[0])) {
-            const buttonContainer = document.createElement('div');
-            buttonContainer.className = 'button-container';
+  compareButton.addEventListener('click', () => {
+    compareButton.classList.add('selected');
+    couponButton.classList.remove('selected');
+    displayData(compereData);
+  });
 
-            const buttonLink = document.createElement('a');
-            buttonLink.href = item.LINK || item.link[0];
-            buttonLink.target = '_blank'; // Open in a new tab
-            buttonLink.className = 'button-link';
+  couponButton.addEventListener('click', () => {
+    couponButton.classList.add('selected');
+    compareButton.classList.remove('selected');
+    displayData(kuponData);
+  });
 
-            const button = document.createElement('button');
-            button.textContent = item.site || item.name;
-            button.className = 'button';
-
-            buttonLink.appendChild(button);
-            buttonContainer.appendChild(buttonLink);
-            content.appendChild(buttonContainer);
-        }
-    });
+  // Initialize with the default data (השוואה list) when the page loads
+  displayData(compereData);
 }
 
-// Initialize with the default data (השוואה list) when the page loads
-generateButtons(kuponData); // Use kuponData from json.js
+function displayData(data) {
+  content.innerHTML = ''; // Clear existing buttons
+
+  data.forEach((item) => {
+    // Check if the URL is not an empty string
+    if (item.URL) {
+      const buttonContainer = document.createElement('div');
+      buttonContainer.className = 'button-container';
+
+      const buttonLink = document.createElement('a');
+      buttonLink.href = item.URL;
+      buttonLink.target = '_blank'; // Open in a new tab
+      buttonLink.className = 'button-link';
+
+      const button = document.createElement('button');
+      button.textContent = item.siteName || item.site;
+      button.className = 'button';
+
+      buttonLink.appendChild(button);
+      buttonContainer.appendChild(buttonLink);
+      content.appendChild(buttonContainer);
+    }
+  });
+}
