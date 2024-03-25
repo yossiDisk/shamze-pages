@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>אתר הלינקים</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      text-align: right;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h2 {
+      color: #333;
+    }
+
+    .search-form {
+      display: flex;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      border: none;
+      color: #fff;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .result-box {
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+
+    .result-box h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .result-box a {
+      color: #007bff;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .result-box a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 767px) {
+      .container {
+        padding: 10px;
+      }
+
+      .search-form {
+        flex-direction: column;
+      }
+
+      input[type="text"] {
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>אתר הלינקים</h1>
+    <h2>יש להזין מזהה או תיאור של הלינק</h2>
+    <form class="search-form">
+      <input type="text" id="searchInput" placeholder="הזן מזהה או תיאור של הלינק">
+      <button type="button" onclick="searchLinks()">שלח</button>
+    </form>
+    <div id="loader" style="display: none;">טוען...</div>
+    <div id="results"></div>
+    <div id="error" style="display: none; color: red;"></div>
+  </div>
+
+  <script>
+    function searchLinks() {
+      var query = document.getElementById('searchInput').value;
+      var loader = document.getElementById('loader');
+      var resultsContainer = document.getElementById('results');
+      var errorContainer = document.getElementById('error');
+
+      loader.style.display = 'block';
+      resultsContainer.innerHTML = '';
+      errorContainer.style.display = 'none';
+
+      fetch(`https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/items?siteId=131&query=${query}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.length === 0) {
+            errorContainer.textContent = 'לא נמצאו תוצאות';
+            errorContainer.style.display = 'block';
+          } else {
+            displayResults(data);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+          errorContainer.textContent = 'אירעה שגיאה בהבאת התוצאות';
+          errorContainer.style.display = 'block';
+        })
+        .finally(() => {
+          loader.style.display = 'none';
+        });
+    }
+
+    function displayResults(results) {
+      var resultsContainer = document.getElementById('results');
+      resultsContainer.innerHTML = '';
+      results.forEach(result => {
+        var resultBox = document.createElement('div');
+        resultBox.classList.add('result-box');
+        var nameElement = document.createElement('h3');
+        nameElement.textContent = result.name;
+        var imageLinkElement = document.createElement('a');
+        imageLinkElement.href = result.URL;
+        imageLinkElement.textContent = "קישור לאתר";
+        imageLinkElement.target = "_blank";
+        resultBox.appendChild(nameElement);
+        resultBox.appendChild(imageLinkElement);
+        resultsContainer.appendChild(resultBox);
+      });
+    }
+  </script>
+</body>
+</html>
