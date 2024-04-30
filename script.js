@@ -54,7 +54,7 @@ function displayData(data) {
             buttonContainer.className = 'button-container';
 
             const buttonLink = document.createElement('a');
-            buttonLink.href = item.URL;
+            buttonLink.href = item.affLink;
             buttonLink.target = '_blank'; // Open in a new tab
             buttonLink.className = 'button-link';
 
