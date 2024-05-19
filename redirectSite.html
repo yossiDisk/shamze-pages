@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirect Page</title>
+    <script type="text/javascript">
+        function getQueryParam(param) {
+            let urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function redirect() {
+            let link = getQueryParam('link');
+            if (link) {
+                // Creating an iframe to avoid sending the referer header
+                let iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.onload = function() {
+                    window.location.href = link;
+                };
+                iframe.src = 'about:blank';
+                document.body.appendChild(iframe);
+            } else {
+                alert('No link parameter provided!');
+            }
+        }
+
+        window.onload = function() {
+            setTimeout(redirect, 1000);
+        }
+    </script>
+</head>
+<body>
+    <p>Redirecting you to the specified link...</p>
+</body>
+</html>
