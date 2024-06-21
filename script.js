@@ -88,12 +88,28 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
-                populateTable(data);
-                addSortAndFilter(data);
+                const uniqueData = getUniqueData(data);
+                populateTable(uniqueData);
+                addSortAndFilter(uniqueData);
             })
             .catch(error => console.error('Error fetching data:', error));
     }
 });
+
+function getUniqueData(data) {
+    const uniqueItems = [];
+    const itemMap = new Map();
+
+    data.forEach(item => {
+        const key = `${item.website}-${item.url}-${item.priceILS}-${item.name}`;
+        if (!itemMap.has(key)) {
+            itemMap.set(key, true);
+            uniqueItems.push(item);
+        }
+    });
+
+    return uniqueItems;
+}
 
 function populateTable(data) {
     const tbody = document.querySelector('#data-table tbody');
@@ -102,9 +118,10 @@ function populateTable(data) {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${item.name}</td>
-            <td>${item.price}</td>
-            <td><a href="${item.URL}" target="_blank">Link</a></td>
-            <td><img src="${item.imageURL}" alt="${item.name}" width="50"></td>
+            <td>${item.priceILS}</td>
+            <td><a href="${item.url}" target="_blank">Link</a></td>
+            <td>${item.website}</td>
+            <td>${new Date(item.createdAt).toLocaleString()}</td>
         `;
         tbody.appendChild(row);
     });
@@ -144,10 +161,12 @@ function addSortAndFilter(data) {
 
 function sortData(data, key, order) {
     return [...data].sort((a, b) => {
-        if (key === 'price') {
+        if (key === 'priceILS') {
             return order === 'asc' ? parseFloat(a[key]) - parseFloat(b[key]) : parseFloat(b[key]) - parseFloat(a[key]);
-        } else if (key === 'name' || key === 'URL' || key === 'imageURL') {
+        } else if (key === 'name' || key === 'url' || key === 'website') {
             return order === 'asc' ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key]);
+        } else if (key === 'createdAt') {
+            return order === 'asc' ? new Date(a[key]) - new Date(b[key]) : new Date(b[key]) - new Date(a[key]);
         }
     });
 }
@@ -158,7 +177,7 @@ function filterData(data, keyword) {
 
 function filterDataByPrice(data, fromPrice, toPrice) {
     return data.filter(item => {
-        const price = parseFloat(item.price);
+        const price = parseFloat(item.priceILS);
         if (fromPrice && price < fromPrice) {
             return false;
         }
