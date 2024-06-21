@@ -170,11 +170,11 @@ h1 {
 
 #controls {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-bottom: 20px;
 }
 
-#controls label, #controls select, #controls input {
+#controls label, #controls input {
   margin: 0 10px;
 }
 

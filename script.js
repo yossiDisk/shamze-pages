@@ -70,10 +70,17 @@ function displayData(data) {
 }
 
 
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const siteId = urlParams.get('siteId');
     const query = urlParams.get('query');
+
+    if (query) {
+        document.getElementById('page-title').innerText = query;
+        document.getElementById('header-title').innerText = query;
+    }
 
     if (siteId && query) {
         const apiUrl = `https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/items?siteId=${siteId}&query=${query}`;
@@ -104,29 +111,60 @@ function populateTable(data) {
 }
 
 function addSortAndFilter(data) {
-    const sortKeySelect = document.getElementById('sortKey');
-    const filterInput = document.getElementById('filterKey');
-
-    sortKeySelect.addEventListener('change', () => {
-        const sortedData = sortData(data, sortKeySelect.value);
-        populateTable(sortedData);
+    const headers = document.querySelectorAll('#data-table th');
+    headers.forEach(header => {
+        header.addEventListener('click', () => {
+            const column = header.dataset.column;
+            const order = header.dataset.order === 'desc' ? 'asc' : 'desc';
+            header.dataset.order = order;
+            const sortedData = sortData(data, column, order);
+            populateTable(sortedData);
+        });
     });
 
+    const filterInput = document.getElementById('filterKey');
     filterInput.addEventListener('input', () => {
         const filteredData = filterData(data, filterInput.value);
         populateTable(filteredData);
     });
+
+    const priceFromInput = document.getElementById('priceFrom');
+    const priceToInput = document.getElementById('priceTo');
+
+    priceFromInput.addEventListener('input', () => {
+        const filteredData = filterDataByPrice(data, priceFromInput.value, priceToInput.value);
+        populateTable(filteredData);
+    });
+
+    priceToInput.addEventListener('input', () => {
+        const filteredData = filterDataByPrice(data, priceFromInput.value, priceToInput.value);
+        populateTable(filteredData);
+    });
 }
 
-function sortData(data, key) {
+function sortData(data, key, order) {
     return [...data].sort((a, b) => {
         if (key === 'price') {
-            return parseFloat(a[key]) - parseFloat(b[key]);
+            return order === 'asc' ? parseFloat(a[key]) - parseFloat(b[key]) : parseFloat(b[key]) - parseFloat(a[key]);
+        } else if (key === 'name' || key === 'URL' || key === 'imageURL') {
+            return order === 'asc' ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key]);
         }
-        return a[key].localeCompare(b[key]);
     });
 }
 
 function filterData(data, keyword) {
     return data.filter(item => item.name.toLowerCase().includes(keyword.toLowerCase()));
+}
+
+function filterDataByPrice(data, fromPrice, toPrice) {
+    return data.filter(item => {
+        const price = parseFloat(item.price);
+        if (fromPrice && price < fromPrice) {
+            return false;
+        }
+        if (toPrice && price > toPrice) {
+            return false;
+        }
+        return true;
+    });
 }
