@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Data Table</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>API Data Table</h1>
+        <div id="controls">
+            <label for="sortKey">Sort by:</label>
+            <select id="sortKey">
+                <option value="name">Name</option>
+                <option value="price">Price</option>
+            </select>
+            <label for="filterKey">Filter by:</label>
+            <input type="text" id="filterKey" placeholder="Filter by name">
+        </div>
+        <table id="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>URL</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be populated here -->
+            </tbody>
+        </table>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

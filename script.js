@@ -54,7 +54,7 @@ function displayData(data) {
             buttonContainer.className = 'button-container';
 
             const buttonLink = document.createElement('a');
-            buttonLink.href = item.affLink;
+            buttonLink.href = item.URL;
             buttonLink.target = '_blank'; // Open in a new tab
             buttonLink.className = 'button-link';
 
@@ -67,4 +67,66 @@ function displayData(data) {
             content.appendChild(buttonContainer);
         }
     });
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const siteId = urlParams.get('siteId');
+    const query = urlParams.get('query');
+
+    if (siteId && query) {
+        const apiUrl = `https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/items?siteId=${siteId}&query=${query}`;
+        
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                populateTable(data);
+                addSortAndFilter(data);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+});
+
+function populateTable(data) {
+    const tbody = document.querySelector('#data-table tbody');
+    tbody.innerHTML = '';
+    data.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${item.name}</td>
+            <td>${item.price}</td>
+            <td><a href="${item.URL}" target="_blank">Link</a></td>
+            <td><img src="${item.imageURL}" alt="${item.name}" width="50"></td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function addSortAndFilter(data) {
+    const sortKeySelect = document.getElementById('sortKey');
+    const filterInput = document.getElementById('filterKey');
+
+    sortKeySelect.addEventListener('change', () => {
+        const sortedData = sortData(data, sortKeySelect.value);
+        populateTable(sortedData);
+    });
+
+    filterInput.addEventListener('input', () => {
+        const filteredData = filterData(data, filterInput.value);
+        populateTable(filteredData);
+    });
+}
+
+function sortData(data, key) {
+    return [...data].sort((a, b) => {
+        if (key === 'price') {
+            return parseFloat(a[key]) - parseFloat(b[key]);
+        }
+        return a[key].localeCompare(b[key]);
+    });
+}
+
+function filterData(data, keyword) {
+    return data.filter(item => item.name.toLowerCase().includes(keyword.toLowerCase()));
 }
