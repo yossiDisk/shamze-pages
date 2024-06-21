@@ -88,13 +88,45 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
-                const uniqueData = getUniqueData(data);
+                let formattedData = [];
+                if (isOldFormat(data)) {
+                    formattedData = formatOldData(data);
+                } else {
+                    formattedData = formatNewData(data);
+                }
+                const uniqueData = getUniqueData(formattedData);
                 populateTable(uniqueData);
                 addSortAndFilter(uniqueData);
             })
             .catch(error => console.error('Error fetching data:', error));
     }
 });
+
+function isOldFormat(data) {
+    return data[0] && data[0].hasOwnProperty('ItemCode');
+}
+
+function formatOldData(data) {
+    return data.map(item => ({
+        id: item.ItemCode,
+        createdAt: item.PriceUpdateDate,
+        name: item.ItemName || item.ManufacturerItemDescription,
+        priceILS: parseFloat(item.ItemPrice),
+        url: item.URL,
+        website: item.Super
+    }));
+}
+
+function formatNewData(data) {
+    return data.map(item => ({
+        id: item.id,
+        createdAt: item.createdAt,
+        name: item.name,
+        priceILS: parseFloat(item.priceILS),
+        url: item.url,
+        website: item.website
+    }));
+}
 
 function getUniqueData(data) {
     const uniqueItems = [];
