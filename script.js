@@ -1,81 +1,11 @@
-const compareButton = document.getElementById('compareButton');
-const couponButton = document.getElementById('couponButton');
-const content = document.getElementById('content');
-const searchInput = document.getElementById('searchInput');
-
-// Fetch data from the provided URL
-fetch('https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/sites')
-    .then((response) => response.json())
-    .then((data) => {
-        generateButtons(data);
-    })
-    .catch((error) => {
-        console.error('Error fetching data:', error);
-    });
-
-function generateButtons(data) {
-    content.innerHTML = ''; // Clear existing buttons
-    const compereData = data.filter((item) => item.compareWith.kupon !== 'cupons');
-    const kuponData = data.filter((item) => item.compareWith.kupon === 'cupons');
-
-    compareButton.addEventListener('click', () => {
-        compareButton.classList.add('selected');
-        couponButton.classList.remove('selected');
-        displayData(compereData);
-    });
-
-    couponButton.addEventListener('click', () => {
-        couponButton.classList.add('selected');
-        compareButton.classList.remove('selected');
-        displayData(kuponData);
-    });
-
-    // Initialize with the default data (השוואה list) when the page loads
-    displayData(compereData);
-
-    // Listen for changes in the search input field
-    searchInput.addEventListener('input', () => {
-        const searchText = searchInput.value.toLowerCase().trim();
-        const filteredData = data.filter(item =>
-            item.siteName.toLowerCase().includes(searchText) ||
-            item.URL.toLowerCase().includes(searchText)
-        );
-        displayData(filteredData);
-    });
-}
-
-function displayData(data) {
-    content.innerHTML = ''; // Clear existing buttons
-
-    data.forEach((item) => {
-        // Check if the URL is not an empty string
-        if (item.URL) {
-            const buttonContainer = document.createElement('div');
-            buttonContainer.className = 'button-container';
-
-            const buttonLink = document.createElement('a');
-            buttonLink.href = item.URL;
-            buttonLink.target = '_blank'; // Open in a new tab
-            buttonLink.className = 'button-link';
-
-            const button = document.createElement('button');
-            button.textContent = item.siteName || item.site;
-            button.className = 'button';
-
-            buttonLink.appendChild(button);
-            buttonContainer.appendChild(buttonLink);
-            content.appendChild(buttonContainer);
-        }
-    });
-}
-
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const siteId = urlParams.get('siteId');
     const query = urlParams.get('query');
+    const compareButton = document.getElementById('compareButton');
+    const couponButton = document.getElementById('couponButton');
+    const content = document.getElementById('content');
+    const searchInput = document.getElementById('searchInput');
 
     if (query) {
         document.getElementById('page-title').innerText = query;
@@ -94,128 +24,355 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     formattedData = formatNewData(data);
                 }
+                window.allData = formattedData; // Store all data globally
                 const uniqueData = getUniqueData(formattedData);
                 populateTable(uniqueData);
                 addSortAndFilter(uniqueData);
             })
             .catch(error => console.error('Error fetching data:', error));
     }
-});
 
-function isOldFormat(data) {
-    return data[0] && data[0].hasOwnProperty('ItemCode');
-}
-
-function formatOldData(data) {
-    return data.map(item => ({
-        id: item.ItemCode,
-        createdAt: item.PriceUpdateDate,
-        name: item.ItemName || item.ManufacturerItemDescription,
-        priceILS: parseFloat(item.ItemPrice),
-        url: item.URL,
-        website: item.Super
-    }));
-}
-
-function formatNewData(data) {
-    return data.map(item => ({
-        id: item.id,
-        createdAt: item.createdAt,
-        name: item.name,
-        priceILS: parseFloat(item.priceILS),
-        url: item.url,
-        website: item.website
-    }));
-}
-
-function getUniqueData(data) {
-    const uniqueItems = [];
-    const itemMap = new Map();
-
-    data.forEach(item => {
-        const key = `${item.website}-${item.url}-${item.priceILS}-${item.name}`;
-        if (!itemMap.has(key)) {
-            itemMap.set(key, true);
-            uniqueItems.push(item);
-        }
-    });
-
-    return uniqueItems;
-}
-
-function populateTable(data) {
-    const tbody = document.querySelector('#data-table tbody');
-    tbody.innerHTML = '';
-    data.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${item.name}</td>
-            <td>${item.priceILS}</td>
-            <td><a href="${item.url}" target="_blank">Link</a></td>
-            <td>${item.website}</td>
-            <td>${new Date(item.createdAt).toLocaleString()}</td>
-        `;
-        tbody.appendChild(row);
-    });
-}
-
-function addSortAndFilter(data) {
-    const headers = document.querySelectorAll('#data-table th');
-    headers.forEach(header => {
-        header.addEventListener('click', () => {
-            const column = header.dataset.column;
-            const order = header.dataset.order === 'desc' ? 'asc' : 'desc';
-            header.dataset.order = order;
-            const sortedData = sortData(data, column, order);
-            populateTable(sortedData);
+    fetch('https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/sites')
+        .then((response) => response.json())
+        .then((data) => {
+            generateButtons(data);
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
         });
-    });
 
-    const filterInput = document.getElementById('filterKey');
-    filterInput.addEventListener('input', () => {
-        const filteredData = filterData(data, filterInput.value);
-        populateTable(filteredData);
-    });
+    function generateButtons(data) {
+        if (content) {
+            content.innerHTML = ''; // Clear existing buttons
+            const compereData = data.filter((item) => item.compareWith.kupon !== 'cupons');
+            const kuponData = data.filter((item) => item.compareWith.kupon === 'cupons');
+    
+            if (compareButton) {
+                compareButton.addEventListener('click', () => {
+                    compareButton.classList.add('selected');
+                    if (couponButton) couponButton.classList.remove('selected');
+                    displayData(compereData);
+                });
+            }
+    
+            if (couponButton) {
+                couponButton.addEventListener('click', () => {
+                    couponButton.classList.add('selected');
+                    if (compareButton) compareButton.classList.remove('selected');
+                    displayData(kuponData);
+                });
+            }
+    
+            // Initialize with the default data (השוואה list) when the page loads
+            displayData(compereData);
+    
+            // Listen for changes in the search input field
+            if (searchInput) {
+                searchInput.addEventListener('input', () => {
+                    const searchText = searchInput.value.toLowerCase().trim();
+                    const filteredData = data.filter(item =>
+                        item.siteName.toLowerCase().includes(searchText) ||
+                        item.URL.toLowerCase().includes(searchText)
+                    );
+                    displayData(filteredData);
+                });
+            }
+        }
+    }
 
-    const priceFromInput = document.getElementById('priceFrom');
-    const priceToInput = document.getElementById('priceTo');
+    function displayData(data) {
+        if (content) {
+            content.innerHTML = ''; // Clear existing buttons
+            data.forEach((item) => {
+                // Check if the URL is not an empty string
+                if (item.URL) {
+                    const buttonContainer = document.createElement('div');
+                    buttonContainer.className = 'button-container';
+    
+                    const buttonLink = document.createElement('a');
+                    buttonLink.href = item.URL;
+                    buttonLink.target = '_blank'; // Open in a new tab
+                    buttonLink.className = 'button-link';
+    
+                    const button = document.createElement('button');
+                    button.textContent = item.siteName || item.site;
+                    button.className = 'button';
+    
+                    buttonLink.appendChild(button);
+                    buttonContainer.appendChild(buttonLink);
+                    content.appendChild(buttonContainer);
+                }
+            });
+        }
+    }
 
-    priceFromInput.addEventListener('input', () => {
-        const filteredData = filterDataByPrice(data, priceFromInput.value, priceToInput.value);
-        populateTable(filteredData);
-    });
+    function isOldFormat(data) {
+        return data[0] && data[0].hasOwnProperty('ItemCode');
+    }
 
-    priceToInput.addEventListener('input', () => {
-        const filteredData = filterDataByPrice(data, priceFromInput.value, priceToInput.value);
-        populateTable(filteredData);
-    });
-}
+    function formatOldData(data) {
+        return data.map(item => ({
+            id: item.ItemCode,
+            createdAt: item.PriceUpdateDate,
+            name: cleanName(item.ItemName || item.ManufacturerItemDescription),
+            priceILS: parseFloat(item.ItemPrice),
+            url: item.URL,
+            website: item.Super
+        }));
+    }
 
-function sortData(data, key, order) {
-    return [...data].sort((a, b) => {
-        if (key === 'priceILS') {
-            return order === 'asc' ? parseFloat(a[key]) - parseFloat(b[key]) : parseFloat(b[key]) - parseFloat(a[key]);
-        } else if (key === 'name' || key === 'url' || key === 'website') {
-            return order === 'asc' ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key]);
-        } else if (key === 'createdAt') {
-            return order === 'asc' ? new Date(a[key]) - new Date(b[key]) : new Date(b[key]) - new Date(a[key]);
+    function formatNewData(data) {
+        return data.map(item => ({
+            id: item.id,
+            createdAt: item.createdAt,
+            name: cleanName(item.name),
+            priceILS: parseFloat(item.priceILS),
+            url: item.url,
+            website: item.website
+        }));
+    }
+
+    function getUniqueData(data) {
+        const uniqueItems = [];
+        const itemMap = new Map();
+    
+        data.forEach(item => {
+            const key = `${item.name}-${item.website}`;
+            if (!itemMap.has(key)) {
+                itemMap.set(key, []);
+            }
+            itemMap.get(key).push(item);
+        });
+    
+        itemMap.forEach(items => {
+            uniqueItems.push(items[0]);
+        });
+    
+        return uniqueItems;
+    }
+
+    function createItemMap(data) {
+        const itemMap = new Map();
+    
+        data.forEach(item => {
+            const key = `${item.name}-${item.website}`;
+            if (!itemMap.has(key)) {
+                itemMap.set(key, []);
+            }
+            itemMap.get(key).push(item);
+        });
+    
+        return itemMap;
+    }
+
+    function populateTable(data) {
+        const tbody = document.querySelector('#data-table tbody');
+        if (tbody) {
+            tbody.innerHTML = '';
+            const itemMap = createItemMap(getAllData());
+    
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                const key = `${item.name}-${item.website}`;
+                const itemCount = itemMap.get(key).length;
+                const buttonDisabled = itemCount <= 1 ? 'disabled' : '';
+    
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.priceILS}</td>
+                    <td><a href="${item.url}" target="_blank">Link</a></td>
+                    <td>${item.website}</td>
+                    <td>${new Date(item.createdAt).toLocaleString()}</td>
+                    <td><button class="price-history-btn" data-name="${item.name}" data-website="${item.website}" ${buttonDisabled}>הסטוריית מחירים</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+    
+            document.querySelectorAll('.price-history-btn').forEach(button => {
+                button.addEventListener('click', event => {
+                    const name = event.target.dataset.name;
+                    const website = event.target.dataset.website;
+                    if (!event.target.disabled) {
+                        displayPriceHistory(name, website);
+                    }
+                });
+            });
+        }
+    }
+
+    function createPriceHistoryGraph(data) {
+        const ctx = document.getElementById('priceHistoryChart').getContext('2d');
+        
+        if (window.priceHistoryChart instanceof Chart) {
+            window.priceHistoryChart.destroy();
+        }
+        
+        const chartData = data.map(item => ({
+            x: new Date(item.createdAt),
+            y: parseFloat(item.priceILS)
+        })).reverse();
+    
+        window.priceHistoryChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: 'Price History',
+                    data: chartData,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                aspectRatio: 2, // This should match the aspect-ratio in CSS
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Price (ILS)'
+                        },
+                        beginAtZero: false
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false // Hide the legend if not needed
+                    }
+                }
+            }
+        });
+    }
+
+    function addSortAndFilter(data) {
+        const headers = document.querySelectorAll('#data-table th');
+        headers.forEach(header => {
+            header.addEventListener('click', () => {
+                const column = header.dataset.column;
+                const order = header.dataset.order === 'desc' ? 'asc' : 'desc';
+                header.dataset.order = order;
+                const sortedData = sortData(data, column, order);
+                populateTable(sortedData);
+            });
+        });
+    
+        const filterInput = document.getElementById('filterKey');
+        if (filterInput) {
+            filterInput.addEventListener('input', () => {
+                const filteredData = filterData(data, filterInput.value);
+                populateTable(filteredData);
+            });
+        }
+    
+        const priceFromInput = document.getElementById('priceFrom');
+        const priceToInput = document.getElementById('priceTo');
+        const filterWebsiteInput = document.getElementById('filterWebsite');
+    
+        if (priceFromInput) {
+            priceFromInput.addEventListener('input', () => {
+                const filteredData = filterDataByPrice(data, priceFromInput.value, priceToInput.value, filterWebsiteInput.value);
+                populateTable(filteredData);
+            });
+        }
+    
+        if (priceToInput) {
+            priceToInput.addEventListener('input', () => {
+                const filteredData = filterDataByPrice(data, priceFromInput.value, priceToInput.value, filterWebsiteInput.value);
+                populateTable(filteredData);
+            });
+        }
+    
+        if (filterWebsiteInput) {
+            filterWebsiteInput.addEventListener('input', () => {
+                const filteredData = filterDataByPrice(data, priceFromInput.value, priceToInput.value, filterWebsiteInput.value);
+                populateTable(filteredData);
+            });
+        }
+    }
+
+    function sortData(data, key, order) {
+        return [...data].sort((a, b) => {
+            if (key === 'priceILS') {
+                return order === 'asc' ? parseFloat(a[key]) - parseFloat(b[key]) : parseFloat(b[key]) - parseFloat(a[key]);
+            } else if (key === 'name' || key === 'url' || key === 'website') {
+                return order === 'asc' ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key]);
+            } else if (key === 'createdAt') {
+                return order === 'asc' ? new Date(a[key]) - new Date(b[key]) : new Date(b[key]) - new Date(a[key]);
+            }
+        });
+    }
+
+    function filterData(data, keyword) {
+        return data.filter(item => item.name.toLowerCase().includes(keyword.toLowerCase()));
+    }
+
+    function filterDataByPrice(data, fromPrice, toPrice, website) {
+        return data.filter(item => {
+            const price = parseFloat(item.priceILS);
+            const matchesWebsite = !website || item.website.toLowerCase().includes(website.toLowerCase());
+            const matchesPriceFrom = !fromPrice || price >= parseFloat(fromPrice);
+            const matchesPriceTo = !toPrice || price <= parseFloat(toPrice);
+            return matchesWebsite && matchesPriceFrom && matchesPriceTo;
+        });
+    }
+
+
+    function displayPriceHistory(name, website) {
+        const allData = getAllData();
+        const historyData = allData.filter(item => item.name === name && item.website === website);
+        const sortedHistoryData = sortData(historyData, 'createdAt', 'desc');
+        const tbody = document.querySelector('#history-table tbody');
+        if (tbody) {
+            tbody.innerHTML = '';
+            sortedHistoryData.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.priceILS}</td>
+                    <td><a href="${item.url}" target="_blank" rel="noopener noreferrer">Link</a></td>
+                    <td>${item.website}</td>
+                    <td>${new Date(item.createdAt).toLocaleString()}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        const modal = document.getElementById('priceHistoryModal');
+        if (modal) {
+            modal.style.display = 'block';
+        }
+        
+        // Add graph
+        createPriceHistoryGraph(sortedHistoryData);
+    }
+
+    function getAllData() {
+        return window.allData || [];
+    }
+
+    function cleanName(name) {
+        return name.replace(/"/g, "'");
+    }
+
+    document.querySelector('.close').addEventListener('click', () => {
+        const modal = document.getElementById('priceHistoryModal');
+        if (modal) {
+            modal.style.display = 'none';
         }
     });
-}
 
-function filterData(data, keyword) {
-    return data.filter(item => item.name.toLowerCase().includes(keyword.toLowerCase()));
-}
-
-function filterDataByPrice(data, fromPrice, toPrice) {
-    return data.filter(item => {
-        const price = parseFloat(item.priceILS);
-        if (fromPrice && price < fromPrice) {
-            return false;
+    window.onclick = event => {
+        const modal = document.getElementById('priceHistoryModal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
         }
-        if (toPrice && price > toPrice) {
-            return false;
-        }
-        return true;
-    });
-}
+    };
+});

@@ -10,12 +10,19 @@
     <div class="container">
         <h1 id="header-title">Loading...</h1>
         <div id="controls">
-            <label for="filterKey">Filter by name:</label>
-            <input type="text" id="filterKey" placeholder="Filter by name">
-            <label for="priceFrom">From price:</label>
-            <input type="number" id="priceFrom" placeholder="From price">
-            <label for="priceTo">To price:</label>
-            <input type="number" id="priceTo" placeholder="To price">
+            <div class="filter-group">
+                <label for="filterKey">Filter by name:</label>
+                <input type="text" id="filterKey" placeholder="Enter name">
+            </div>
+            <div class="filter-group">
+                <label for="priceFrom">Price range:</label>
+                <input type="number" id="priceFrom" placeholder="From">
+                <input type="number" id="priceTo" placeholder="To">
+            </div>
+            <div class="filter-group">
+                <label for="filterWebsite">Filter by website:</label>
+                <input type="text" id="filterWebsite" placeholder="Enter website">
+            </div>
         </div>
         <table id="data-table">
             <thead>
@@ -25,6 +32,7 @@
                     <th data-column="url" data-order="desc">URL</th>
                     <th data-column="website" data-order="desc">Website</th>
                     <th data-column="createdAt" data-order="desc">Created At</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,6 +40,31 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Modal -->
+    <div id="priceHistoryModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Price History</h2>
+            <canvas id="priceHistoryChart"></canvas>
+            <table id="history-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price (ILS)</th>
+                        <th>URL</th>
+                        <th>Website</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- History data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
