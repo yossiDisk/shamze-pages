@@ -299,3 +299,12 @@ th:hover {
       width: 100%;
   }
 }
+
+#data-table td:last-child {
+  font-weight: bold;
+}
+
+#data-table td:last-child:empty {
+  background-color: #f0f0f0;
+}
+

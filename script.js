@@ -165,28 +165,36 @@ document.addEventListener('DOMContentLoaded', () => {
         return itemMap;
     }
 
-    function populateTable(data) {
-        const tbody = document.querySelector('#data-table tbody');
-        if (tbody) {
-            tbody.innerHTML = '';
-            const itemMap = createItemMap(getAllData());
-    
-            data.forEach(item => {
-                const row = document.createElement('tr');
-                const key = `${item.name}-${item.website}`;
-                const itemCount = itemMap.get(key).length;
-                const buttonDisabled = itemCount <= 1 ? 'disabled' : '';
-    
-                row.innerHTML = `
-                    <td>${item.name}</td>
-                    <td>${item.priceILS}</td>
-                    <td><a href="${item.url}" target="_blank">Link</a></td>
-                    <td>${item.website}</td>
-                    <td>${new Date(item.createdAt).toLocaleString()}</td>
-                    <td><button class="price-history-btn" data-name="${item.name}" data-website="${item.website}" ${buttonDisabled}>הסטוריית מחירים</button></td>
-                `;
-                tbody.appendChild(row);
-            });
+function populateTable(data) {
+    const tbody = document.querySelector('#data-table tbody');
+    if (tbody) {
+        tbody.innerHTML = '';
+        const itemMap = createItemMap(getAllData());
+
+        data.forEach(item => {
+            const row = document.createElement('tr');
+            const key = `${item.name}-${item.website}`;
+            const itemHistory = itemMap.get(key);
+            const itemCount = itemHistory.length;
+            const buttonDisabled = itemCount <= 1 ? 'disabled' : '';
+            
+            itemHistory.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
+            const mostRecentItem = itemHistory[0];
+            const insight = getInsight(itemHistory);
+            const domainName = extractDomain(mostRecentItem.url);
+
+            row.innerHTML = `
+                <td>${mostRecentItem.name}</td>
+                <td>${mostRecentItem.priceILS}</td>
+                <td><a href="${mostRecentItem.url}" target="_blank" title="${mostRecentItem.url}">Link</a></td>
+                <td title="${mostRecentItem.url}">${domainName}</td>
+                <td>${new Date(mostRecentItem.createdAt).toLocaleString()}</td>
+                <td><button class="price-history-btn" data-name="${mostRecentItem.name}" data-website="${domainName}" ${buttonDisabled}>הסטוריית מחירים</button></td>
+                <td>${insight}</td>
+            `;
+            tbody.appendChild(row);
+        });
     
             document.querySelectorAll('.price-history-btn').forEach(button => {
                 button.addEventListener('click', event => {
@@ -197,6 +205,43 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             });
+        }
+    }
+
+    function extractDomain(url) {
+        let domain;
+        try {
+            domain = new URL(url).hostname;
+        } catch (e) {
+            domain = url;
+        }
+        return domain.replace(/^www\./, '');
+    }
+
+    function getInsight(itemHistory) {
+        if (itemHistory.length < 2) return '';
+    
+        // Sort by date, most recent first
+        itemHistory.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    
+        const currentPrice = parseFloat(itemHistory[0].priceILS);
+        const previousPrice = parseFloat(itemHistory[1].priceILS);
+    
+        if (isNaN(currentPrice) || isNaN(previousPrice)) return '';
+    
+        const priceDifference = currentPrice - previousPrice;
+        const percentageChange = (priceDifference / previousPrice) * 100;
+    
+        if (percentageChange <= -20) {
+            return 'ירידת מחיר חדה';
+        } else if (percentageChange >= 20) {
+            return 'עליית מחיר חדה';
+        } else if (percentageChange < 0) {
+            return 'ירידת מחיר';
+        } else if (percentageChange > 0) {
+            return 'עליית מחיר';
+        } else {
+            return '';
         }
     }
 
