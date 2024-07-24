@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תוצאות חיפוש</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .search-results {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .product {
+            border: 1px solid #ddd;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .product-image {
+            width: 120px;
+            height: 120px;
+            margin-right: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f8f8;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .product-info {
+            flex-grow: 1;
+        }
+        .product-info h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .product-info p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .product-info a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        .product-info a:hover {
+            text-decoration: underline;
+        }
+        .loading-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .sort-container {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sort-container">
+        <label for="sort-select">מיין לפי:</label>
+        <select id="sort-select" onchange="sortResults()">
+            <option value="default">ברירת מחדל</option>
+            <option value="price-asc">מחיר - מהנמוך לגבוה</option>
+            <option value="price-desc">מחיר - מהגבוה לנמוך</option>
+        </select>
+    </div>
+    <div id="loadingContainer" class="loading-container" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>אוספים מוצרים מכל האתרים, זה לוקח כמה שניות...</p>
+    </div>
+    <div id="searchResults" class="search-results"></div>
+
+    <script>
+        const imageCache = new Map();
+        let logMessages = [];
+        let currentResults = [];
+
+        function log(message) {
+            console.log(message);
+            logMessages.push(message);
+        }
+
+        function displayLogs() {
+            console.log("--- Full Log ---");
+            console.log(logMessages.join('\n'));
+            console.log("--- End Log ---");
+        }
+
+        function showLoadingSpinner() {
+            document.getElementById('loadingContainer').style.display = 'block';
+        }
+
+        function hideLoadingSpinner() {
+            document.getElementById('loadingContainer').style.display = 'none';
+        }
+
+        function search(query) {
+            showLoadingSpinner();
+            log(`Starting search for query: ${query}`);
+            return new Promise((resolve, reject) => {
+                fetchSearchResults(query)
+                    .then(() => {
+                        log('Search completed');
+                        hideLoadingSpinner();
+                        resolve();
+                    })
+                    .catch(error => {
+                        log(`Error during search: ${error}`);
+                        hideLoadingSpinner();
+                        reject(error);
+                    });
+            });
+        }
+
+        function fetchSearchResults(query) {
+            return fetch(`https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=10`)
+                .then(response => response.json())
+                .then(data => {
+                    log(`Received ${data.length} search results`);
+                    currentResults = data;
+                    displaySearchResults(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    log(`Error fetching search results: ${error}`);
+                });
+        }
+
+        function displaySearchResults(results) {
+            const container = document.getElementById('searchResults');
+            container.innerHTML = '';
+            results.forEach(product => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product';
+                productDiv.innerHTML = `
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <p>מחיר: ${product.price}</p>
+                        <p>אתר: ${product.site}</p>
+                    </div>
+                    <div class="product-image"></div>
+                `;
+                productDiv.onclick = () => window.open(product.urlAff, '_blank');
+                container.appendChild(productDiv);
+                
+                fetchProductImage(product.url, productDiv.querySelector('.product-image'));
+            });
+        }
+
+        function sortResults() {
+            const sortType = document.getElementById('sort-select').value;
+            let sortedResults = [...currentResults];
+
+            if (sortType === 'price-asc' || sortType === 'price-desc') {
+                sortedResults.sort((a, b) => {
+                    const priceA = parseFloat(a.price.replace(/[^\d.]/g, ''));
+                    const priceB = parseFloat(b.price.replace(/[^\d.]/g, ''));
+                    
+                    if (isNaN(priceA)) return 1;
+                    if (isNaN(priceB)) return -1;
+                    
+                    return sortType === 'price-asc' ? priceA - priceB : priceB - priceA;
+                });
+            }
+
+            displaySearchResults(sortedResults);
+        }
+
+        function fetchProductImage(productUrl, imageContainer) {
+            log(`Attempting to fetch image for product: ${productUrl}`);
+            if (imageCache.has(productUrl)) {
+                log(`Image found in cache for ${productUrl}`);
+                displayImage(imageCache.get(productUrl), imageContainer);
+                return;
+            }
+
+            const directImageUrl = buildDirectImageUrl(productUrl);
+            if (directImageUrl) {
+                tryLoadingDirectImage(directImageUrl, productUrl, imageContainer);
+                return;
+            }
+
+            fetch(productUrl)
+                .then(response => {
+                    log(`Received response from ${productUrl}. Status: ${response.status}`);
+                    return response.text();
+                })
+                .then(html => {
+                    log(`Successfully fetched HTML for ${productUrl}`);
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    findAndLoadImage(doc, productUrl, imageContainer);
+                })
+                .catch(error => {
+                    log(`Error fetching product page ${productUrl}: ${error}`);
+                    console.error('Error fetching product page:', error);
+                    imageContainer.style.display = 'none';
+                });
+        }
+
+        function buildDirectImageUrl(productUrl) {
+            if (productUrl.includes('zap.co.il')) {
+                const sku = productUrl.match(/(\d+)$/)?.[1];
+                if (sku) return `https://img.zap.co.il/pics/new/${sku}.gif`;
+            }
+            if (productUrl.includes('ksp.co.il')) {
+                const sku = productUrl.match(/item\/(\d+)/)?.[1];
+                if (sku) return `https://img.ksp.co.il/item/${sku}/b_1.jpg`;
+            }
+            return null;
+        }
+
+        function tryLoadingDirectImage(imageUrl, productUrl, imageContainer) {
+            const img = new Image();
+            img.onload = () => {
+                log(`Direct image successfully loaded: ${imageUrl}`);
+                imageCache.set(productUrl, imageUrl);
+                displayImage(imageUrl, imageContainer);
+            };
+            img.onerror = () => {
+                log(`Failed to load direct image: ${imageUrl}. Falling back to HTML parsing.`);
+                fetch(productUrl)
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        findAndLoadImage(doc, productUrl, imageContainer);
+                    })
+                    .catch(error => {
+                        log(`Error fetching product page ${productUrl}: ${error}`);
+                        imageContainer.style.display = 'none';
+                    });
+            };
+            img.src = imageUrl;
+        }
+
+        function findAndLoadImage(doc, baseUrl, imageContainer) {
+            log(`Searching for image in document from ${baseUrl}`);
+            const imageFinders = [
+                // ... (כל שיטות החיפוש הקודמות נשארות ללא שינוי)
+            ];
+
+            tryNextImage(imageFinders, 0, baseUrl, imageContainer);
+        }
+
+        function tryNextImage(finders, index, baseUrl, imageContainer) {
+            if (index >= finders.length) {
+                log(`All image finding methods exhausted for ${baseUrl}. No image found.`);
+                imageContainer.style.display = 'none';
+                return;
+            }
+
+            log(`Trying image finder method ${index + 1} for ${baseUrl}`);
+            let imageUrl = finders[index]();
+            
+            if (imageUrl) {
+                log(`Image URL found: ${imageUrl}`);
+                if (imageUrl.startsWith('/')) {
+                    const urlObj = new URL(baseUrl);
+                    imageUrl = `${urlObj.protocol}//${urlObj.hostname}${imageUrl}`;
+                    log(`Relative URL converted to absolute: ${imageUrl}`);
+                } else if (!imageUrl.startsWith('http')) {
+                    imageUrl = new URL(imageUrl, baseUrl).href;
+                    log(`Relative URL converted to absolute: ${imageUrl}`);
+                }
+
+                const img = new Image();
+                img.onload = () => {
+                    log(`Image successfully loaded: ${imageUrl}`);
+                    imageCache.set(baseUrl, imageUrl);
+                    displayImage(imageUrl, imageContainer);
+                };
+                img.onerror = () => {
+                    log(`Failed to load image: ${imageUrl}`);
+                    tryNextImage(finders, index + 1, baseUrl, imageContainer);
+                };
+                img.src = imageUrl;
+            } else {
+                log(`No image URL found with method ${index + 1}. Trying next method.`);
+                tryNextImage(finders, index + 1, baseUrl, imageContainer);
+            }
+        }
+
+        function displayImage(imageUrl, container) {
+            container.style.display = 'flex';
+            container.innerHTML = '';
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.alt = 'תמונת מוצר';
+            img.style.maxWidth = '100%';
+            img.style.maxHeight = '100%';
+            container.appendChild(img);
+        }
+
+        // ביצוע חיפוש מיידי אם יש פרמטר query ב-URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const queryParam = urlParams.get('query');
+        if (queryParam) {
+            search(queryParam).then(() => {
+                displayLogs();
+            }).catch(error => {
+                console.error('Initial search failed:', error);
+                displayLogs();
+            });
+        }
+    </script>
+</body>
+</html>
