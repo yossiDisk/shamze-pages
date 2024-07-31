@@ -139,6 +139,7 @@
         const imageCache = new Map();
         let logMessages = [];
         let currentResults = [];
+        let currentSearchQuery = '';
 
         function log(message) {
             console.log(message);
@@ -216,6 +217,7 @@
         });
 
         function search(query) {
+            currentSearchQuery = query;  // עדכון ה-query הנוכחי
             showLoadingSpinner();
             log(`Starting search for query: ${query}`);
             return new Promise((resolve, reject) => {
@@ -254,17 +256,44 @@
                 const productDiv = document.createElement('div');
                 productDiv.className = 'product';
                 productDiv.innerHTML = `
-                    <div class="product-info">
-                        <h3>${product.name}</h3>
-                        <p>מחיר: ${product.price}</p>
-                        <p>אתר: ${product.site}</p>
-                    </div>
-                    <div class="product-image"></div>
-                `;
-                productDiv.onclick = () => window.open(product.urlAff, '_blank');
+            <div class="product-info">
+                <h3>${product.name}</h3>
+                <p>מחיר: ${product.price}</p>
+                <p>אתר: ${product.site}</p>
+            </div>
+            <div class="product-image"></div>
+        `;
+                productDiv.onclick = () => {
+                    logClick(product);  // קריאה לפונקציית logClick
+                    window.open(product.urlAff, '_blank');
+                };
                 container.appendChild(productDiv);
 
                 fetchProductImage(product.url, productDiv.querySelector('.product-image'));
+            });
+        }
+
+        function logClick(product) {
+            const clickData = {
+                productId: product.id,
+                productName: product.name,
+                targetSite: product.site,
+                searchQuery: currentSearchQuery,
+                timestamp: new Date().toISOString()
+            };
+
+            // שמירה ב-localStorage
+            let clicks = JSON.parse(localStorage.getItem('productClicks') || '[]');
+            clicks.push(clickData);
+            localStorage.setItem('productClicks', JSON.stringify(clicks));
+
+            // שליחת אירוע ל-Google Analytics
+            gtag('event', 'product_click', {
+                'event_category': 'Product Interaction',
+                'event_label': product.name,
+                'value': parseFloat(product.price.replace(/[^\d.]/g, '')),
+                'site': product.site,
+                'search_query': currentSearchQuery
             });
         }
 
