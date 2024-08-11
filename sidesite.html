@@ -3,15 +3,7 @@
 
 <head>
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PK1VZL0FDV"></script>
     <script defer data-domain="yossidisk.github.io/shamze/sidesite.html" src="https://plausible.io/js/script.js"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-PK1VZL0FDV');
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>תוצאות חיפוש</title>
@@ -218,14 +210,21 @@
         });
 
         function search(query) {
-            currentSearchQuery = query;  // עדכון ה-query הנוכחי
+            currentSearchQuery = query;
             showLoadingSpinner();
             log(`Starting search for query: ${query}`);
             return new Promise((resolve, reject) => {
                 fetchSearchResults(query)
-                    .then(() => {
+                    .then((results) => {
                         log('Search completed');
                         hideLoadingSpinner();
+                        // שליחת אירוע חיפוש ל-Plausible Analytics
+                        plausible('Search', {
+                            props: {
+                                query: query,
+                                resultsCount: results.length
+                            }
+                        });
                         resolve();
                     })
                     .catch(error => {
@@ -274,6 +273,7 @@
             });
         }
 
+
         function logClick(product) {
             const clickData = {
                 productId: product.id,
@@ -283,18 +283,19 @@
                 timestamp: new Date().toISOString()
             };
 
-            // שמירה ב-localStorage
+            // שמירה ב-localStorage (אם אתה עדיין רוצה זאת)
             let clicks = JSON.parse(localStorage.getItem('productClicks') || '[]');
             clicks.push(clickData);
             localStorage.setItem('productClicks', JSON.stringify(clicks));
 
-            // שליחת אירוע ל-Google Analytics
-            gtag('event', 'product_click', {
-                'event_category': 'Product Interaction',
-                'event_label': product.name,
-                'value': parseFloat(product.price.replace(/[^\d.]/g, '')),
-                'site': product.site,
-                'search_query': currentSearchQuery
+            // שליחת אירוע ל-Plausible Analytics
+            plausible('Product Click', {
+                props: {
+                    productName: product.name,
+                    price: parseFloat(product.price.replace(/[^\d.]/g, '')),
+                    site: product.site,
+                    searchQuery: currentSearchQuery
+                }
             });
         }
 
