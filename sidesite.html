@@ -3,7 +3,8 @@
 
 <head>
     <!-- Google tag (gtag.js) -->
-    <script defer data-domain="yossidisk.github.io/shamze/sidesite.html" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="yossidisk.github.io/shamze/sidesite.html"
+        src="https://plausible.io/js/script.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>תוצאות חיפוש</title>
@@ -218,14 +219,12 @@
                     .then((results) => {
                         log('Search completed');
                         hideLoadingSpinner();
-                        // שליחת אירוע חיפוש ל-Plausible Analytics
-                        plausible('Search', {
-                            props: {
-                                query: query,
-                                resultsCount: results.length
-                            }
+                        sendPlausibleEvent('Search', {
+                            query: query,
+                            resultsCount: results.length
                         });
-                        resolve();
+                        displaySearchResults(results);
+                        resolve(results);
                     })
                     .catch(error => {
                         log(`Error during search: ${error}`);
@@ -273,30 +272,40 @@
             });
         }
 
+        function sendPlausibleEvent(eventName, eventData) {
+            const data = new Blob([JSON.stringify({
+                domain: 'yossidisk.github.io/shamze/sidesite.html',
+                name: eventName,
+                url: window.location.href,
+                props: eventData
+            })], { type: 'application/json' });
+
+            if (navigator.sendBeacon) {
+                navigator.sendBeacon('https://plausible.io/api/event', data);
+            } else {
+                // Fallback אם sendBeacon לא נתמך
+                fetch('https://plausible.io/api/event', {
+                    method: 'POST',
+                    body: data,
+                    keepalive: true
+                }).catch(console.error);
+            }
+        }
 
         function logClick(product) {
             const clickData = {
-                productId: product.id,
                 productName: product.name,
-                targetSite: product.site,
-                searchQuery: currentSearchQuery,
-                timestamp: new Date().toISOString()
+                price: parseFloat(product.price.replace(/[^\d.]/g, '')),
+                site: product.site,
+                searchQuery: currentSearchQuery
             };
 
-            // שמירה ב-localStorage (אם אתה עדיין רוצה זאת)
-            let clicks = JSON.parse(localStorage.getItem('productClicks') || '[]');
-            clicks.push(clickData);
-            localStorage.setItem('productClicks', JSON.stringify(clicks));
+            sendPlausibleEvent('Product Click', clickData);
 
-            // שליחת אירוע ל-Plausible Analytics
-            plausible('Product Click', {
-                props: {
-                    productName: product.name,
-                    price: parseFloat(product.price.replace(/[^\d.]/g, '')),
-                    site: product.site,
-                    searchQuery: currentSearchQuery
-                }
-            });
+            // שמירה ב-localStorage (אם עדיין נדרש)
+            let clicks = JSON.parse(localStorage.getItem('productClicks') || '[]');
+            clicks.push({ ...clickData, timestamp: new Date().toISOString() });
+            localStorage.setItem('productClicks', JSON.stringify(clicks));
         }
 
         function sortResults() {
