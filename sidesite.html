@@ -3,7 +3,8 @@
 
 <head>
     <!-- Google tag (gtag.js) -->
-    <script defer data-domain="yossidisk.github.io/shamze/sidesite.html" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="yossidisk.github.io/shamze/sidesite.html"
+        src="https://plausible.io/js/script.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>תוצאות חיפוש</title>
@@ -156,9 +157,10 @@
         function startCountdown() {
             let countdown = 10;
             const countdownElement = document.getElementById('countdown');
+            const loadingContainer = document.getElementById('loadingContainer');
 
-            if (!countdownElement) {
-                console.error("Element with id 'countdown' not found");
+            if (!countdownElement || !loadingContainer) {
+                console.error("Required elements not found");
                 return;
             }
 
@@ -172,10 +174,25 @@
                 if (countdown <= 0) {
                     clearInterval(intervalId);
                     console.log("Countdown finished");
+
+                    // בדיקה אם יש תוצאות
+                    if (currentResults.length === 0) {
+                        displayErrorMessage(`
+                    <p>נותן לזה עוד רגע...</p>
+                `);
+                    }
                 }
             }, 1000);
         }
 
+        function displayErrorMessage(message) {
+            const container = document.getElementById('searchResults');
+            if (container) {
+                container.innerHTML = message;
+            } else {
+                console.error("Search results container not found");
+            }
+        }
         function showLoading() {
             const loadingContainer = document.getElementById('loadingContainer');
             if (loadingContainer) {
@@ -229,16 +246,38 @@
         }
 
         function fetchSearchResults(query) {
-            return fetch(`https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=10`)
-                .then(response => response.json())
+            showLoading();  // הצג את אנימציית הטעינה
+            startCountdown();  // התחל את הספירה לאחור
+
+            return fetch(`https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=10`, {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    'Accept': 'application/json',
+                },
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     log(`Received ${data.length} search results`);
                     currentResults = data;
                     displaySearchResults(data);
+                    hideLoading();  // הסתר את אנימציית הטעינה
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    log(`Error fetching search results: ${error}`);
+                    log(`Error fetching search results: ${error.message}`);
+                    hideLoading();  // הסתר את אנימציית הטעינה גם במקרה של שגיאה
+                    displayErrorMessage(`
+                    <p>עדיין לא נטען?</p>
+                    <p>נראה שיש תקלה...</p>
+                    <p>כדאי לספר לי על זה כדי שאבדוק</p>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamzezolyoter@gmail.com&su=פידבק על תוצאות החיפוש&body=היי, נראה שיש תקלה בטעינת תוצאות החיפוש:" target="_blank">לחץ כאן</a>
+                `);
                 });
         }
 
@@ -267,31 +306,31 @@
         }
 
         function logClick(product) {
-    const clickData = {
-        productId: product.id,
-        productName: product.name,
-        targetSite: product.site,
-        searchQuery: currentSearchQuery,
-        timestamp: new Date().toISOString()
-    };
+            const clickData = {
+                productId: product.id,
+                productName: product.name,
+                targetSite: product.site,
+                searchQuery: currentSearchQuery,
+                timestamp: new Date().toISOString()
+            };
 
-    // שליחה מיידית ל-Plausible
-    if (window.plausible) {
-        window.plausible('ProductClick', {
-            props: {
-                productId: clickData.productId,
-                productName: clickData.productName,
-                targetSite: clickData.targetSite,
-                searchQuery: clickData.searchQuery
+            // שליחה מיידית ל-Plausible
+            if (window.plausible) {
+                window.plausible('ProductClick', {
+                    props: {
+                        productId: clickData.productId,
+                        productName: clickData.productName,
+                        targetSite: clickData.targetSite,
+                        searchQuery: clickData.searchQuery
+                    }
+                });
             }
-        });
-    }
 
-    // אופציונלי: שמירה ב-localStorage למטרות לוג מקומי
-    let clicks = JSON.parse(localStorage.getItem('productClicks') || '[]');
-    clicks.push(clickData);
-    localStorage.setItem('productClicks', JSON.stringify(clicks));
-}
+            // אופציונלי: שמירה ב-localStorage למטרות לוג מקומי
+            let clicks = JSON.parse(localStorage.getItem('productClicks') || '[]');
+            clicks.push(clickData);
+            localStorage.setItem('productClicks', JSON.stringify(clicks));
+        }
 
         function sortResults() {
             const sortType = document.getElementById('sort-select').value;
