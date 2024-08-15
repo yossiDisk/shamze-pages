@@ -2,7 +2,8 @@
 <html lang="he" dir="rtl">
 
 <head>
-    <script defer data-domain="yossidisk.github.io/shamze/sidesite.html" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="yossidisk.github.io/shamze/sidesite.html"
+        src="https://plausible.io/js/script.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>תוצאות חיפוש</title>
@@ -133,9 +134,12 @@
         let currentResults = [];
         let currentSearchQuery = '';
 
+        const DEBUG_MODE = true; // Set to true for detailed console logs
+        const SEND_TO_PLAUSIBLE = true;
+
         function log(message) {
-            console.log(message);
-            logMessages.push(message);
+            const logMessage = `[${new Date().toISOString()}] ${message}`;
+            console.log(logMessage);
         }
 
         function displayLogs() {
@@ -208,6 +212,7 @@
             testLoading();
         });
 
+        // Update the search function
         function search(query) {
             currentSearchQuery = query;
             showLoadingSpinner();
@@ -219,7 +224,7 @@
                     sendPlausibleEvent('Search', {
                         query: query,
                         resultsCount: results.length,
-                        referrer: document.referrer  // הוספת ה-referrer לנתונים
+                        referrer: document.referrer
                     });
                     displaySearchResults(results);
                     return results;
@@ -230,6 +235,7 @@
                     throw error;
                 });
         }
+
 
         function fetchSearchResults(query) {
             return fetch(`https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=10`)
@@ -268,43 +274,49 @@
 
         function sendPlausibleEvent(eventName, eventData) {
             const data = {
-                domain: 'yossidisk.github.io',  
+                domain: 'yossidisk.github.io', // Keep the original domain
                 name: eventName,
-                url: document.referrer || 'https://yossidisk.github.io/shamze/sidesite.html',
+                url: window.location.href, // Use current URL, even if it's local
                 props: eventData
             };
 
-            const jsonData = JSON.stringify(data);
+            if (DEBUG_MODE) {
+                console.log(`DEBUG: Plausible event - ${eventName}`);
+                console.log('DEBUG: Event data', data);
+            }
 
-            // שליחה באמצעות sendBeacon או fetch
-            if (navigator.sendBeacon) {
-                const blob = new Blob([jsonData], { type: 'application/json' });
-                const success = navigator.sendBeacon('https://plausible.io/api/event', blob);
-                console.log('Beacon sent successfully:', success, 'Event:', eventName, 'Data:', eventData);
-            } else {
-                fetch('https://plausible.io/api/event', {
-                    method: 'POST',
-                    body: jsonData,
-                    headers: { 'Content-Type': 'application/json' },
-                    mode: 'no-cors',
-                    keepalive: true
-                }).then(() => console.log('Fetch sent successfully. Event:', eventName, 'Data:', eventData))
-                    .catch(error => console.error('Error sending data:', error));
+            if (SEND_TO_PLAUSIBLE) {
+                const jsonData = JSON.stringify(data);
+
+                if (navigator.sendBeacon) {
+                    const blob = new Blob([jsonData], { type: 'application/json' });
+                    const success = navigator.sendBeacon('https://plausible.io/api/event', blob);
+                    console.log(`Beacon sent successfully: ${success}, Event: ${eventName}`);
+                } else {
+                    fetch('https://plausible.io/api/event', {
+                        method: 'POST',
+                        body: jsonData,
+                        headers: { 'Content-Type': 'application/json' },
+                        mode: 'no-cors',
+                        keepalive: true
+                    }).then(() => console.log(`Fetch sent successfully. Event: ${eventName}`))
+                        .catch(error => console.error(`Error sending data: ${error}`));
+                }
             }
         }
-        // עדכון פונקציית logClick
+
         function logClick(product) {
             const clickData = {
                 productName: product.name,
                 price: parseFloat(product.price.replace(/[^\d.]/g, '')),
-                site: product.site,  // זה החלק החשוב - אתר המוצר
+                site: product.site,
                 searchQuery: currentSearchQuery
             };
 
             sendPlausibleEvent('Product Click', clickData);
-            console.log('Logging click:', clickData);
+            log(`Logging click: ${JSON.stringify(clickData)}`);
 
-            // שמירה ב-localStorage אם עדיין נדרש
+            // Always save to localStorage
             let clicks = JSON.parse(localStorage.getItem('productClicks') || '[]');
             clicks.push({ ...clickData, timestamp: new Date().toISOString() });
             localStorage.setItem('productClicks', JSON.stringify(clicks));
