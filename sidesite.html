@@ -280,14 +280,6 @@
             clicks.push(clickData);
             localStorage.setItem('productClicks', JSON.stringify(clicks));
 
-            // שליחת אירוע ל-Google Analytics
-            gtag('event', 'product_click', {
-                'event_category': 'Product Interaction',
-                'event_label': product.name,
-                'value': parseFloat(product.price.replace(/[^\d.]/g, '')),
-                'site': product.site,
-                'search_query': currentSearchQuery
-            });
         }
 
         function sortResults() {
