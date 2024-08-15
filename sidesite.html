@@ -267,21 +267,31 @@
         }
 
         function logClick(product) {
-            const clickData = {
-                productId: product.id,
-                productName: product.name,
-                targetSite: product.site,
-                searchQuery: currentSearchQuery,
-                timestamp: new Date().toISOString()
-                
-            };
+    const clickData = {
+        productId: product.id,
+        productName: product.name,
+        targetSite: product.site,
+        searchQuery: currentSearchQuery,
+        timestamp: new Date().toISOString()
+    };
 
-            // שמירה ב-localStorage
-            let clicks = JSON.parse(localStorage.getItem('productClicks') || '[]');
-            clicks.push(clickData);
-            localStorage.setItem('productClicks', JSON.stringify(clicks));
+    // שליחה מיידית ל-Plausible
+    if (window.plausible) {
+        window.plausible('ProductClick', {
+            props: {
+                productId: clickData.productId,
+                productName: clickData.productName,
+                targetSite: clickData.targetSite,
+                searchQuery: clickData.searchQuery
+            }
+        });
+    }
 
-        }
+    // אופציונלי: שמירה ב-localStorage למטרות לוג מקומי
+    let clicks = JSON.parse(localStorage.getItem('productClicks') || '[]');
+    clicks.push(clickData);
+    localStorage.setItem('productClicks', JSON.stringify(clicks));
+}
 
         function sortResults() {
             const sortType = document.getElementById('sort-select').value;
