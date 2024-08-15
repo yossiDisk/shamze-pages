@@ -259,72 +259,59 @@
                 <p>מחיר: ${product.price}</p>
                 <p>אתר: ${product.site}</p>
             </div>
-            <div class="product-image"></div>
         `;
                 productDiv.onclick = () => {
-                    logClick(product);  // קריאה לפונקציית logClick
+                    logClick(product);
                     window.open(product.urlAff, '_blank');
                 };
                 container.appendChild(productDiv);
-
-                fetchProductImage(product.url, productDiv.querySelector('.product-image'));
             });
         }
 
         function sendPlausibleEvent(eventName, eventData) {
             const data = {
-                domain: 'yossidisk.github.io',  // הדומיין העיקרי שלך
+                domain: 'yossidisk.github.io',  
                 name: eventName,
-                url: document.referrer || 'https://yossidisk.github.io/shamze/sidesite.html',  // שימוש ב-referrer אם זמין
+                url: document.referrer || 'https://yossidisk.github.io/shamze/sidesite.html',
                 props: eventData
             };
 
             const jsonData = JSON.stringify(data);
 
-            // נסה לשלוח באמצעות sendBeacon
+            // שליחה באמצעות sendBeacon או fetch
             if (navigator.sendBeacon) {
                 const blob = new Blob([jsonData], { type: 'application/json' });
                 const success = navigator.sendBeacon('https://plausible.io/api/event', blob);
-                if (success) {
-                    console.log('Beacon sent successfully');
-                    return;
-                }
-                console.warn('Beacon failed to send, falling back to fetch');
+                console.log('Beacon sent successfully:', success, 'Event:', eventName, 'Data:', eventData);
+            } else {
+                fetch('https://plausible.io/api/event', {
+                    method: 'POST',
+                    body: jsonData,
+                    headers: { 'Content-Type': 'application/json' },
+                    mode: 'no-cors',
+                    keepalive: true
+                }).then(() => console.log('Fetch sent successfully. Event:', eventName, 'Data:', eventData))
+                    .catch(error => console.error('Error sending data:', error));
             }
-
-            // Fallback ל-fetch עם התחשבות במגבלות CORS
-            fetch('https://plausible.io/api/event', {
-                method: 'POST',
-                body: jsonData,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                mode: 'no-cors',  // שימוש ב-no-cors mode
-                keepalive: true
-            }).then(() => {
-                console.log('Data sent successfully via fetch');
-            }).catch(error => {
-                console.error('Error sending data via fetch:', error);
-            });
         }
-
         // עדכון פונקציית logClick
         function logClick(product) {
             const clickData = {
                 productName: product.name,
                 price: parseFloat(product.price.replace(/[^\d.]/g, '')),
-                site: product.site,
-                searchQuery: currentSearchQuery,
-                referrer: document.referrer  // הוספת ה-referrer לנתונים
+                site: product.site,  // זה החלק החשוב - אתר המוצר
+                searchQuery: currentSearchQuery
             };
 
             sendPlausibleEvent('Product Click', clickData);
+            console.log('Logging click:', clickData);
 
             // שמירה ב-localStorage אם עדיין נדרש
             let clicks = JSON.parse(localStorage.getItem('productClicks') || '[]');
             clicks.push({ ...clickData, timestamp: new Date().toISOString() });
             localStorage.setItem('productClicks', JSON.stringify(clicks));
         }
+
         function sortResults() {
             const sortType = document.getElementById('sort-select').value;
             let sortedResults = [...currentResults];
