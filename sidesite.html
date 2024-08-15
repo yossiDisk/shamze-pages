@@ -2,6 +2,7 @@
 <html lang="he" dir="rtl">
 
 <head>
+    <!-- Google tag (gtag.js) -->
     <script defer data-domain="yossidisk.github.io/shamze/sidesite.html" src="https://plausible.io/js/script.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -212,23 +213,26 @@
             currentSearchQuery = query;
             showLoadingSpinner();
             log(`Starting search for query: ${query}`);
-            return fetchSearchResults(query)
-                .then(results => {
-                    log('Search completed');
-                    hideLoadingSpinner();
-                    sendPlausibleEvent('Search', {
-                        query: query,
-                        resultsCount: results.length,
-                        referrer: document.referrer  // הוספת ה-referrer לנתונים
+            return new Promise((resolve, reject) => {
+                fetchSearchResults(query)
+                    .then((results) => {
+                        log('Search completed');
+                        hideLoadingSpinner();
+                        // שליחת אירוע חיפוש ל-Plausible Analytics
+                        plausible('Search', {
+                            props: {
+                                query: query,
+                                resultsCount: results.length
+                            }
+                        });
+                        resolve();
+                    })
+                    .catch(error => {
+                        log(`Error during search: ${error}`);
+                        hideLoadingSpinner();
+                        reject(error);
                     });
-                    displaySearchResults(results);
-                    return results;
-                })
-                .catch(error => {
-                    log(`Error during search: ${error}`);
-                    hideLoadingSpinner();
-                    throw error;
-                });
+            });
         }
 
         function fetchSearchResults(query) {
@@ -257,57 +261,42 @@
                 <p>מחיר: ${product.price}</p>
                 <p>אתר: ${product.site}</p>
             </div>
+            <div class="product-image"></div>
         `;
                 productDiv.onclick = () => {
-                    logClick(product);
+                    logClick(product);  // קריאה לפונקציית logClick
                     window.open(product.urlAff, '_blank');
                 };
                 container.appendChild(productDiv);
+
+                fetchProductImage(product.url, productDiv.querySelector('.product-image'));
             });
         }
 
-        function sendPlausibleEvent(eventName, eventData) {
-            const data = {
-                domain: 'yossidisk.github.io',  
-                name: eventName,
-                url: document.referrer || 'https://yossidisk.github.io/shamze/sidesite.html',
-                props: eventData
-            };
 
-            const jsonData = JSON.stringify(data);
-
-            // שליחה באמצעות sendBeacon או fetch
-            if (navigator.sendBeacon) {
-                const blob = new Blob([jsonData], { type: 'application/json' });
-                const success = navigator.sendBeacon('https://plausible.io/api/event', blob);
-                console.log('Beacon sent successfully:', success, 'Event:', eventName, 'Data:', eventData);
-            } else {
-                fetch('https://plausible.io/api/event', {
-                    method: 'POST',
-                    body: jsonData,
-                    headers: { 'Content-Type': 'application/json' },
-                    mode: 'no-cors',
-                    keepalive: true
-                }).then(() => console.log('Fetch sent successfully. Event:', eventName, 'Data:', eventData))
-                    .catch(error => console.error('Error sending data:', error));
-            }
-        }
-        // עדכון פונקציית logClick
         function logClick(product) {
             const clickData = {
+                productId: product.id,
                 productName: product.name,
-                price: parseFloat(product.price.replace(/[^\d.]/g, '')),
-                site: product.site,  // זה החלק החשוב - אתר המוצר
-                searchQuery: currentSearchQuery
+                targetSite: product.site,
+                searchQuery: currentSearchQuery,
+                timestamp: new Date().toISOString()
             };
 
-            sendPlausibleEvent('Product Click', clickData);
-            console.log('Logging click:', clickData);
-
-            // שמירה ב-localStorage אם עדיין נדרש
+            // שמירה ב-localStorage (אם אתה עדיין רוצה זאת)
             let clicks = JSON.parse(localStorage.getItem('productClicks') || '[]');
-            clicks.push({ ...clickData, timestamp: new Date().toISOString() });
+            clicks.push(clickData);
             localStorage.setItem('productClicks', JSON.stringify(clicks));
+
+            // שליחת אירוע ל-Plausible Analytics
+            plausible('Product Click', {
+                props: {
+                    productName: product.name,
+                    price: parseFloat(product.price.replace(/[^\d.]/g, '')),
+                    site: product.site,
+                    searchQuery: currentSearchQuery
+                }
+            });
         }
 
         function sortResults() {
