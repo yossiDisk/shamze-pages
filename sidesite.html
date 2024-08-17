@@ -306,27 +306,39 @@
         }
 
         function logClick(product) {
+            // בדיקה שהאובייקט product קיים ומכיל את השדה site
+            if (!product || typeof product.site === 'undefined') {
+                console.warn('Product data is incomplete:', product);
+                return;
+            }
+
             const clickData = {
-                productId: product.id,
-                productName: product.name,
-                targetSite: product.site,
-                searchQuery: currentSearchQuery,
+                productId: product.id || 'unknown',
+                productName: product.name || 'unknown',
+                targetSite: product.site || 'unknown',
+                searchQuery: currentSearchQuery || 'unknown',
                 timestamp: new Date().toISOString()
             };
 
-            // שליחה מיידית ל-Plausible
+            console.log('Logging click:', clickData);
+
             if (window.plausible) {
-                window.plausible('ProductClick', {
-                    props: {
-                        productId: clickData.productId,
-                        productName: clickData.productName,
-                        targetSite: clickData.targetSite,
-                        searchQuery: clickData.searchQuery
-                    }
-                });
+                try {
+                    window.plausible('ProductClick', {
+                        props: {
+                            productId: clickData.productId,
+                            productName: clickData.productName,
+                            targetSite: clickData.targetSite,
+                            searchQuery: clickData.searchQuery
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error sending data to Plausible:', error);
+                }
+            } else {
+                console.warn('Plausible is not available');
             }
 
-            // אופציונלי: שמירה ב-localStorage למטרות לוג מקומי
             let clicks = JSON.parse(localStorage.getItem('productClicks') || '[]');
             clicks.push(clickData);
             localStorage.setItem('productClicks', JSON.stringify(clicks));
