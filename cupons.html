@@ -324,6 +324,7 @@
       currentSearchQuery = query;
       showLoading();
       resultsContainer.innerHTML = '';
+      sortContainer.style.display = 'none';
 
       const filteredSites = allSites.filter(site =>
         site.siteName.toLowerCase().includes(query.toLowerCase()) ||
@@ -333,6 +334,9 @@
       hideLoading();
       displaySearchResults(filteredSites);
       updateCompareButton(query);
+
+      // Plausible analytics
+      plausible('Search', { props: { query: query } });
     }
 
     function displaySearchResults(results) {
@@ -425,14 +429,13 @@
         const productDiv = document.createElement('div');
         productDiv.className = 'comparison-item';
 
-        // בדיקה אם האתר קיים ברשימת sites
         const siteInfo = findSiteInfo(product.url);
 
         let productContent = `
-                    <h3 onclick="goToSite('${product.urlAff}', '${product.site}')">${product.name}</h3>
-                    <p>מחיר: ${product.price}</p>
-                    <p>אתר: ${product.site}</p>
-                `;
+            <h3 onclick="goToProduct('${product.urlAff}', '${product.site}', '${product.name}')">${product.name}</h3>
+            <p>מחיר: ${product.price}</p>
+            <p>אתר: ${product.site}</p>
+        `;
 
         if (siteInfo && siteInfo.cupon && siteInfo.cupon !== "") {
           productContent += `
@@ -453,6 +456,19 @@
         productDiv.innerHTML = productContent;
         productDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
         comparisonContainer.appendChild(productDiv);
+      });
+    }
+
+    function goToProduct(url, siteName, productName) {
+      window.open(url, '_blank');
+
+      // Plausible analytics
+      plausible('ProductClick', {
+        props: {
+          site: siteName,
+          product: productName,
+          query: currentSearchQuery
+        }
       });
     }
 
