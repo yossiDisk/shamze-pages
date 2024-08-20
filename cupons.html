@@ -1,319 +1,349 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>שם זה זול יותר</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 20px;
-            background-color: #f0f0f0;
-            color: #333;
-            overflow-x: hidden;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>שם זה זול יותר</title>
+  <script defer data-domain="https://yossidisk.github.io/Shamze/cupons.html"
+    src="https://plausible.io/js/script.js"></script>
 
-        h1 {
-            margin-bottom: 10px;
-            color: #2c3e50;
-            font-size: 24px;
-        }
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+      background-color: #f0f0f0;
+      color: #333;
+      overflow-x: hidden;
+    }
 
-        h4 {
-            margin-bottom: 20px;
-            color: #7f8c8d;
-            font-size: 14px;
-            font-weight: normal;
-        }
+    h1 {
+      margin-bottom: 10px;
+      color: #2c3e50;
+      font-size: 24px;
+    }
 
-        .search-container {
-            position: relative;
-            max-width: 300px;
-            margin: 0 auto;
-        }
+    h4 {
+      margin-bottom: 20px;
+      color: #7f8c8d;
+      font-size: 14px;
+      font-weight: normal;
+    }
 
-        .search-input {
-            padding: 12px 30px 12px 12px;
-            font-size: 16px;
-            border: 1px solid #999;
-            border-radius: 8px;
-            width: 100%;
-            transition: all 0.3s ease;
-        }
+    .search-container {
+      position: relative;
+      max-width: 300px;
+      margin: 0 auto;
+    }
 
-        .search-input:focus {
-            outline: none;
-            border-color: #555;
-        }
+    .search-input {
+      padding: 12px 30px 12px 12px;
+      font-size: 16px;
+      border: 1px solid #999;
+      border-radius: 8px;
+      width: 100%;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
 
-        .clear-search {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #999;
-            font-size: 18px;
-        }
+    .search-container {
+      position: relative;
+      max-width: 300px;
+      margin: 0 auto;
+      width: 100%;
+    }
 
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
+    .search-input:focus {
+      outline: none;
+      border-color: #555;
+    }
 
-        .coupon-button, .compare-button {
-            padding: 15px;
-            background-color: #777;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 300px;
-        }
+    .clear-search {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #999;
+      font-size: 18px;
+    }
 
-        .coupon-button:hover, .coupon-button:active,
-        .compare-button:hover, .compare-button:active {
-            background-color: #555;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
 
-        .loading-container {
-            text-align: center;
-            margin: 20px 0;
-        }
+    .coupon-button,
+    .compare-button {
+      padding: 15px;
+      background-color: #777;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 300px;
+    }
 
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 10px auto;
-        }
+    .coupon-button:hover,
+    .coupon-button:active,
+    .compare-button:hover,
+    .compare-button:active {
+      background-color: #555;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+    .loading-container {
+      text-align: center;
+      margin: 20px 0;
+    }
 
-        .product {
-            border: 1px solid #ddd;
-            padding: 15px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            margin-bottom: 15px;
-            text-align: right;
-            width: 100%;
-            max-width: 300px;
-            overflow: hidden;
-        }
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 10px auto;
+    }
 
-        .product h3 {
-            margin-top: 0;
-            color: #333;
-            font-size: 18px;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
 
-        .product h3:hover {
-            text-decoration: underline;
-        }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
 
-        .product p {
-            margin: 5px 0;
-            color: #666;
-            font-size: 14px;
-        }
+    .product {
+      border: 1px solid #ddd;
+      padding: 15px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      margin-bottom: 15px;
+      text-align: right;
+      width: 100%;
+      max-width: 300px;
+      overflow: hidden;
+    }
 
-        .comparison-result {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
+    .product h3 {
+      margin-top: 0;
+      color: #333;
+      font-size: 18px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
 
-        .comparison-item {
-            width: calc(50% - 10px);
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            text-align: right;
-        }
+    .product h3:hover {
+      text-decoration: underline;
+    }
 
-        .comparison-item h3 {
-            margin-top: 0;
-            font-size: 16px;
-            color: #333;
-        }
+    .product p {
+      margin: 5px 0;
+      color: #666;
+      font-size: 14px;
+    }
 
-        .comparison-item p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: #666;
-        }
+    .comparison-result {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
 
-        .coupon-details {
-            margin-top: 10px;
-        }
+    .comparison-item {
+      width: calc(50% - 10px);
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      text-align: right;
+    }
 
-        .coupon-toggle {
-            background-color: #f0f0f0;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
+    .comparison-item h3 {
+      margin-top: 0;
+      font-size: 16px;
+      color: #333;
+    }
 
-        .coupon-toggle:after {
-            content: '▼';
-            font-size: 12px;
-            margin-right: 5px;
-            transition: transform 0.3s ease;
-        }
+    .comparison-item p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #666;
+    }
 
-        .coupon-toggle.active:after {
-            transform: rotate(180deg);
-        }
+    .coupon-details {
+      margin-top: 10px;
+    }
 
-        .coupon-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
+    .coupon-toggle {
+      background-color: #f0f0f0;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
 
-        .coupon-content.active {
-            max-height: 500px; /* adjust as needed */
-        }
+    .coupon-toggle:after {
+      content: '▼';
+      font-size: 12px;
+      margin-right: 5px;
+      transition: transform 0.3s ease;
+    }
 
-        .copy-icon {
-            cursor: pointer;
-            margin-right: 10px;
-        }
+    .coupon-toggle.active:after {
+      transform: rotate(180deg);
+    }
 
-        .site-link {
-            color: #3498db;
-            text-decoration: none;
-            cursor: pointer;
-            margin-top: 10px;
-            display: inline-block;
-        }
+    .coupon-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
 
-        .site-link:hover {
-            text-decoration: underline;
-        }
+    .coupon-content.active {
+      max-height: 500px;
+      /* adjust as needed */
+    }
 
-        .coupon-info {
-            font-size: 12px;
-            color: #777;
-            margin-top: 5px;
-        }
+    .copy-icon {
+      cursor: pointer;
+      margin-right: 10px;
+    }
 
-        @media (max-width: 600px) {
-            .comparison-item {
-                width: 100%;
-            }
-        }
-    </style>
+    .site-link {
+      color: #3498db;
+      text-decoration: none;
+      cursor: pointer;
+      margin-top: 10px;
+      display: inline-block;
+    }
+
+    .site-link:hover {
+      text-decoration: underline;
+    }
+
+    .coupon-info {
+      font-size: 12px;
+      color: #777;
+      margin-top: 5px;
+    }
+
+    @media (max-width: 600px) {
+      .comparison-item {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <h1>שם זה זול יותר</h1>
-    <h4>חפש לפי חנות או שם מוצר</h4>
+  <h1>שם זה זול יותר</h1>
+  <h4>חפש לפי חנות או שם מוצר</h4>
 
-    <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder='לדוגמא "המשביר" או "אוזניות גיימינג"'>
-        <span id="clearSearch" class="clear-search">✕</span>
-    </div>
+  <div class="search-container">
+    <input type="text" id="searchInput" class="search-input" placeholder='לדוגמא "המשביר" או "אוזניות גיימינג"'>
+    <span id="clearSearch" class="clear-search">✕</span>
+  </div>
 
-    <div id="loadingContainer" class="loading-container" style="display: none;">
-        <div class="loading-spinner"></div>
-        <p>מחפש מוצרים...</p>
-    </div>
+  <div id="loadingContainer" class="loading-container" style="display: none;">
+    <div class="loading-spinner"></div>
+    <p>מחפש מוצרים...</p>
+  </div>
 
-    <div id="resultsContainer" class="button-container"></div>
+  <div id="sortContainer" class="sort-container" style="display: none;">
+    <select id="sortSelect" class="sort-select">
+      <option value="default">מיון לפי</option>
+      <option value="price-asc">מחיר: מהנמוך לגבוה</option>
+      <option value="price-desc">מחיר: מהגבוה לנמוך</option>
+    </select>
+  </div>
 
-    <div id="compareButtonContainer" style="display: none;">
-        <button id="compareButton" class="compare-button"></button>
-    </div>
+  <div id="resultsContainer" class="button-container"></div>
 
-    <script>
-        const searchInput = document.getElementById('searchInput');
-        const clearSearch = document.getElementById('clearSearch');
-        const loadingContainer = document.getElementById('loadingContainer');
-        const compareButtonContainer = document.getElementById('compareButtonContainer');
-        const compareButton = document.getElementById('compareButton');
-        const resultsContainer = document.getElementById('resultsContainer');
+  <div id="compareButtonContainer" style="display: none;">
+    <button id="compareButton" class="compare-button"></button>
+  </div>
 
-        let currentSearchQuery = '';
-        let allSites = [];
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const clearSearch = document.getElementById('clearSearch');
+    const loadingContainer = document.getElementById('loadingContainer');
+    const compareButtonContainer = document.getElementById('compareButtonContainer');
+    const compareButton = document.getElementById('compareButton');
+    const resultsContainer = document.getElementById('resultsContainer');
 
-        // Fetch all sites data
-        fetch("https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/sites")
-            .then(response => response.json())
-            .then(data => {
-                allSites = data;
-            })
-            .catch(error => console.error("Error fetching sites:", error));
+    let currentSearchQuery = '';
+    let allSites = [];
 
-        function showLoading() {
-            loadingContainer.style.display = 'block';
-        }
+    // Fetch all sites data
+    fetch("https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/sites")
+      .then(response => response.json())
+      .then(data => {
+        allSites = data;
+      })
+      .catch(error => console.error("Error fetching sites:", error));
 
-        function hideLoading() {
-            loadingContainer.style.display = 'none';
-        }
+    function showLoading() {
+      loadingContainer.style.display = 'block';
+    }
 
-        function updateCompareButton(query) {
-            if (query.trim()) {
-                compareButton.textContent = `השוואת מחירים עבור "${query}"`;
-                compareButtonContainer.style.display = 'block';
-            } else {
-                compareButtonContainer.style.display = 'none';
-            }
-        }
+    function hideLoading() {
+      loadingContainer.style.display = 'none';
+    }
 
-        function search(query) {
-            currentSearchQuery = query;
-            showLoading();
-            resultsContainer.innerHTML = '';
+    function updateCompareButton(query) {
+      if (query.trim()) {
+        compareButton.textContent = `השוואת מחירים עבור "${query}"`;
+        compareButtonContainer.style.display = 'block';
+      } else {
+        compareButtonContainer.style.display = 'none';
+      }
+    }
 
-            const filteredSites = allSites.filter(site => 
-                site.siteName.toLowerCase().includes(query.toLowerCase()) ||
-                (site.cuponDetails && site.cuponDetails.toLowerCase().includes(query.toLowerCase()))
-            );
+    function search(query) {
+      currentSearchQuery = query;
+      showLoading();
+      resultsContainer.innerHTML = '';
 
-            hideLoading();
-            displaySearchResults(filteredSites);
-            updateCompareButton(query);
-        }
+      const filteredSites = allSites.filter(site =>
+        site.siteName.toLowerCase().includes(query.toLowerCase()) ||
+        (site.cuponDetails && site.cuponDetails.toLowerCase().includes(query.toLowerCase()))
+      );
 
-        function displaySearchResults(results) {
-            resultsContainer.innerHTML = '';
-            results.forEach(site => {
-                const siteDiv = document.createElement('div');
-                siteDiv.className = 'product';
-                let siteContent = `<h3 onclick="window.open('${site.affLink || site.URL}', '_blank')">${site.siteName}</h3>`;
-                
-                if (site.cupon && site.cupon !== "") {
-                    siteContent += `
+      hideLoading();
+      displaySearchResults(filteredSites);
+      updateCompareButton(query);
+    }
+
+    function displaySearchResults(results) {
+      resultsContainer.innerHTML = '';
+      results.forEach(site => {
+        const siteDiv = document.createElement('div');
+        siteDiv.className = 'product';
+        let siteContent = `<h3 onclick="window.open('${site.affLink || site.URL}', '_blank')">${site.siteName}</h3>`;
+
+        if (site.cupon && site.cupon !== "") {
+          siteContent += `
                         <div class="coupon-details">
                             <button class="coupon-toggle">פרטי קופון</button>
                             <div class="coupon-content">
@@ -324,68 +354,88 @@
                             </div>
                         </div>
                     `;
-                } else {
-                    siteContent += `<a href="${site.affLink || site.URL}" class="site-link" target="_blank">עבור לאתר</a>`;
-                }
-                
-                siteDiv.innerHTML = siteContent;
-                siteDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
-                resultsContainer.appendChild(siteDiv);
-            });
+        } else {
+          siteContent += `<a href="${site.affLink || site.URL}" class="site-link" target="_blank">עבור לאתר</a>`;
         }
 
-        function toggleCoupon(event) {
-            const toggle = event.target;
-            const content = toggle.nextElementSibling;
-            toggle.classList.toggle('active');
-            content.classList.toggle('active');
-            event.stopPropagation();
-        }
+        siteDiv.innerHTML = siteContent;
+        siteDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
+        resultsContainer.appendChild(siteDiv);
+      });
+    }
 
-        function copyCoupon(coupon, event) {
-            navigator.clipboard.writeText(coupon)
-                .then(() => alert('הקופון הועתק'))
-                .catch(err => console.error('Failed to copy: ', err));
-            event.stopPropagation();
-        }
+    function toggleCoupon(event) {
+      const toggle = event.target;
+      const content = toggle.nextElementSibling;
+      toggle.classList.toggle('active');
+      content.classList.toggle('active');
+      event.stopPropagation();
+    }
 
-        function performPriceComparison(query) {
-            showLoading();
-            fetch(`https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=20`)
-                .then(response => response.json())
-                .then(data => {
-                    hideLoading();
-                    if (data.length === 0) {
-                        resultsContainer.innerHTML = '<p>לא נמצאו תוצאות להשוואת מחירים</p>';
-                    } else {
-                        displayComparisonResults(data);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    hideLoading();
-                    resultsContainer.innerHTML = '<p>אירעה שגיאה בהשוואת המחירים</p>';
-                });
-        }
+    function copyCoupon(coupon, event) {
+      navigator.clipboard.writeText(coupon)
+        .then(() => alert('הקופון הועתק'))
+        .catch(err => console.error('Failed to copy: ', err));
+      event.stopPropagation();
 
-        function displayComparisonResults(results) {
-            resultsContainer.innerHTML = '<div class="comparison-result"></div>';
-            const comparisonContainer = resultsContainer.querySelector('.comparison-result');
-            results.forEach(product => {
-                const productDiv = document.createElement('div');
-                productDiv.className = 'comparison-item';
-                
-                // בדיקה אם האתר קיים ברשימת sites
-                const siteInfo = findSiteInfo(product.url);
-                
-                let productContent = `
-                    <h3 onclick="window.open('${product.urlAff}', '_blank')">${product.name}</h3>
+      // Plausible analytics
+      plausible('CouponCopy', { props: { coupon: coupon } });
+    }
+
+    let currentResults = [];
+
+    function performPriceComparison(query) {
+      showLoading();
+      sortContainer.style.display = 'none';
+      fetch(`https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=20`)
+        .then(response => response.json())
+        .then(data => {
+          hideLoading();
+          if (data.length === 0) {
+            resultsContainer.innerHTML = '<p>לא נמצאו תוצאות להשוואת מחירים</p>';
+          } else {
+            currentResults = data;
+            displayComparisonResults(data);
+            sortContainer.style.display = 'block';
+          }
+
+          // Plausible analytics
+          plausible('PriceComparison', { props: { query: query } });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          hideLoading();
+          resultsContainer.innerHTML = '<p>אירעה שגיאה בהשוואת המחירים</p>';
+        });
+    }
+
+    sortSelect.addEventListener('change', function () {
+      const sortedResults = [...currentResults].sort((a, b) => {
+        const priceA = parseFloat(a.price.replace(/[^\d.-]/g, ''));
+        const priceB = parseFloat(b.price.replace(/[^\d.-]/g, ''));
+        return this.value === 'price-asc' ? priceA - priceB : priceB - priceA;
+      });
+      displayComparisonResults(sortedResults);
+    });
+
+    function displayComparisonResults(results) {
+      resultsContainer.innerHTML = '<div class="comparison-result"></div>';
+      const comparisonContainer = resultsContainer.querySelector('.comparison-result');
+      results.forEach(product => {
+        const productDiv = document.createElement('div');
+        productDiv.className = 'comparison-item';
+
+        // בדיקה אם האתר קיים ברשימת sites
+        const siteInfo = findSiteInfo(product.url);
+
+        let productContent = `
+                    <h3 onclick="goToSite('${product.urlAff}', '${product.site}')">${product.name}</h3>
                     <p>מחיר: ${product.price}</p>
                     <p>אתר: ${product.site}</p>
                 `;
 
-                if (siteInfo && siteInfo.cupon && siteInfo.cupon !== "") {
-                    productContent += `
+        if (siteInfo && siteInfo.cupon && siteInfo.cupon !== "") {
+          productContent += `
                         <div class="coupon-details">
                             <button class="coupon-toggle">פרטי קופון</button>
                             <div class="coupon-content">
@@ -396,57 +446,64 @@
                             </div>
                         </div>
                     `;
-                } else {
-                    productContent += `<a href="${product.urlAff}" class="site-link" target="_blank">עבור לאתר</a>`;
-                }
-
-                productDiv.innerHTML = productContent;
-                productDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
-                comparisonContainer.appendChild(productDiv);
-            });
+        } else {
+          productContent += `<a href="${product.urlAff}" class="site-link" target="_blank">עבור לאתר</a>`;
         }
 
-        function findSiteInfo(url) {
-            const parsedUrl = new URL(url);
-            return allSites.find(site => {
-                const siteUrl = new URL(site.URL);
-                return siteUrl.hostname === parsedUrl.hostname;
-            });
-        }
+        productDiv.innerHTML = productContent;
+        productDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
+        comparisonContainer.appendChild(productDiv);
+      });
+    }
 
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.trim();
-            if (query) {
-                search(query);
-            } else {
-                resultsContainer.innerHTML = '';
-                compareButtonContainer.style.display = 'none';
-            }
-        });
+    function goToSite(url, siteName, event) {
+      if (event) event.preventDefault();
+      window.open(url, '_blank');
+      plausible('SiteClick', { props: { site: siteName } });
+    }
 
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                performPriceComparison(currentSearchQuery);
-            }
-        });
+    function findSiteInfo(url) {
+      const parsedUrl = new URL(url);
+      return allSites.find(site => {
+        const siteUrl = new URL(site.URL);
+        return siteUrl.hostname === parsedUrl.hostname;
+      });
+    }
 
-        compareButton.addEventListener('click', () => performPriceComparison(currentSearchQuery));
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.trim();
+      if (query) {
+        search(query);
+      } else {
+        resultsContainer.innerHTML = '';
+        compareButtonContainer.style.display = 'none';
+      }
+    });
 
-        clearSearch.addEventListener('click', () => {
-            searchInput.value = '';
-            resultsContainer.innerHTML = '';
-            compareButtonContainer.style.display = 'none';
-            currentSearchQuery = '';
-        });
+    searchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        performPriceComparison(currentSearchQuery);
+      }
+    });
 
-        // ביצוע חיפוש מיידי אם יש פרמטר query ב-URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const queryParam = urlParams.get('query');
-        if (queryParam) {
-            searchInput.value = queryParam;
-            search(queryParam);
-        }
-    </script>
+    compareButton.addEventListener('click', () => performPriceComparison(currentSearchQuery));
+
+    clearSearch.addEventListener('click', () => {
+      searchInput.value = '';
+      resultsContainer.innerHTML = '';
+      compareButtonContainer.style.display = 'none';
+      currentSearchQuery = '';
+    });
+
+    // ביצוע חיפוש מיידי אם יש פרמטר query ב-URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryParam = urlParams.get('query');
+    if (queryParam) {
+      searchInput.value = queryParam;
+      search(queryParam);
+    }
+  </script>
 </body>
+
 </html>
