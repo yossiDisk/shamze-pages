@@ -398,10 +398,9 @@
       });
     }
 
-    // פונקציית logClick
     function logClick(site) {
       if (window.plausible) {
-        window.plausible('ProductClick', {
+        window.plausible('SiteClick', {
           props: {
             productName: site.siteName,
             targetSite: site.siteName,
@@ -411,7 +410,7 @@
       }
 
     }
-    
+
     function toggleCoupon(event) {
       const toggle = event.target;
       const content = toggle.nextElementSibling;
