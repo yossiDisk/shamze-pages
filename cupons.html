@@ -248,6 +248,32 @@
       margin-top: 5px;
     }
 
+    .popular-searches-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .popular-search-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .popular-search-button {
+      padding: 10px 15px;
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .popular-search-button:hover {
+      background-color: #e0e0e0;
+    }
+
     @media (max-width: 600px) {
       .comparison-item {
         width: 100%;
@@ -324,6 +350,14 @@
       currentSearchQuery = query;
       showLoading();
       resultsContainer.innerHTML = '';
+
+      if (query.trim() === '') {
+        hideLoading();
+        displayPopularSearches();
+        sortContainer.style.display = 'none';
+        return;
+      }
+
       sortContainer.style.display = 'none';
 
       const filteredSites = allSites.filter(site =>
@@ -338,6 +372,101 @@
       // Plausible analytics
       plausible('Search', { props: { query: query } });
     }
+
+    function displayPopularSearches() {
+      const popularSearches = [
+        "Ali express",
+        "המשביר",
+        "ACE",
+        "איירפודס",
+        "בושם לגבר",
+        "Toys R us"
+      ];
+
+      const container = document.createElement('div');
+      container.className = 'popular-searches-container';
+
+      const title = document.createElement('h3');
+      title.textContent = 'חיפושים נפוצים';
+      container.appendChild(title);
+
+      const buttonContainer = document.createElement('div');
+      buttonContainer.className = 'popular-search-buttons';
+
+      popularSearches.forEach(searchQuery => {
+        const button = document.createElement('button');
+        button.textContent = searchQuery;
+        button.className = 'popular-search-button';
+        button.addEventListener('click', () => {
+          const searchInput = document.querySelector('#searchInput');
+          searchInput.value = searchQuery;
+
+          // דיווח ל-Plausible
+          if (window.plausible) {
+            window.plausible('PopularSearch', { props: { query: searchQuery } });
+          }
+
+          handleSearchInput();
+        });
+        buttonContainer.appendChild(button);
+      });
+
+      container.appendChild(buttonContainer);
+      resultsContainer.appendChild(container);
+    }
+
+    function initializeSearch() {
+      const searchInput = document.querySelector('#searchInput');
+      const clearSearchSpan = document.querySelector('#clearSearch');
+
+      // הצג חיפושים נפוצים בטעינה הראשונית אם שדה החיפוש ריק
+      if (searchInput.value.trim() === '') {
+        displayPopularSearches();
+      } else {
+        search(searchInput.value);
+      }
+
+      // האזנה לשינויים בשדה החיפוש
+      searchInput.addEventListener('input', handleSearchInput);
+
+      // טיפול באלמנט הניקוי
+      if (clearSearchSpan) {
+        clearSearchSpan.addEventListener('click', function () {
+          searchInput.value = '';
+          handleSearchInput();
+          // הסתרת אלמנט הניקוי אם צריך
+          this.style.display = 'none';
+        });
+      }
+
+      // האזנה לאירוע 'submit' של הטופס (אם קיים)
+      const searchForm = document.querySelector('form');
+      if (searchForm) {
+        searchForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          search(searchInput.value);
+        });
+      }
+    }
+
+    function handleSearchInput() {
+      const searchInput = document.querySelector('#searchInput');
+      const clearSearchSpan = document.querySelector('#clearSearch');
+
+      if (searchInput.value.trim() === '') {
+        displayPopularSearches();
+        // הסתרת אלמנט הניקוי כשהשדה ריק
+        if (clearSearchSpan) clearSearchSpan.style.display = 'none';
+      } else {
+        search(searchInput.value);
+        // הצגת אלמנט הניקוי כשיש טקסט בשדה
+        if (clearSearchSpan) clearSearchSpan.style.display = 'inline';
+      }
+    }
+
+    // הפעלת פונקציית האתחול כאשר הדף נטען
+    document.addEventListener('DOMContentLoaded', initializeSearch);
+
 
     function displaySearchResults(results) {
       resultsContainer.innerHTML = '';
