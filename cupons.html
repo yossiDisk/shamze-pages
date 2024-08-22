@@ -356,7 +356,8 @@
       uniqueResults.forEach(site => {
         const siteDiv = document.createElement('div');
         siteDiv.className = 'product';
-        let siteContent = `<h3 onclick="window.open('${site.affLink || site.URL}', '_blank')">${site.siteName}</h3>`;
+
+        let siteContent = `<h3>${site.siteName}</h3>`;
 
         if (site.cupon && site.cupon !== "") {
           siteContent += `
@@ -375,11 +376,42 @@
         }
 
         siteDiv.innerHTML = siteContent;
+
+        // הוספת מאזין אירועים לכותרת
+        siteDiv.querySelector('h3').addEventListener('click', (event) => {
+          logClick(site);
+          window.open(site.affLink || site.URL, '_blank');
+        });
+
+        // הוספת מאזין אירועים לקישור "עבור לאתר"
+        const siteLink = siteDiv.querySelector('.site-link');
+        if (siteLink) {
+          siteLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            logClick(site);
+            window.open(site.affLink || site.URL, '_blank');
+          });
+        }
+
         siteDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
         resultsContainer.appendChild(siteDiv);
       });
     }
 
+    // פונקציית logClick
+    function logClick(site) {
+      if (window.plausible) {
+        window.plausible('ProductClick', {
+          props: {
+            productName: site.siteName,
+            targetSite: site.siteName,
+            searchQuery: currentSearchQuery // וודא שזה מוגדר במקום המתאים בקוד שלך
+          }
+        });
+      }
+
+    }
+    
     function toggleCoupon(event) {
       const toggle = event.target;
       const content = toggle.nextElementSibling;
