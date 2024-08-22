@@ -341,23 +341,35 @@
 
     function displaySearchResults(results) {
       resultsContainer.innerHTML = '';
+
+      // יצירת Map לאחסון תוצאה אחת לכל siteName
+      const uniqueResults = new Map();
+
+      // סינון התוצאות כדי לשמור רק תוצאה אחת לכל siteName
       results.forEach(site => {
+        if (!uniqueResults.has(site.siteName)) {
+          uniqueResults.set(site.siteName, site);
+        }
+      });
+
+      // הצגת התוצאות הייחודיות
+      uniqueResults.forEach(site => {
         const siteDiv = document.createElement('div');
         siteDiv.className = 'product';
         let siteContent = `<h3 onclick="window.open('${site.affLink || site.URL}', '_blank')">${site.siteName}</h3>`;
 
         if (site.cupon && site.cupon !== "") {
           siteContent += `
-                        <div class="coupon-details">
-                            <button class="coupon-toggle">פרטי קופון</button>
-                            <div class="coupon-content">
-                                <span>${site.cupon}</span>
-                                <span class="copy-icon" onclick="copyCoupon('${site.cupon}', event)">📋</span>
-                                <a href="${site.affLink || site.URL}" class="site-link" target="_blank">עבור לאתר</a>
-                                <p class="coupon-info">${site.cuponDetails || ''}</p>
-                            </div>
-                        </div>
-                    `;
+        <div class="coupon-details">
+            <button class="coupon-toggle">פרטי קופון</button>
+            <div class="coupon-content">
+                <span>${site.cupon}</span>
+                <span class="copy-icon" onclick="copyCoupon('${site.cupon}', event)">📋</span>
+                <a href="${site.affLink || site.URL}" class="site-link" target="_blank">עבור לאתר</a>
+                <p class="coupon-info">${site.cuponDetails || ''}</p>
+            </div>
+        </div>
+      `;
         } else {
           siteContent += `<a href="${site.affLink || site.URL}" class="site-link" target="_blank">עבור לאתר</a>`;
         }
