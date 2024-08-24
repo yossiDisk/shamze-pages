@@ -376,9 +376,11 @@
     function displayPopularSearches() {
       const popularSearches = [
         "Ali express",
+        "Golf",
         "המשביר",
         "ACE",
         "איירפודס",
+        "NAUTICA",
         "בושם לגבר",
         "Toys R us"
       ];
@@ -632,7 +634,7 @@
     }
 
     function goToProduct(url, siteName, productName) {
-      window.open(url, '_blank');
+      window.open(url+"?param=mobile", '_blank');
 
       // Plausible analytics
       plausible('ProductClick', {
