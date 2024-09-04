@@ -117,6 +117,22 @@
       margin: 10px auto;
     }
 
+    .request-coupon-button {
+      background-color: #3498db;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .email-input {
+      padding: 10px;
+      margin-top: 10px;
+      width: 100%;
+      max-width: 300px;
+    }
+
     @keyframes spin {
       0% {
         transform: rotate(0deg);
@@ -346,6 +362,8 @@
       }
     }
 
+    let searchedUrl = '';
+
     function search(query) {
       currentSearchQuery = query;
       showLoading();
@@ -360,17 +378,76 @@
 
       sortContainer.style.display = 'none';
 
-      const filteredSites = allSites.filter(site =>
-        site.siteName.toLowerCase().includes(query.toLowerCase()) ||
-        (site.cuponDetails && site.cuponDetails.toLowerCase().includes(query.toLowerCase()))
-      );
+      // Check if the query is a URL
+      if (query.toLowerCase().startsWith('https://')) {
+        searchedUrl = query; // Store the searched URL
+        searchByUrl(query);
+      } else {
+        searchedUrl = ''; // Reset the searched URL
+        const filteredSites = allSites.filter(site =>
+          site.siteName.toLowerCase().includes(query.toLowerCase()) ||
+          (site.cuponDetails && site.cuponDetails.toLowerCase().includes(query.toLowerCase()))
+        );
 
-      hideLoading();
-      displaySearchResults(filteredSites);
-      updateCompareButton(query);
+        hideLoading();
+        displaySearchResults(filteredSites);
+        updateCompareButton(query);
+      }
 
       // Plausible analytics
       plausible('Search', { props: { query: query } });
+    }
+
+    function searchByUrl(url) {
+      const matchingSite = allSites.find(site => url.toLowerCase().startsWith(site.URL.toLowerCase()));
+      
+      if (matchingSite) {
+        displaySearchResults([matchingSite], true); // Pass true to indicate URL search
+        updateCompareButton(matchingSite.siteName);
+      } else {
+        displayNoCouponMessage(url);
+      }
+      
+      hideLoading();
+    }
+
+    function displayNoCouponMessage(url) {
+      const siteName = new URL(url).hostname;
+      resultsContainer.innerHTML = `
+        <p>נראה שאין כאן קופון, אפשר ללחוץ כאן ולבקש להוסיף</p>
+        <button class="request-coupon-button" onclick="requestCoupon('${siteName}')">בקשת הטבה ל${siteName}</button>
+      `;
+    }
+
+    function requestCoupon(siteName) {
+      const emailInput = document.createElement('input');
+      emailInput.type = 'email';
+      emailInput.placeholder = 'הזן את כתובת המייל שלך';
+      emailInput.className = 'email-input';
+
+      const submitButton = document.createElement('button');
+      submitButton.textContent = 'שליחה';
+      submitButton.className = 'request-coupon-button';
+      submitButton.onclick = function() {
+        const email = emailInput.value;
+        if (email) {
+          // Plausible analytics
+          plausible('CouponRequest', { 
+            props: { 
+              site: siteName,
+              email: email
+            }
+          });
+          alert('הבקשה נשלחה');
+          emailInput.remove();
+          submitButton.remove();
+        } else {
+          alert('אנא הזן כתובת מייל תקינה');
+        }
+      };
+
+      resultsContainer.appendChild(emailInput);
+      resultsContainer.appendChild(submitButton);
     }
 
     function displayPopularSearches() {
@@ -470,7 +547,7 @@
     document.addEventListener('DOMContentLoaded', initializeSearch);
 
 
-    function displaySearchResults(results) {
+    function displaySearchResults(results, isUrlSearch = false) {
       resultsContainer.innerHTML = '';
 
       // יצירת Map לאחסון תוצאה אחת לכל siteName
@@ -497,37 +574,31 @@
             <div class="coupon-content">
                 <span>${site.cupon}</span>
                 <span class="copy-icon" onclick="copyCoupon('${site.cupon}', event)">📋</span>
-                <a href="${site.affLink || site.URL}" class="site-link" target="_blank">עבור לאתר</a>
+                <a href="#" class="site-link" onclick="goToSite('${site.affLink || site.URL}', '${site.siteName}', '${isUrlSearch ? 'למוצר' : 'לאתר'}', event)">
+                  עבור ${isUrlSearch ? 'למוצר' : 'לאתר'}
+                </a>
                 <p class="coupon-info">${site.cuponDetails || ''}</p>
             </div>
         </div>
       `;
         } else {
-          siteContent += `<a href="${site.affLink || site.URL}" class="site-link" target="_blank">עבור לאתר</a>`;
+          siteContent += `<a href="#" class="site-link" onclick="goToSite('${site.affLink || site.URL}', '${site.siteName}', '${isUrlSearch ? 'למוצר' : 'לאתר'}', event)">
+            עבור ${isUrlSearch ? 'למוצר' : 'לאתר'}
+          </a>`;
         }
 
         siteDiv.innerHTML = siteContent;
 
         // הוספת מאזין אירועים לכותרת
         siteDiv.querySelector('h3').addEventListener('click', (event) => {
-          logClick(site);
-          window.open(site.affLink || site.URL, '_blank');
+          goToSite(site.affLink || site.URL, site.siteName, isUrlSearch ? 'למוצר' : 'לאתר', event);
         });
-
-        // הוספת מאזין אירועים לקישור "עבור לאתר"
-        const siteLink = siteDiv.querySelector('.site-link');
-        if (siteLink) {
-          siteLink.addEventListener('click', (event) => {
-            event.preventDefault();
-            logClick(site);
-            window.open(site.affLink || site.URL, '_blank');
-          });
-        }
 
         siteDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
         resultsContainer.appendChild(siteDiv);
       });
     }
+
 
     function logClick(site) {
       if (window.plausible) {
@@ -646,10 +717,29 @@
       });
     }
 
-    function goToSite(url, siteName, event) {
+    function goToSite(url, siteName, linkType, event) {
       if (event) event.preventDefault();
-      window.open(url, '_blank');
-      plausible('SiteClick', { props: { site: siteName } });
+      
+      let finalUrl = url;
+      
+      if (searchedUrl && linkType === 'למוצר') {
+        if (url.startsWith('https://track')) {
+          finalUrl = `${url}?forceURL=${encodeURIComponent(searchedUrl)}`;
+        } else {
+          finalUrl = searchedUrl;
+        }
+      }
+
+      window.open(finalUrl, '_blank');
+      
+      plausible('SiteClick', { 
+        props: { 
+          site: siteName, 
+          linkType: linkType,
+          originalUrl: url,
+          finalUrl: finalUrl
+        } 
+      });
     }
 
     function findSiteInfo(url) {
