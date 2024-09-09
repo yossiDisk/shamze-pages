@@ -126,6 +126,9 @@
     <div id="loadingContainer" class="loading-container" style="display: none;">
         <div class="loading-spinner"></div>
         <p>אוספים מוצרים מכל האתרים, זה יכול לקחת עד <span id="countdown">10</span> שניות...</p>
+        <p></p>
+        <p>רוצה לפרסם פה? <span id="countdown"></span> </p>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamzezolyoter@gmail.com&su=מתעניין בפרסום בתוסף&body=אני מעוניין לקבל הצעת מחיר על פרסום" target="_blank">לחץ כאן</a>
     </div>
     <div id="searchResults" class="search-results"></div>
 
@@ -313,7 +316,6 @@
             }
 
             const clickData = {
-                productId: product.id || 'unknown',
                 productName: product.name || 'unknown',
                 targetSite: product.site || 'unknown',
                 searchQuery: currentSearchQuery || 'unknown',
@@ -326,7 +328,6 @@
                 try {
                     window.plausible('ProductClick', {
                         props: {
-                            productId: clickData.productId,
                             productName: clickData.productName,
                             targetSite: clickData.targetSite,
                             searchQuery: clickData.searchQuery
