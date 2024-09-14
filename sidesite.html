@@ -127,8 +127,8 @@
         <div class="loading-spinner"></div>
         <p>אוספים מוצרים מכל האתרים, זה יכול לקחת עד <span id="countdown">10</span> שניות...</p>
         <p></p>
-        <p>רוצה לפרסם פה? <span id="countdown"></span> </p>
-        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamzezolyoter@gmail.com&su=מתעניין בפרסום בתוסף&body=אני מעוניין לקבל הצעת מחיר על פרסום" target="_blank">לחץ כאן</a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamzezolyoter@gmail.com&su=יצרת קשר - שם זה זול יותר&body=יצירת קשר מעמוד חיפוש"
+            target="_blank">צור קשר</a>
     </div>
     <div id="searchResults" class="search-results"></div>
 
@@ -229,10 +229,35 @@
             testLoading();
         });
 
+        document.addEventListener('DOMContentLoaded', () => {
+            const feedbackLink = document.querySelector('.feedback-link');
+            if (feedbackLink) {
+                feedbackLink.addEventListener('click', () => {
+                    sendPlausibleEvent('FeedbackLinkClicked');
+                });
+            }
+        });
+
         function search(query) {
-            currentSearchQuery = query;  // עדכון ה-query הנוכחי
+            currentSearchQuery = query;
             showLoadingSpinner();
             log(`Starting search for query: ${query}`);
+
+            // Log the search event to Plausible
+            if (window.plausible) {
+                try {
+                    window.plausible('Search', {
+                        props: {
+                            query: query
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error sending search data to Plausible:', error);
+                }
+            } else {
+                console.warn('Plausible is not available for logging search event');
+            }
+
             return new Promise((resolve, reject) => {
                 fetchSearchResults(query)
                     .then(() => {
@@ -308,6 +333,19 @@
             });
         }
 
+        function sendPlausibleEvent(eventName, props = {}) {
+            if (window.plausible) {
+                try {
+                    window.plausible(eventName, { props });
+                    console.log(`Event sent to Plausible: ${eventName}`, props);
+                } catch (error) {
+                    console.error(`Error sending ${eventName} event to Plausible:`, error);
+                }
+            } else {
+                console.warn(`Plausible not available for logging ${eventName} event`);
+            }
+        }
+
         function logClick(product) {
             // בדיקה שהאובייקט product קיים ומכיל את השדה site
             if (!product || typeof product.site === 'undefined') {
@@ -360,6 +398,7 @@
                     return sortType === 'price-asc' ? priceA - priceB : priceB - priceA;
                 });
             }
+            sendPlausibleEvent('SortResults', { sortType });
 
             displaySearchResults(sortedResults);
         }
