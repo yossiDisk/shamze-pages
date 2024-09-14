@@ -229,6 +229,15 @@
             testLoading();
         });
 
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (typeof window.plausible === 'undefined') {
+                console.warn('Plausible script not loaded. Attempting to load it manually.');
+                loadPlausibleScript();
+            } else {
+                console.log('Plausible script already loaded.');
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             const feedbackLink = document.querySelector('.feedback-link');
             if (feedbackLink) {
@@ -238,25 +247,32 @@
             }
         });
 
+        let eventQueue = [];
+
+        // פונקציה להוספת אירועים לתור
+        function queueEvent(eventName, props) {
+            eventQueue.push({ eventName, props });
+        }
+
+        function sendQueuedEvents() {
+            if (typeof window.plausible === 'function' && eventQueue.length > 0) {
+                console.log('Sending queued events to Plausible.');
+                eventQueue.forEach(event => {
+                    sendPlausibleEvent(event.eventName, event.props);
+                });
+                eventQueue = []; // ניקוי התור לאחר שליחת האירועים
+            }
+        }
+
+        setInterval(sendQueuedEvents, 5000); // בדיקה כל 5 שניות
+
+        // עדכון פונקציית החיפוש
         function search(query) {
             currentSearchQuery = query;
             showLoadingSpinner();
             log(`Starting search for query: ${query}`);
 
-            // Log the search event to Plausible
-            if (window.plausible) {
-                try {
-                    window.plausible('Search', {
-                        props: {
-                            query: query
-                        }
-                    });
-                } catch (error) {
-                    console.error('Error sending search data to Plausible:', error);
-                }
-            } else {
-                console.warn('Plausible is not available for logging search event');
-            }
+            sendPlausibleEvent('Search', { query });
 
             return new Promise((resolve, reject) => {
                 fetchSearchResults(query)
@@ -333,8 +349,18 @@
             });
         }
 
+        function loadPlausibleScript() {
+            const script = document.createElement('script');
+            script.defer = true;
+            script.setAttribute('data-domain', 'yossidisk.github.io/shamze/sidesite.html');
+            script.src = 'https://plausible.io/js/script.js';
+            script.onload = () => console.log('Plausible script loaded successfully.');
+            script.onerror = () => console.error('Failed to load Plausible script.');
+            document.head.appendChild(script);
+        }
+
         function sendPlausibleEvent(eventName, props = {}) {
-            if (window.plausible) {
+            if (typeof window.plausible === 'function') {
                 try {
                     window.plausible(eventName, { props });
                     console.log(`Event sent to Plausible: ${eventName}`, props);
@@ -342,7 +368,8 @@
                     console.error(`Error sending ${eventName} event to Plausible:`, error);
                 }
             } else {
-                console.warn(`Plausible not available for logging ${eventName} event`);
+                console.warn(`Plausible not available for logging ${eventName} event. Queuing event.`);
+                queueEvent(eventName, props);
             }
         }
 
