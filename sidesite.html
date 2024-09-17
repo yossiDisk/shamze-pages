@@ -397,6 +397,7 @@
             const clickData = {
                 productName: product.name || 'unknown',
                 targetSite: product.site || 'unknown',
+                productPrice: product.price || 'unknown',
                 searchQuery: currentSearchQuery || 'unknown',
                 timestamp: new Date().toISOString()
             };
@@ -409,6 +410,7 @@
                         props: {
                             productName: clickData.productName,
                             targetSite: clickData.targetSite,
+                            productPrice: clickData.productPrice,
                             searchQuery: clickData.searchQuery
                         }
                     });
