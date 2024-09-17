@@ -266,13 +266,27 @@
 
         setInterval(sendQueuedEvents, 5000); // בדיקה כל 5 שניות
 
-        // עדכון פונקציית החיפוש
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // נעדכן את פונקציית החיפוש
         function search(query) {
             currentSearchQuery = query;
             showLoadingSpinner();
             log(`Starting search for query: ${query}`);
 
-            sendPlausibleEvent('Search', { query });
+            // קריאת הפרמטרים הנוספים מה-URL
+            const price = getUrlParameter('price');
+            const referrerUrl = getUrlParameter('url');
+
+            // שליחת אירוע Search עם הפרמטרים הנוספים
+            sendPlausibleEvent('Search', {
+                query: query,
+                price: price || 'Not provided',
+                referrerUrl: referrerUrl || 'Not provided'
+            });
 
             return new Promise((resolve, reject) => {
                 fetchSearchResults(query)
@@ -559,6 +573,9 @@
         // ביצוע חיפוש מיידי אם יש פרמטר query ב-URL
         const urlParams = new URLSearchParams(window.location.search);
         const queryParam = urlParams.get('query');
+        const priceParam = urlParams.get('price');
+        const urlParam = urlParams.get('url');
+
         if (queryParam) {
             search(queryParam).then(() => {
                 displayLogs();
