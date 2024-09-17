@@ -283,7 +283,7 @@
 
             // שליחת אירוע Search עם הפרמטרים הנוספים
             sendPlausibleEvent('Search', {
-                query: query,
+                query: query || 'Not provided',
                 price: price || 'Not provided',
                 referrerUrl: referrerUrl || 'Not provided'
             });
