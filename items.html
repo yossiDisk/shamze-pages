@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analytics Tracker</title>
+</head>
+<body>
+    <script>
+        // Google tag (gtag.js)
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtag/js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','G-47D8PKKSJN');
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-47D8PKKSJN');
+
+// מעקב אחר לחיצות
+document.addEventListener('click', function() {
+    gtag('event', 'click', {
+        'event_category': 'User Interaction',
+        'event_label': 'Page Click'
+    });
+});
+
+// מעקב אחר זמן שהייה בעמוד
+var startTime = new Date().getTime();
+setInterval(function() {
+    var timeSpent = Math.round((new Date().getTime() - startTime) / 1000);
+    gtag('event', 'time_spent', {
+        'event_category': 'User Engagement',
+        'event_label': 'Time on Page',
+        'value': timeSpent
+    });
+}, 60000); // שולח עדכון כל דקה
+
+// שליחת נתונים כאשר המשתמש עוזב את העמוד
+window.addEventListener('beforeunload', function() {
+    gtag('event', 'page_exit', {
+        'event_category': 'User Engagement',
+        'event_label': 'Page Exit'
+    });
+});
+
+// מעקב אחר URL נוכחי
+gtag('event', 'page_view', {
+    'page_location': window.location.href,
+    'page_title': document.title
+});
+    </script>
+</body>
+</html>
