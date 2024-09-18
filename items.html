@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Enhanced Items Collector</title>
+    <title>Enhanced Items Collector with Source Tracking</title>
     <script defer data-domain="yossidisk.github.io/shamze/items.html" src="https://plausible.io/js/script.file-downloads.hash.outbound-links.pageview-props.revenue.tagged-events.js"></script>
     <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
 </head>
@@ -18,8 +18,24 @@
         gtag('js', new Date());
         gtag('config', 'G-47D8PKKSJN');
 
-        // Enhanced tracking function
+        // פונקציה לקבלת המקור של ה-iframe
+        function getIframeSource() {
+            try {
+                return window.parent.location.href;
+            } catch (e) {
+                // אם אין גישה ל-parent בגלל מדיניות same-origin, נחזיר את ה-referrer
+                return document.referrer || 'Unknown';
+            }
+        }
+
+        // המקור של ה-iframe
+        var iframeSource = getIframeSource();
+
+        // פונקציית מעקב משופרת
         function sendEvent(eventName, eventData) {
+            // הוספת מקור ה-iframe לכל אירוע
+            eventData.iframe_source = iframeSource;
+            
             gtag('event', eventName, eventData);
             if (window.plausible) {
                 window.plausible(eventName, { props: eventData });
@@ -99,8 +115,8 @@
             }
         }).observe(document, {subtree: true, childList: true});
 
-        // מעקב ראשוני אחר URL נוכחי
-        sendEvent('page_view', {
+        // מעקב ראשוני אחר URL נוכחי ומקור ה-iframe
+        sendEvent('initial_load', {
             'page_location': window.location.href,
             'page_title': document.title
         });
