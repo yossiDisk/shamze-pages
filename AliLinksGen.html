@@ -76,9 +76,13 @@
                 return;
             }
 
+            document.getElementById('message').textContent = 'מעבד את הקישור...';
+
             const generatedLink = await generateAliExpressLink(cleanLink);
             if (generatedLink) {
-                window.location.href = generatedLink;
+                // הסרת המירכאות הכפולות מתחילת וסוף הקישור
+                const cleanGeneratedLink = generatedLink.replace(/^"|"$/g, '');
+                window.location.href = cleanGeneratedLink;
             } else {
                 document.getElementById('message').textContent = 'אירעה שגיאה בעת יצירת הקישור.';
             }
