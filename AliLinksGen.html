@@ -22,10 +22,10 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
     </style>
+    <script defer data-domain="yossidisk.github.io/shamze/AliLinksGen.html" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
     <div id="message">טוען...</div>
-
     <script>
         function removeParametersFromUrl(url) {
             try {
@@ -49,11 +49,9 @@
                         url: url
                     })
                 });
-
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
                 }
-
                 return await response.text();
             } catch (error) {
                 console.error('Error:', error);
@@ -61,34 +59,57 @@
             }
         }
 
+        function trackEvent(eventName, props) {
+            if (typeof plausible !== 'undefined') {
+                plausible(eventName, { props: props });
+            } else {
+                console.log('Plausible event:', eventName, props);
+            }
+        }
+
         async function processAndRedirect() {
             const urlParams = new URLSearchParams(window.location.search);
             const link = urlParams.get('link');
+            const source = urlParams.get('source') || 'unknown';
+
+            trackEvent('PageView', { source: source });
 
             if (!link) {
                 document.getElementById('message').textContent = 'לא סופק קישור.';
+                trackEvent('Error', { error: 'No link provided', source: source });
                 return;
             }
 
             const cleanLink = removeParametersFromUrl(link);
             if (!cleanLink) {
                 document.getElementById('message').textContent = 'הקישור שסופק אינו תקין.';
+                trackEvent('Error', { error: 'Invalid link', source: source, link: link });
                 return;
             }
 
             document.getElementById('message').textContent = 'מעבד את הקישור...';
-
+            
             const generatedLink = await generateAliExpressLink(cleanLink);
             if (generatedLink) {
-                // הסרת המירכאות הכפולות מתחילת וסוף הקישור
                 const cleanGeneratedLink = generatedLink.replace(/^"|"$/g, '');
-                window.location.href = cleanGeneratedLink;
+                
+                trackEvent('LinkGenerated', { 
+                    source: source, 
+                    originalLink: cleanLink,
+                    generatedLink: cleanGeneratedLink 
+                });
+
+                setTimeout(() => {
+                    window.location.href = cleanGeneratedLink;
+                }, 100);
             } else {
                 document.getElementById('message').textContent = 'אירעה שגיאה בעת יצירת הקישור.';
+                trackEvent('Error', { error: 'Link generation failed', source: source, link: cleanLink });
             }
         }
 
-        processAndRedirect();
+        // Run processAndRedirect after the page has fully loaded
+        window.addEventListener('load', processAndRedirect);
     </script>
 </body>
 </html>
