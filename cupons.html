@@ -718,29 +718,48 @@
     }
 
     function goToSite(url, siteName, linkType, event) {
-      if (event) event.preventDefault();
-      
-      let finalUrl = url;
-      
-      if (searchedUrl && linkType === 'למוצר') {
-        if (url.startsWith('https://track')) {
-          finalUrl = `${url}?forceURL=${encodeURIComponent(searchedUrl)}`;
-        } else {
-          finalUrl = searchedUrl;
-        }
+  if (event) event.preventDefault();
+  
+  let finalUrl = url;
+  
+  // Find the site info
+  const siteInfo = allSites.find(site => site.siteName === siteName);
+  
+  if (siteInfo) {
+    if (searchedUrl && linkType === 'למוצר') {
+      if (url.startsWith('https://track')) {
+        finalUrl = `${url}?forceURL=${encodeURIComponent(searchedUrl)}`;
+      } else {
+        finalUrl = searchedUrl;
       }
-
-      window.open(finalUrl, '_blank');
+    } else if (siteInfo.affParam) {
+      // Check if the URL already has parameters
+      const urlObj = new URL(finalUrl);
+      const separator = urlObj.search ? '&' : '?';
       
-      plausible('SiteClick', { 
-        props: { 
-          site: siteName, 
-          linkType: linkType,
-          originalUrl: url,
-          finalUrl: finalUrl
-        } 
-      });
+      // Add affParam, ensuring we don't break the URL structure
+      if (siteInfo.affParam.startsWith('/')) {
+        // If affParam starts with '/', replace the entire path and search
+        urlObj.pathname = siteInfo.affParam;
+        urlObj.search = '';
+      } else {
+        // Otherwise, append it to the existing URL
+        finalUrl = `${finalUrl}${separator}${siteInfo.affParam}`;
+      }
     }
+  }
+
+  window.open(finalUrl, '_blank');
+  
+  plausible('SiteClick', { 
+    props: { 
+      site: siteName, 
+      linkType: linkType,
+      originalUrl: url,
+      finalUrl: finalUrl
+    } 
+  });
+}
 
     function findSiteInfo(url) {
       const parsedUrl = new URL(url);
