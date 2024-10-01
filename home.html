@@ -31,30 +31,30 @@
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center">
                 <img src="https://lh3.googleusercontent.com/Sp3b24fVCvCVewv5udOP_e-qNVWGuxcZX9DEgYmKncXjeO9kp6KKCJ8NFcVs0VQNFeWo1P9p8-aYV1fDyq1Ct0ZCXec=s60" alt="לוגו שם זה זול יותר" class="w-10 h-10 mr-2">
-                <h1 class="text-2xl font-bold">שם זה זול יותר</h1>
+                <h1 class="text-xl font-bold">שם זה זול יותר</h1>
             </div>
-            <button id="menu-toggle" class="sm:hidden" onclick="plausible('Toggle Mobile Menu')">
+            <button id="menu-toggle" class="sm:hidden text-2xl focus:outline-none" aria-label="תפריט">
                 ☰
             </button>
-            <nav id="nav-menu" class="hidden sm:flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 sm:space-x-reverse absolute sm:relative top-16 sm:top-0 right-0 sm:right-auto bg-green-600 sm:bg-transparent w-full sm:w-auto p-4 sm:p-0">
-                <a href="#features" class="hover:underline px-2 py-1" onclick="plausible('Nav Click', {props: {section: 'features'}})">יתרונות</a>
-                <a href="#how-it-works" class="hover:underline px-2 py-1" onclick="plausible('Nav Click', {props: {section: 'how-it-works'}})">איך זה עובד</a>
-                <a href="#media" class="hover:underline px-2 py-1" onclick="plausible('Nav Click', {props: {section: 'media'}})">מדיה</a>
-                <a href="#testimonials" class="hover:underline px-2 py-1" onclick="plausible('Nav Click', {props: {section: 'testimonials'}})">המלצות</a>
-                <a href="#community" class="hover:underline px-2 py-1" onclick="plausible('Nav Click', {props: {section: 'community'}})">קהילה</a>
-                <a href="#stores" class="hover:underline px-2 py-1" onclick="plausible('Nav Click', {props: {section: 'stores'}})">חנויות נתמכות</a>
+        </div>
+        <nav id="nav-menu" class="hidden sm:flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 sm:space-x-reverse absolute sm:relative top-full left-0 right-0 sm:top-0 bg-green-600 sm:bg-transparent w-full sm:w-auto p-4 sm:p-0 shadow-lg sm:shadow-none">
+            <a href="#features" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto">יתרונות</a>
+            <a href="#how-it-works" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto">איך זה עובד</a>
+            <a href="#media" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto">מדיה</a>
+            <a href="#testimonials" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto">המלצות</a>
+            <a href="#community" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto">קהילה</a>
+            <a href="#stores" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto">חנויות נתמכות</a>
+            <div class="flex flex-col sm:flex-row w-full sm:w-auto mt-4 sm:mt-0">
                 <a href="https://yossidisk.github.io/Shamze/cupons.html" 
-                   class="bg-yellow-400 text-green-600 px-4 py-2 rounded-full font-bold hover:bg-yellow-300 transition duration-300"
-                   onclick="plausible('Find Discount Click')">
+                   class="bg-yellow-400 text-green-600 px-4 py-2 rounded-full font-bold hover:bg-yellow-300 transition duration-300 text-center mb-2 sm:mb-0 sm:mr-2">
                     מצא הנחה
                 </a>
                 <a href="https://chromewebstore.google.com/detail/%D7%A9%D7%9D-%D7%96%D7%94-%D7%96%D7%95%D7%9C-%D7%99%D7%95%D7%AA%D7%A8/neigoggljhfnodeneidndcflnclldnpm?hl=iw" 
-                   class="bg-white text-green-600 px-4 py-2 rounded-full font-bold hover:bg-green-100 transition duration-300"
-                   onclick="plausible('Install Extension', {props: {location: 'header'}})">
+                   class="bg-white text-green-600 px-4 py-2 rounded-full font-bold hover:bg-green-100 transition duration-300 text-center">
                     התקן עכשיו
                 </a>
-            </nav>
-        </div>
+            </div>
+        </nav>
     </header>
 
     <main class="container mx-auto mt-8 px-4">
@@ -205,14 +205,14 @@
                     <div class="p-2 bg-gray-100 rounded">KSP</div>
                     <div class="p-2 bg-gray-100 rounded">Ivory</div>
                     <div class="p-2 bg-gray-100 rounded">Lastprice</div>
-                    <div class="p-2 bg-gray-100 rounded">Duty Free</div>
-                    <div class="p-2 bg-gray-100 rounded">Azrieli</div>
-                    <div class="p-2 bg-gray-100 rounded">Castro</div>
-                    <div class="p-2 bg-gray-100 rounded">Adika</div>
+                    <div class="p-2 bg-gray-100 rounded">סופרפארם</div>
+                    <div class="p-2 bg-gray-100 rounded">BUG</div>
+                    <div class="p-2 bg-gray-100 rounded">מחסני חשמל</div>
+                    <div class="p-2 bg-gray-100 rounded">AliExpress</div>
                     <div class="p-2 bg-gray-100 rounded">Renuar</div>
                     <div class="p-2 bg-gray-100 rounded">Zap</div>
                     <div class="p-2 bg-gray-100 rounded">Terminal X</div>
-                    <div class="p-2 bg-gray-100 rounded">Yves Rocher</div>
+                    <div class="p-2 bg-gray-100 rounded">Amazon</div>
                     <div class="p-2 bg-gray-100 rounded">Shufersal</div>
                 </div>
                 <p class="text-center mt-4">ועוד רבות אחרות!</p>
@@ -223,35 +223,35 @@
             <h2 class="text-3xl font-bold text-center mb-8">שאלות נפוצות</h2>
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <div class="faq-item mb-4">
-                    <button class="flex justify-between items-center w-full text-left font-bold text-xl mb-2" onclick="toggleFAQ(this); plausible('FAQ Click', {props: {question: this.textContent.trim()}})">
+                    <button class="flex justify-between items-center w-full text-left font-bold text-xl mb-2">
                         <span>האם השימוש בתוסף הוא בחינם?</span>
                         <span class="transform transition-transform duration-200">▼</span>
                     </button>
                     <p class="hidden mt-2">כן, התוסף הוא לגמרי חינמי לשימוש. אנחנו מאמינים בלעזור לאנשים לחסוך כסף בלי שזה יעלה להם.</p>
                 </div>
                 <div class="faq-item mb-4">
-                    <button class="flex justify-between items-center w-full text-left font-bold text-xl mb-2" onclick="toggleFAQ(this); plausible('FAQ Click', {props: {question: this.textContent.trim()}})">
+                    <button class="flex justify-between items-center w-full text-left font-bold text-xl mb-2">
                         <span>האם התוסף בטוח לשימוש?</span>
                         <span class="transform transition-transform duration-200">▼</span>
                     </button>
                     <p class="hidden mt-2">בהחלט. אנחנו מקפידים על אבטחה ופרטיות. התוסף שלנו לא אוסף מידע אישי ופועל רק כדי למצוא לכם את ההנחות הטובות ביותר.</p>
                 </div>
                 <div class="faq-item mb-4">
-                    <button class="flex justify-between items-center w-full text-left font-bold text-xl mb-2" onclick="toggleFAQ(this); plausible('FAQ Click', {props: {question: this.textContent.trim()}})">
+                    <button class="flex justify-between items-center w-full text-left font-bold text-xl mb-2">
                         <span>איך אני מתקין את התוסף?</span>
                         <span class="transform transition-transform duration-200">▼</span>
                     </button>
                     <p class="hidden mt-2">פשוט לחצו על כפתור "התקן את התוסף בחינם" בראש העמוד. זה יוביל אתכם לחנות התוספים של Chrome, שם תוכלו להתקין את התוסף בקליק אחד.</p>
                 </div>
                 <div class="faq-item mb-4">
-                    <button class="flex justify-between items-center w-full text-left font-bold text-xl mb-2" onclick="toggleFAQ(this); plausible('FAQ Click', {props: {question: this.textContent.trim()}})">
+                    <button class="flex justify-between items-center w-full text-left font-bold text-xl mb-2">
                         <span>איך משתמשים בתוסף לאחר ההתקנה?</span>
                         <span class="transform transition-transform duration-200">▼</span>
                     </button>
                     <p class="hidden mt-2">השימוש בתוסף הוא פשוט וללא מאמץ! לאחר ההתקנה, אין צורך לעשות שום פעולה נוספת. התוסף יפעל אוטומטית כאשר תגלשו לאתרי קניות נתמכים. הוא יקפוץ מעצמו ויציג לכם קופונים והשוואות מחירים בזמן אמת, בלי שתצטרכו לעשות דבר. פשוט המשיכו לגלוש ולקנות כרגיל, והתוסף יעשה את כל העבודה בשבילכם!</p>
                 </div>
                 <div class="faq-item">
-                    <button class="flex justify-between items-center w-full text-left font-bold text-xl mb-2" onclick="toggleFAQ(this); plausible('FAQ Click', {props: {question: this.textContent.trim()}})">
+                    <button class="flex justify-between items-center w-full text-left font-bold text-xl mb-2">
                         <span>באילו אתרים התוסף עובד?</span>
                         <span class="transform transition-transform duration-200">▼</span>
                     </button>
@@ -274,21 +274,60 @@
     </footer>
 
     <script>
-        // Toggle mobile menu
-        document.getElementById('menu-toggle').addEventListener('click', function() {
-            const menu = document.getElementById('nav-menu');
-            menu.classList.toggle('hidden');
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+    
+        menuToggle.addEventListener('click', (event) => {
+            event.stopPropagation();
+            navMenu.classList.toggle('hidden');
+            menuToggle.setAttribute('aria-expanded', navMenu.classList.contains('hidden') ? 'false' : 'true');
+            
+            if (!navMenu.classList.contains('hidden')) {
+                navMenu.style.maxHeight = navMenu.scrollHeight + 'px';
+            } else {
+                navMenu.style.maxHeight = '0px';
+            }
         });
-
-        // Toggle FAQ answers
-        function toggleFAQ(button) {
-            const answer = button.nextElementSibling;
-            const arrow = button.querySelector('span:last-child');
-            answer.classList.toggle('hidden');
-            arrow.classList.toggle('rotate-180');
-        }
-
-        // Plausible events
+    
+        document.addEventListener('click', (event) => {
+            if (!navMenu.contains(event.target) && !menuToggle.contains(event.target) && !navMenu.classList.contains('hidden')) {
+                navMenu.classList.add('hidden');
+                menuToggle.setAttribute('aria-expanded', 'false');
+                navMenu.style.maxHeight = '0px';
+            }
+        });
+    
+        navMenu.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
+    
+        menuToggle.addEventListener('click', () => {
+            plausible('Toggle Mobile Menu');
+        });
+    
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                plausible('Nav Click', {props: {section: link.textContent.trim()}});
+                if (window.innerWidth < 640) {
+                    navMenu.classList.add('hidden');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                    navMenu.style.maxHeight = '0px';
+                }
+            });
+        });
+    
+        // FAQ functionality (preserving original implementation)
+        document.querySelectorAll('#faq button').forEach(button => {
+            button.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                const arrow = this.querySelector('span:last-child');
+                answer.classList.toggle('hidden');
+                arrow.classList.toggle('rotate-180');
+                plausible('FAQ Click', {props: {question: this.querySelector('span:first-child').textContent.trim()}});
+            });
+        });
+    
+        // Existing Plausible events
         document.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', function(e) {
                 if (!this.getAttribute('onclick')) {
@@ -296,20 +335,31 @@
                 }
             });
         });
-
-        // Scroll tracking
+    
         window.addEventListener('scroll', function() {
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
                 plausible('Scroll to Bottom');
             }
         });
-
-        // Track video plays
+    
         document.querySelectorAll('iframe').forEach(iframe => {
             iframe.addEventListener('load', function() {
                 plausible('Video Loaded', { props: { video: this.src } });
             });
         });
     </script>
+    <style>
+        #nav-menu {
+            transition: max-height 0.3s ease-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        @media (min-width: 640px) {
+            #nav-menu {
+                max-height: none !important;
+                overflow: visible;
+            }
+        }
+    </style>
 </body>
 </html>
