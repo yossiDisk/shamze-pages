@@ -1,46 +1,129 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>שם זה זול יותר - קופונים והשוואת מחירים</title>
-    <script defer data-domain="yossidisk.github.io/shamze/cupons.html" src="https://plausible.io/js/script.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap');
-      
-      :root {
-        --primary-green: #166534;
-      }
-      
-      body {
-        font-family: 'Heebo', sans-serif;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        margin: 0;
-        background-color: #f0f0f0;
-        color: #333;
-        overflow-x: hidden;
-        text-align: center;
-      }
-      
-      main {
-        flex: 1 0 auto;
-        padding-bottom: 60px; /* מרווח עבור הסרגל התחתון */
-      }
-      
-      header {
-  background-color: var(--primary-green);
-  color: white;
-  padding: 10px 0;
-}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>שם זה זול יותר - קופונים והשוואת מחירים</title>
+  <script defer data-domain="yossidisk.github.io/shamze/cupons.html" src="https://plausible.io/js/script.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap');
 
-header h1 {
-  color: white;
-}
-      
+    :root {
+      --primary-green: #166534;
+    }
+
+    body {
+      font-family: 'Heebo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+      color: #333;
+      overflow-x: hidden;
+      text-align: center;
+    }
+
+    main {
+      flex: 1 0 auto;
+      padding-bottom: 60px;
+      /* מרווח עבור הסרגל התחתון */
+    }
+
+    header a.install-button {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 150px;
+      /* התאם לפי הצורך */
+      text-align: center;
+    }
+
+    header {
+      background-color: var(--primary-green);
+      color: white;
+      padding: 10px 0;
+    }
+
+    header .logo-container {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      /* מאפשר לתוכן להתכווץ אם נדרש */
+    }
+
+    header h1 {
+      color: white;
+      font-size: 1.25rem;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (max-width: 768px) {
+        footer {
+          display: none;
+          /* מסתיר את הסרגל התחתון במובייל */
+        }
+
+        main {
+          padding-bottom: 20px;
+          /* מקטין את הפדינג התחתון במובייל */
+        }
+      }
+
+    @media (max-width: 10000px) {
+      header h1 {
+        font-size: 0.8rem;
+        max-width: 140px;
+      }
+
+      header a.install-button {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.4rem;
+        max-width: 80px;
+        /* התאם לפי הצורך */
+      }
+
+      @media (max-width: 640px) {
+        header .container {
+          padding: 0.5rem;
+        }
+
+        header a.install-button {
+          font-size: 0.7rem;
+          padding: 0.25rem 0.5rem;
+          max-width: 100px;
+          /* התאם לפי הצורך */
+        }
+
+        header img {
+          width: 24px;
+          height: 24px;
+        }
+
+        header h1 {
+          font-size: 0.9rem;
+          max-width: 140px;
+          /* הגבל את רוחב הכותרת במסכים קטנים */
+        }
+
+        header a {
+          font-size: 0.7rem;
+          padding: 0.25rem 0.5rem;
+        }
+      }
+
+      header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: nowrap;
+      }
+
       footer {
         background-color: var(--primary-green);
         color: white;
@@ -50,27 +133,27 @@ header h1 {
         left: 0;
         right: 0;
       }
-      
+
       h1 {
         margin-bottom: 10px;
         color: #2c3e50;
         font-size: 24px;
       }
-      
+
       h4 {
         margin-bottom: 20px;
         color: #7f8c8d;
         font-size: 14px;
         font-weight: normal;
       }
-      
+
       .search-container {
         position: relative;
         max-width: 300px;
         margin: 0 auto;
         width: 100%;
       }
-      
+
       .search-input {
         width: 100%;
         padding: 12px 30px 12px 12px;
@@ -80,12 +163,12 @@ header h1 {
         box-sizing: border-box;
         transition: all 0.3s ease;
       }
-      
+
       .search-input:focus {
         outline: none;
         border-color: #555;
       }
-      
+
       .clear-search {
         position: absolute;
         left: 10px;
@@ -95,7 +178,7 @@ header h1 {
         color: #999;
         font-size: 18px;
       }
-      
+
       .button-container {
         display: flex;
         flex-direction: column;
@@ -103,7 +186,7 @@ header h1 {
         gap: 15px;
         margin-top: 20px;
       }
-      
+
       .coupon-button,
       .compare-button {
         background-color: var(--primary-green);
@@ -118,7 +201,7 @@ header h1 {
         width: 100%;
         max-width: 300px;
       }
-      
+
       .coupon-button:hover,
       .coupon-button:active,
       .compare-button:hover,
@@ -127,12 +210,12 @@ header h1 {
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
       }
-      
+
       .loading-container {
         text-align: center;
         margin: 20px 0;
       }
-      
+
       .loading-spinner {
         border: 4px solid #f3f3f3;
         border-top: 4px solid #3498db;
@@ -142,12 +225,17 @@ header h1 {
         animation: spin 1s linear infinite;
         margin: 10px auto;
       }
-      
+
       @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
       }
-      
+
       .request-coupon-button {
         background-color: #3498db;
         color: white;
@@ -157,14 +245,14 @@ header h1 {
         cursor: pointer;
         margin-top: 10px;
       }
-      
+
       .email-input {
         padding: 10px;
         margin-top: 10px;
         width: 100%;
         max-width: 300px;
       }
-      
+
       .product {
         background-color: white;
         padding: 15px;
@@ -175,7 +263,7 @@ header h1 {
         width: 100%;
         max-width: 300px;
       }
-      
+
       .product h3 {
         margin-top: 0;
         color: #333;
@@ -183,23 +271,23 @@ header h1 {
         margin-bottom: 10px;
         cursor: pointer;
       }
-      
+
       .product h3:hover {
         text-decoration: underline;
       }
-      
+
       .product p {
         margin: 5px 0;
         color: #666;
         font-size: 14px;
       }
-      
+
       .comparison-result {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
       }
-      
+
       .comparison-item {
         background-color: white;
         padding: 15px;
@@ -209,23 +297,23 @@ header h1 {
         text-align: right;
         width: calc(50% - 10px);
       }
-      
+
       .comparison-item h3 {
         margin-top: 0;
         font-size: 16px;
         color: #333;
       }
-      
+
       .comparison-item p {
         margin: 5px 0;
         font-size: 14px;
         color: #666;
       }
-      
+
       .coupon-details {
         margin-top: 10px;
       }
-      
+
       .coupon-toggle {
         background-color: #f0f0f0;
         border: none;
@@ -237,33 +325,33 @@ header h1 {
         justify-content: space-between;
         width: 100%;
       }
-      
+
       .coupon-toggle:after {
         content: '▼';
         font-size: 12px;
         margin-right: 5px;
         transition: transform 0.3s ease;
       }
-      
+
       .coupon-toggle.active:after {
         transform: rotate(180deg);
       }
-      
+
       .coupon-content {
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.3s ease;
       }
-      
+
       .coupon-content.active {
         max-height: 500px;
       }
-      
+
       .copy-icon {
         cursor: pointer;
         margin-right: 10px;
       }
-      
+
       .site-link {
         color: #3498db;
         text-decoration: none;
@@ -271,22 +359,22 @@ header h1 {
         margin-top: 10px;
         display: inline-block;
       }
-      
+
       .site-link:hover {
         text-decoration: underline;
       }
-      
+
       .coupon-info {
         font-size: 12px;
         color: #777;
         margin-top: 5px;
       }
-      
+
       .popular-searches-container {
         margin-top: 20px;
         text-align: center;
       }
-      
+
       .popular-search-buttons {
         display: flex;
         flex-wrap: wrap;
@@ -294,7 +382,7 @@ header h1 {
         gap: 10px;
         margin-top: 10px;
       }
-      
+
       .popular-search-button {
         background-color: #f0f0f0;
         border: 1px solid #ddd;
@@ -304,65 +392,75 @@ header h1 {
         transition: background-color 0.3s;
         font-size: 14px;
       }
-      
+
       .popular-search-button:hover {
         background-color: #e0e0e0;
       }
-      
+
       .bg-green-600 {
         background-color: var(--primary-green);
       }
-      
+
       .text-green-600 {
         color: var(--primary-green);
       }
-      
+
       .hover\:bg-green-600:hover {
         background-color: var(--primary-green);
       }
-      
+
       @media (max-width: 600px) {
         .comparison-item {
           width: 100%;
         }
       }
-      </style>
+  </style>
 </head>
 
 <header class="bg-green-600 text-white py-2 px-4 sticky top-0 z-50">
   <div class="container mx-auto flex justify-between items-center">
     <div class="flex items-center">
-      <img src="https://lh3.googleusercontent.com/Sp3b24fVCvCVewv5udOP_e-qNVWGuxcZX9DEgYmKncXjeO9kp6KKCJ8NFcVs0VQNFeWo1P9p8-aYV1fDyq1Ct0ZCXec=s60" alt="לוגו שם זה זול יותר" class="w-10 h-10 mr-2">
+      <img
+        src="https://lh3.googleusercontent.com/Sp3b24fVCvCVewv5udOP_e-qNVWGuxcZX9DEgYmKncXjeO9kp6KKCJ8NFcVs0VQNFeWo1P9p8-aYV1fDyq1Ct0ZCXec=s60"
+        alt="לוגו שם זה זול יותר" class="w-10 h-10 mr-2">
       <h1 class="text-xl font-bold">שם זה זול יותר</h1>
     </div>
-    <a href="https://chromewebstore.google.com/detail/%D7%A9%D7%9D-%D7%96%D7%94-%D7%96%D7%95%D7%9C-%D7%99%D7%95%D7%AA%D7%A8/neigoggljhfnodeneidndcflnclldnpm?hl=iw" 
-       class="bg-yellow-400 text-green-600 px-4 py-2 rounded-full font-bold hover:bg-yellow-300 transition duration-300 text-center">
+    <a href="https://chromewebstore.google.com/detail/%D7%A9%D7%9D-%D7%96%D7%94-%D7%96%D7%95%D7%9C-%D7%99%D7%95%D7%AA%D7%A8/neigoggljhfnodeneidndcflnclldnpm?hl=iw"
+      class="bg-yellow-400 text-green-600 px-4 py-2 rounded-full font-bold hover:bg-yellow-300 transition duration-300 text-center install-button">
       התקן את התוסף
     </a>
   </div>
 </header>
 
 <script>
-  document.getElementById('mobileMenu').addEventListener('click', function(e) {
+  document.getElementById('mobileMenu').addEventListener('click', function (e) {
     e.preventDefault();
     var content = document.getElementById('mobileMenuContent');
     content.classList.toggle('hidden');
   });
 </script>
+
 <body class="flex flex-col min-h-screen">
   <div class="flex-grow">
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <h2 class="text-3xl font-bold text-center mb-8">חיפוש קופונים והשוואת מחירים</h2>
-    
-    <div class="bg-white p-6 rounded-lg shadow-md">
-      <div class="max-w-md mx-auto">
-        <div class="relative">
-          <input type="text" id="searchInput" class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder='לדוגמא "המשביר" או "אוזניות גיימינג"'>
-          <span id="clearSearch" class="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600">✕</span>
-          <svg class="w-6 h-6 text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <h2 class="text-3xl font-bold text-center mb-8">חיפוש קופונים והשוואת מחירים</h2>
+
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <div class="max-w-md mx-auto">
+          <div class="relative">
+            <input type="text" id="searchInput"
+              class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              placeholder='לדוגמא "המשביר" או "אוזניות גיימינג"'>
+            <span id="clearSearch"
+              class="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600">✕</span>
+            <svg class="w-6 h-6 text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
         </div>
       </div>
-    </div>
 
       <div id="loadingContainer" class="loading-container" style="display: none;">
         <div class="loading-spinner"></div>
@@ -380,26 +478,32 @@ header h1 {
       <div id="resultsContainer" class="button-container"></div>
 
       <div id="compareButtonContainer" class="mt-6 text-center" style="display: none;">
-        <button id="compareButton" class="bg-green-500 text-white px-6 py-3 rounded-full font-bold hover:bg-green-600 transition duration-300 inline-flex items-center">
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+        <button id="compareButton"
+          class="bg-green-500 text-white px-6 py-3 rounded-full font-bold hover:bg-green-600 transition duration-300 inline-flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+            </path>
+          </svg>
           השווה מחירים
         </button>
       </div>
-  </main>
+    </main>
 
-  <footer class="bg-green-600 text-white py-8">
-    <div class="container mx-auto text-center">
-      <div class="flex flex-wrap justify-center mb-4">
-        <a href="#" class="mx-2 hover:underline">מדיניות פרטיות</a>
-        <a href="#" class="mx-2 hover:underline">תנאי שימוש</a>
-        <a href="mailto:shamzezolyoter@gmail.com" class="mx-2 hover:underline">צור קשר</a>
+    <footer class="bg-green-600 text-white py-8">
+      <div class="container mx-auto text-center">
+        <div class="flex flex-wrap justify-center mb-4">
+          <a href="#" class="mx-2 hover:underline">מדיניות פרטיות</a>
+          <a href="#" class="mx-2 hover:underline">תנאי שימוש</a>
+          <a href="mailto:shamzezolyoter@gmail.com" class="mx-2 hover:underline">צור קשר</a>
+        </div>
+        <p>© 2024 שם זה זול יותר - כל הזכויות שמורות</p>
       </div>
-      <p>© 2024 שם זה זול יותר - כל הזכויות שמורות</p>
-    </div>
-  </footer>
+    </footer>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
         const searchInput = document.getElementById('searchInput');
         const clearSearch = document.getElementById('clearSearch');
         const loadingContainer = document.getElementById('loadingContainer');
@@ -408,192 +512,192 @@ header h1 {
         const resultsContainer = document.getElementById('resultsContainer');
         const sortContainer = document.getElementById('sortContainer');
         const sortSelect = document.getElementById('sortSelect');
-    
+
         let currentSearchQuery = '';
         let allSites = [];
         let searchedUrl = '';
         let currentResults = [];
-    
+
         function getUrlParameter(name) {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            var results = regex.exec(location.search);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+          name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+          var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+          var results = regex.exec(location.search);
+          return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
-    
+
         function updateUrlWithSearchQuery(query) {
-            if (history.pushState) {
-                var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?query=' + encodeURIComponent(query);
-                window.history.pushState({path:newurl}, '', newurl);
-            }
+          if (history.pushState) {
+            var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?query=' + encodeURIComponent(query);
+            window.history.pushState({ path: newurl }, '', newurl);
+          }
         }
-    
+
         function animateTyping(text, index = 0) {
-            if (index < text.length) {
-                searchInput.value += text[index];
-                setTimeout(() => animateTyping(text, index + 1), 100);
-            } else {
-                search(text);
-            }
+          if (index < text.length) {
+            searchInput.value += text[index];
+            setTimeout(() => animateTyping(text, index + 1), 100);
+          } else {
+            search(text);
+          }
         }
-    
+
         function showLoading() {
-            loadingContainer.style.display = 'block';
+          loadingContainer.style.display = 'block';
         }
-    
+
         function hideLoading() {
-            loadingContainer.style.display = 'none';
+          loadingContainer.style.display = 'none';
         }
-    
+
         function updateCompareButton(query) {
-            if (query.trim()) {
-                compareButton.textContent = `השוואת מחירים עבור "${query}"`;
-                compareButtonContainer.style.display = 'block';
-            } else {
-                compareButtonContainer.style.display = 'none';
-            }
+          if (query.trim()) {
+            compareButton.textContent = `השוואת מחירים עבור "${query}"`;
+            compareButtonContainer.style.display = 'block';
+          } else {
+            compareButtonContainer.style.display = 'none';
+          }
         }
-    
+
         function search(query) {
-            currentSearchQuery = query;
-            showLoading();
-            resultsContainer.innerHTML = '';
-            updateUrlWithSearchQuery(query);
-    
-            if (query.trim() === '') {
-                hideLoading();
-                displayPopularSearches();
-                sortContainer.style.display = 'none';
-                return;
-            }
-    
-            sortContainer.style.display = 'none';
-    
-            if (query.toLowerCase().startsWith('https://')) {
-                searchedUrl = query;
-                searchByUrl(query);
-            } else {
-                searchedUrl = '';
-                const filteredSites = allSites.filter(site =>
-                    site.siteName.toLowerCase().includes(query.toLowerCase()) ||
-                    (site.cuponDetails && site.cuponDetails.toLowerCase().includes(query.toLowerCase()))
-                );
-    
-                hideLoading();
-                displaySearchResults(filteredSites);
-                updateCompareButton(query);
-            }
-    
-            if (typeof plausible === 'function') {
-                plausible('Search', { props: { query: query } });
-            }
-        }
-    
-        function searchByUrl(url) {
-            const matchingSite = allSites.find(site => url.toLowerCase().startsWith(site.URL.toLowerCase()));
-            
-            if (matchingSite) {
-                displaySearchResults([matchingSite], true);
-                updateCompareButton(matchingSite.siteName);
-            } else {
-                displayNoCouponMessage(url);
-            }
-            
+          currentSearchQuery = query;
+          showLoading();
+          resultsContainer.innerHTML = '';
+          updateUrlWithSearchQuery(query);
+
+          if (query.trim() === '') {
             hideLoading();
+            displayPopularSearches();
+            sortContainer.style.display = 'none';
+            return;
+          }
+
+          sortContainer.style.display = 'none';
+
+          if (query.toLowerCase().startsWith('https://')) {
+            searchedUrl = query;
+            searchByUrl(query);
+          } else {
+            searchedUrl = '';
+            const filteredSites = allSites.filter(site =>
+              site.siteName.toLowerCase().includes(query.toLowerCase()) ||
+              (site.cuponDetails && site.cuponDetails.toLowerCase().includes(query.toLowerCase()))
+            );
+
+            hideLoading();
+            displaySearchResults(filteredSites);
+            updateCompareButton(query);
+          }
+
+          if (typeof plausible === 'function') {
+            plausible('Search', { props: { query: query } });
+          }
         }
-    
+
+        function searchByUrl(url) {
+          const matchingSite = allSites.find(site => url.toLowerCase().startsWith(site.URL.toLowerCase()));
+
+          if (matchingSite) {
+            displaySearchResults([matchingSite], true);
+            updateCompareButton(matchingSite.siteName);
+          } else {
+            displayNoCouponMessage(url);
+          }
+
+          hideLoading();
+        }
+
         function displayNoCouponMessage(url) {
-            const siteName = new URL(url).hostname;
-            resultsContainer.innerHTML = `
+          const siteName = new URL(url).hostname;
+          resultsContainer.innerHTML = `
                 <p>נראה שאין כאן קופון, אפשר ללחוץ כאן ולבקש להוסיף</p>
                 <button class="request-coupon-button" onclick="requestCoupon('${siteName}')">בקשת הטבה ל${siteName}</button>
             `;
         }
-    
+
         function requestCoupon(siteName) {
-            const emailInput = document.createElement('input');
-            emailInput.type = 'email';
-            emailInput.placeholder = 'הזן את כתובת המייל שלך';
-            emailInput.className = 'email-input';
-    
-            const submitButton = document.createElement('button');
-            submitButton.textContent = 'שליחה';
-            submitButton.className = 'request-coupon-button';
-            submitButton.onclick = function() {
-                const email = emailInput.value;
-                if (email) {
-                    if (typeof plausible === 'function') {
-                        plausible('CouponRequest', { 
-                            props: { 
-                                site: siteName,
-                                email: email
-                            }
-                        });
-                    }
-                    alert('הבקשה נשלחה');
-                    emailInput.remove();
-                    submitButton.remove();
-                } else {
-                    alert('אנא הזן כתובת מייל תקינה');
-                }
-            };
-    
-            resultsContainer.appendChild(emailInput);
-            resultsContainer.appendChild(submitButton);
-        }
-    
-        function displayPopularSearches() {
-            const popularSearches = [
-                "Ali express", "Golf", "המשביר", "ACE",
-                "איירפודס", "NAUTICA", "בושם לגבר", "Toys R us"
-            ];
-    
-            const container = document.createElement('div');
-            container.className = 'popular-searches-container';
-    
-            const title = document.createElement('h3');
-            title.textContent = 'חיפושים נפוצים';
-            container.appendChild(title);
-    
-            const buttonContainer = document.createElement('div');
-            buttonContainer.className = 'popular-search-buttons';
-    
-            popularSearches.forEach(searchQuery => {
-                const button = document.createElement('button');
-                button.textContent = searchQuery;
-                button.className = 'popular-search-button';
-                button.addEventListener('click', () => {
-                    searchInput.value = searchQuery;
-                    if (typeof plausible === 'function') {
-                        plausible('PopularSearch', { props: { query: searchQuery } });
-                    }
-                    handleSearchInput();
+          const emailInput = document.createElement('input');
+          emailInput.type = 'email';
+          emailInput.placeholder = 'הזן את כתובת המייל שלך';
+          emailInput.className = 'email-input';
+
+          const submitButton = document.createElement('button');
+          submitButton.textContent = 'שליחה';
+          submitButton.className = 'request-coupon-button';
+          submitButton.onclick = function () {
+            const email = emailInput.value;
+            if (email) {
+              if (typeof plausible === 'function') {
+                plausible('CouponRequest', {
+                  props: {
+                    site: siteName,
+                    email: email
+                  }
                 });
-                buttonContainer.appendChild(button);
-            });
-    
-            container.appendChild(buttonContainer);
-            resultsContainer.appendChild(container);
+              }
+              alert('הבקשה נשלחה');
+              emailInput.remove();
+              submitButton.remove();
+            } else {
+              alert('אנא הזן כתובת מייל תקינה');
+            }
+          };
+
+          resultsContainer.appendChild(emailInput);
+          resultsContainer.appendChild(submitButton);
         }
-    
-        function displaySearchResults(results, isUrlSearch = false) {
-            resultsContainer.innerHTML = '';
-            const uniqueResults = new Map();
-    
-            results.forEach(site => {
-                if (!uniqueResults.has(site.siteName)) {
-                    uniqueResults.set(site.siteName, site);
-                }
+
+        function displayPopularSearches() {
+          const popularSearches = [
+            "Ali express", "Golf", "המשביר", "ACE",
+            "איירפודס", "NAUTICA", "בושם לגבר", "Toys R us"
+          ];
+
+          const container = document.createElement('div');
+          container.className = 'popular-searches-container';
+
+          const title = document.createElement('h3');
+          title.textContent = 'חיפושים נפוצים';
+          container.appendChild(title);
+
+          const buttonContainer = document.createElement('div');
+          buttonContainer.className = 'popular-search-buttons';
+
+          popularSearches.forEach(searchQuery => {
+            const button = document.createElement('button');
+            button.textContent = searchQuery;
+            button.className = 'popular-search-button';
+            button.addEventListener('click', () => {
+              searchInput.value = searchQuery;
+              if (typeof plausible === 'function') {
+                plausible('PopularSearch', { props: { query: searchQuery } });
+              }
+              handleSearchInput();
             });
-    
-            uniqueResults.forEach(site => {
-                const siteDiv = document.createElement('div');
-                siteDiv.className = 'product';
-    
-                let siteContent = `<h3>${site.siteName}</h3>`;
-    
-                if (site.cupon && site.cupon !== "") {
-                    siteContent += `
+            buttonContainer.appendChild(button);
+          });
+
+          container.appendChild(buttonContainer);
+          resultsContainer.appendChild(container);
+        }
+
+        function displaySearchResults(results, isUrlSearch = false) {
+          resultsContainer.innerHTML = '';
+          const uniqueResults = new Map();
+
+          results.forEach(site => {
+            if (!uniqueResults.has(site.siteName)) {
+              uniqueResults.set(site.siteName, site);
+            }
+          });
+
+          uniqueResults.forEach(site => {
+            const siteDiv = document.createElement('div');
+            siteDiv.className = 'product';
+
+            let siteContent = `<h3>${site.siteName}</h3>`;
+
+            if (site.cupon && site.cupon !== "") {
+              siteContent += `
                         <div class="coupon-details">
                             <button class="coupon-toggle">פרטי קופון</button>
                             <div class="coupon-content">
@@ -606,85 +710,85 @@ header h1 {
                             </div>
                         </div>
                     `;
-                } else {
-                    siteContent += `<a href="#" class="site-link" onclick="goToSite('${site.affLink || site.URL}', '${site.siteName}', '${isUrlSearch ? 'למוצר' : 'לאתר'}', event)">
+            } else {
+              siteContent += `<a href="#" class="site-link" onclick="goToSite('${site.affLink || site.URL}', '${site.siteName}', '${isUrlSearch ? 'למוצר' : 'לאתר'}', event)">
                         עבור ${isUrlSearch ? 'למוצר' : 'לאתר'}
                     </a>`;
-                }
-    
-                siteDiv.innerHTML = siteContent;
-    
-                siteDiv.querySelector('h3').addEventListener('click', (event) => {
-                    goToSite(site.affLink || site.URL, site.siteName, isUrlSearch ? 'למוצר' : 'לאתר', event);
-                });
-    
-                siteDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
-                resultsContainer.appendChild(siteDiv);
+            }
+
+            siteDiv.innerHTML = siteContent;
+
+            siteDiv.querySelector('h3').addEventListener('click', (event) => {
+              goToSite(site.affLink || site.URL, site.siteName, isUrlSearch ? 'למוצר' : 'לאתר', event);
+            });
+
+            siteDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
+            resultsContainer.appendChild(siteDiv);
+          });
+        }
+
+        function toggleCoupon(event) {
+          const toggle = event.target;
+          const content = toggle.nextElementSibling;
+          toggle.classList.toggle('active');
+          content.classList.toggle('active');
+          event.stopPropagation();
+        }
+
+        function copyCoupon(coupon, event) {
+          navigator.clipboard.writeText(coupon)
+            .then(() => alert('הקופון הועתק'))
+            .catch(err => console.error('Failed to copy: ', err));
+          event.stopPropagation();
+
+          if (typeof plausible === 'function') {
+            plausible('CouponCopy', { props: { coupon: coupon } });
+          }
+        }
+
+        function performPriceComparison(query) {
+          showLoading();
+          sortContainer.style.display = 'none';
+          fetch(`https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=20`)
+            .then(response => response.json())
+            .then(data => {
+              hideLoading();
+              if (data.length === 0) {
+                resultsContainer.innerHTML = '<p>לא נמצאו תוצאות להשוואת מחירים</p>';
+              } else {
+                currentResults = data;
+                displayComparisonResults(data);
+                sortContainer.style.display = 'block';
+              }
+
+              if (typeof plausible === 'function') {
+                plausible('PriceComparison', { props: { query: query } });
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              hideLoading();
+              resultsContainer.innerHTML = '<p>אירעה שגיאה בהשוואת המחירים</p>';
             });
         }
-    
-        function toggleCoupon(event) {
-            const toggle = event.target;
-            const content = toggle.nextElementSibling;
-            toggle.classList.toggle('active');
-            content.classList.toggle('active');
-            event.stopPropagation();
-        }
-    
-        function copyCoupon(coupon, event) {
-            navigator.clipboard.writeText(coupon)
-                .then(() => alert('הקופון הועתק'))
-                .catch(err => console.error('Failed to copy: ', err));
-            event.stopPropagation();
-    
-            if (typeof plausible === 'function') {
-                plausible('CouponCopy', { props: { coupon: coupon } });
-            }
-        }
-    
-        function performPriceComparison(query) {
-            showLoading();
-            sortContainer.style.display = 'none';
-            fetch(`https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=20`)
-                .then(response => response.json())
-                .then(data => {
-                    hideLoading();
-                    if (data.length === 0) {
-                        resultsContainer.innerHTML = '<p>לא נמצאו תוצאות להשוואת מחירים</p>';
-                    } else {
-                        currentResults = data;
-                        displayComparisonResults(data);
-                        sortContainer.style.display = 'block';
-                    }
-    
-                    if (typeof plausible === 'function') {
-                        plausible('PriceComparison', { props: { query: query } });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    hideLoading();
-                    resultsContainer.innerHTML = '<p>אירעה שגיאה בהשוואת המחירים</p>';
-                });
-        }
-    
+
         function displayComparisonResults(results) {
-            resultsContainer.innerHTML = '<div class="comparison-result"></div>';
-            const comparisonContainer = resultsContainer.querySelector('.comparison-result');
-            results.forEach(product => {
-                const productDiv = document.createElement('div');
-                productDiv.className = 'comparison-item';
-    
-                const siteInfo = findSiteInfo(product.url);
-    
-                let productContent = `
+          resultsContainer.innerHTML = '<div class="comparison-result"></div>';
+          const comparisonContainer = resultsContainer.querySelector('.comparison-result');
+          results.forEach(product => {
+            const productDiv = document.createElement('div');
+            productDiv.className = 'comparison-item';
+
+            const siteInfo = findSiteInfo(product.url);
+
+            let productContent = `
                     <h3 onclick="goToProduct('${product.urlAff}', '${product.site}', '${product.name}')">${product.name}</h3>
                     <p>מחיר: ${product.price}</p>
                     <p>אתר: ${product.site}</p>
                 `;
-    
-                if (siteInfo && siteInfo.cupon && siteInfo.cupon !== "") {
-                    productContent += `
+
+            if (siteInfo && siteInfo.cupon && siteInfo.cupon !== "") {
+              productContent += `
                         <div class="coupon-details">
                             <button class="coupon-toggle">פרטי קופון</button>
                             <div class="coupon-content">
@@ -695,137 +799,137 @@ header h1 {
                             </div>
                         </div>
                     `;
-                } else {
-                    productContent += `<a href="${product.urlAff}" class="site-link" target="_blank">עבור לאתר</a>`;
-                }
-    
-                productDiv.innerHTML = productContent;
-                productDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
-                comparisonContainer.appendChild(productDiv);
-            });
-        }
-    
-        function goToProduct(url, siteName, productName) {
-            window.open(url, '_blank');
-    
-            if (typeof plausible === 'function') {
-                plausible('ProductClick', {
-                    props: {
-                        site: siteName,
-                        product: productName,
-                        query: currentSearchQuery
-                    }
-                });
-            }
-        }
-    
-        function goToSite(url, siteName, linkType, event) {
-            if (event) event.preventDefault();
-            
-            let finalUrl = url;
-            
-            const siteInfo = allSites.find(site => site.siteName === siteName);
-            
-            if (siteInfo) {
-                if (searchedUrl && linkType === 'למוצר') {
-                    if (url.startsWith('https://track')) {
-                        finalUrl = `${url}?forceURL=${encodeURIComponent(searchedUrl)}`;
-                    } else {
-                        finalUrl = searchedUrl;
-                    }
-                } else if (siteInfo.affParam) {
-                    const urlObj = new URL(finalUrl);
-                    const separator = urlObj.search ? '&' : '?';
-                    
-                    if (siteInfo.affParam.startsWith('/')) {
-                        urlObj.pathname = siteInfo.affParam;
-                        urlObj.search = '';
-                    } else {
-                        finalUrl = `${finalUrl}${separator}${siteInfo.affParam}`;
-                    }
-                }
-            }
-    
-            window.open(finalUrl, '_blank');
-            
-            if (typeof plausible === 'function') {
-                plausible('SiteClick', { 
-                    props: { 
-                        site: siteName, 
-                        linkType: linkType,
-                        originalUrl: url,
-                        finalUrl: finalUrl
-                    } 
-                });
-            }
-        }
-    
-        function findSiteInfo(url) {
-            const parsedUrl = new URL(url);
-            return allSites.find(site => {
-                const siteUrl = new URL(site.URL);
-                return siteUrl.hostname === parsedUrl.hostname;
-            });
-        }
-    
-        function handleSearchInput() {
-            const query = searchInput.value.trim();
-            if (query === '') {
-                displayPopularSearches();
-                if (clearSearch) clearSearch.style.display = 'none';
             } else {
-                search(query);
-                if (clearSearch) clearSearch.style.display = 'inline';
+              productContent += `<a href="${product.urlAff}" class="site-link" target="_blank">עבור לאתר</a>`;
             }
+
+            productDiv.innerHTML = productContent;
+            productDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
+            comparisonContainer.appendChild(productDiv);
+          });
         }
-    
+
+        function goToProduct(url, siteName, productName) {
+          window.open(url, '_blank');
+
+          if (typeof plausible === 'function') {
+            plausible('ProductClick', {
+              props: {
+                site: siteName,
+                product: productName,
+                query: currentSearchQuery
+              }
+            });
+          }
+        }
+
+        function goToSite(url, siteName, linkType, event) {
+          if (event) event.preventDefault();
+
+          let finalUrl = url;
+
+          const siteInfo = allSites.find(site => site.siteName === siteName);
+
+          if (siteInfo) {
+            if (searchedUrl && linkType === 'למוצר') {
+              if (url.startsWith('https://track')) {
+                finalUrl = `${url}?forceURL=${encodeURIComponent(searchedUrl)}`;
+              } else {
+                finalUrl = searchedUrl;
+              }
+            } else if (siteInfo.affParam) {
+              const urlObj = new URL(finalUrl);
+              const separator = urlObj.search ? '&' : '?';
+
+              if (siteInfo.affParam.startsWith('/')) {
+                urlObj.pathname = siteInfo.affParam;
+                urlObj.search = '';
+              } else {
+                finalUrl = `${finalUrl}${separator}${siteInfo.affParam}`;
+              }
+            }
+          }
+
+          window.open(finalUrl, '_blank');
+
+          if (typeof plausible === 'function') {
+            plausible('SiteClick', {
+              props: {
+                site: siteName,
+                linkType: linkType,
+                originalUrl: url,
+                finalUrl: finalUrl
+              }
+            });
+          }
+        }
+
+        function findSiteInfo(url) {
+          const parsedUrl = new URL(url);
+          return allSites.find(site => {
+            const siteUrl = new URL(site.URL);
+            return siteUrl.hostname === parsedUrl.hostname;
+          });
+        }
+
+        function handleSearchInput() {
+          const query = searchInput.value.trim();
+          if (query === '') {
+            displayPopularSearches();
+            if (clearSearch) clearSearch.style.display = 'none';
+          } else {
+            search(query);
+            if (clearSearch) clearSearch.style.display = 'inline';
+          }
+        }
+
         function initializeSearch() {
-        const queryParam = getUrlParameter('query');
-        if (queryParam) {
+          const queryParam = getUrlParameter('query');
+          if (queryParam) {
             searchInput.value = '';
             animateTyping(queryParam);
-        } else {
+          } else {
             displayPopularSearches();
-        }
+          }
 
-        searchInput.addEventListener('input', handleSearchInput);
+          searchInput.addEventListener('input', handleSearchInput);
 
-        if (clearSearch) {
+          if (clearSearch) {
             clearSearch.addEventListener('click', function () {
-                searchInput.value = '';
-                handleSearchInput();
-                this.style.display = 'none';
+              searchInput.value = '';
+              handleSearchInput();
+              this.style.display = 'none';
             });
-        }
+          }
 
-        compareButton.addEventListener('click', () => performPriceComparison(currentSearchQuery));
+          compareButton.addEventListener('click', () => performPriceComparison(currentSearchQuery));
 
-        sortSelect.addEventListener('change', function () {
+          sortSelect.addEventListener('change', function () {
             const sortedResults = [...currentResults].sort((a, b) => {
-                const priceA = parseFloat(a.price.replace(/[^\d.-]/g, ''));
-                const priceB = parseFloat(b.price.replace(/[^\d.-]/g, ''));
-                return this.value === 'price-asc' ? priceA - priceB : priceB - priceA;
+              const priceA = parseFloat(a.price.replace(/[^\d.-]/g, ''));
+              const priceB = parseFloat(b.price.replace(/[^\d.-]/g, ''));
+              return this.value === 'price-asc' ? priceA - priceB : priceB - priceA;
             });
             displayComparisonResults(sortedResults);
-        });
-    }
+          });
+        }
 
-    // Fetch all sites data
-    fetch("https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/sites")
-        .then(response => response.json())
-        .then(data => {
+        // Fetch all sites data
+        fetch("https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/sites")
+          .then(response => response.json())
+          .then(data => {
             allSites = data;
             initializeSearch();
-        })
-        .catch(error => console.error("Error fetching sites:", error));
+          })
+          .catch(error => console.error("Error fetching sites:", error));
 
-    // Global functions that need to be accessible from HTML
-    window.requestCoupon = requestCoupon;
-    window.copyCoupon = copyCoupon;
-    window.goToProduct = goToProduct;
-    window.goToSite = goToSite;
-});
-</script>
+        // Global functions that need to be accessible from HTML
+        window.requestCoupon = requestCoupon;
+        window.copyCoupon = copyCoupon;
+        window.goToProduct = goToProduct;
+        window.goToSite = goToSite;
+      });
+    </script>
 </body>
 
 </html>
