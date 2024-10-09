@@ -5,6 +5,7 @@
     <!-- Google tag (gtag.js) -->
     <script defer data-domain="yossidisk.github.io/shamze/sidesite.html"
         src="https://plausible.io/js/script.js"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>תוצאות חיפוש</title>
@@ -93,6 +94,23 @@
             height: 40px;
             animation: spin 1s linear infinite;
             margin: 10px auto;
+        }
+
+        .show-more-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .show-more-button:hover {
+            background-color: #1558b3;
         }
 
         @keyframes spin {
@@ -342,25 +360,61 @@
         function displaySearchResults(results) {
             const container = document.getElementById('searchResults');
             container.innerHTML = '';
-            results.forEach(product => {
-                const productDiv = document.createElement('div');
-                productDiv.className = 'product';
-                productDiv.innerHTML = `
-            <div class="product-info">
-                <h3>${product.name}</h3>
-                <p>מחיר: ${product.price}</p>
-                <p>אתר: ${product.site}</p>
-            </div>
-            <div class="product-image"></div>
-        `;
-                productDiv.onclick = () => {
-                    logClick(product);  // קריאה לפונקציית logClick
-                    window.open(product.urlAff, '_blank');
-                };
-                container.appendChild(productDiv);
 
-                fetchProductImage(product.url, productDiv.querySelector('.product-image'));
+            // הצג רק 3 תוצאות ראשונות
+            const initialResults = results.slice(0, 3);
+            const remainingResults = results.slice(3);
+
+            initialResults.forEach(product => {
+                const productDiv = createProductElement(product);
+                container.appendChild(productDiv);
             });
+
+            if (remainingResults.length > 0) {
+                const showMoreButton = document.createElement('button');
+                showMoreButton.textContent = 'עוד תוצאות';
+                showMoreButton.className = 'show-more-button';
+                showMoreButton.onclick = () => {
+                    showMoreResults(remainingResults);
+                    sendPlausibleEvent('ShowMoreResults', {
+                        additionalResults: remainingResults.length
+                    });
+                };
+                container.appendChild(showMoreButton);
+            }
+        }
+
+        // פונקציה חדשה ליצירת אלמנט מוצר
+        function createProductElement(product) {
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product';
+            productDiv.innerHTML = `
+        <div class="product-info">
+            <h3>${product.name}</h3>
+            <p>מחיר: ${product.price}</p>
+            <p>אתר: ${product.site}</p>
+        </div>
+        <div class="product-image"></div>
+    `;
+            productDiv.onclick = () => {
+                logClick(product);
+                window.open(product.urlAff, '_blank');
+            };
+            fetchProductImage(product.url, productDiv.querySelector('.product-image'));
+            return productDiv;
+        }
+
+        // פונקציה חדשה להצגת תוצאות נוספות
+        function showMoreResults(remainingResults) {
+            const container = document.getElementById('searchResults');
+            const showMoreButton = container.querySelector('.show-more-button');
+
+            remainingResults.forEach(product => {
+                const productDiv = createProductElement(product);
+                container.insertBefore(productDiv, showMoreButton);
+            });
+
+            showMoreButton.remove();
         }
 
         function loadPlausibleScript() {
