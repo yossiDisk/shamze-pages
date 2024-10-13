@@ -64,16 +64,16 @@
     }
 
     @media (max-width: 768px) {
-        footer {
-          display: none;
-          /* מסתיר את הסרגל התחתון במובייל */
-        }
-
-        main {
-          padding-bottom: 20px;
-          /* מקטין את הפדינג התחתון במובייל */
-        }
+      footer {
+        display: none;
+        /* מסתיר את הסרגל התחתון במובייל */
       }
+
+      main {
+        padding-bottom: 20px;
+        /* מקטין את הפדינג התחתון במובייל */
+      }
+    }
 
     @media (max-width: 10000px) {
       header h1 {
@@ -414,6 +414,8 @@
           width: 100%;
         }
       }
+
+    }
   </style>
 </head>
 
@@ -524,6 +526,14 @@
           var results = regex.exec(location.search);
           return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
+
+        function checkAndLogSource() {
+          const source = getUrlParameter('source');
+          if (source && typeof plausible === 'function') {
+            plausible('TrafficSource', { props: { source: source } });
+          }
+        }
+
 
         function updateUrlWithSearchQuery(query) {
           if (history.pushState) {
@@ -884,6 +894,7 @@
         }
 
         function initializeSearch() {
+          checkAndLogSource();
           const queryParam = getUrlParameter('query');
           if (queryParam) {
             searchInput.value = '';
