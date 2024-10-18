@@ -542,12 +542,13 @@
           }
         }
 
-        function animateTyping(text, index = 0) {
+        function animateTyping(text, callback, index = 0) {
           if (index < text.length) {
             searchInput.value += text[index];
-            setTimeout(() => animateTyping(text, index + 1), 100);
+            setTimeout(() => animateTyping(text, callback, index + 1), 100);
           } else {
             search(text);
+            if (callback) callback();
           }
         }
 
@@ -896,9 +897,15 @@
         function initializeSearch() {
           checkAndLogSource();
           const queryParam = getUrlParameter('query');
+          const searchParam = getUrlParameter('search');
+
           if (queryParam) {
             searchInput.value = '';
-            animateTyping(queryParam);
+            animateTyping(queryParam, () => {
+              if (searchParam === 'true') {
+                performPriceComparison(queryParam);
+              }
+            });
           } else {
             displayPopularSearches();
           }
