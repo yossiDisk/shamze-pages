@@ -124,6 +124,7 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s ease;
+            text-decoration: none;
         }
 
         .action-button:hover {
@@ -167,7 +168,7 @@
     <div class="action-buttons">
         <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamzezolyoter@gmail.com&su=פידבק על תוצאות החיפוש&body=היי, יש לי פידבק על תוצאות החיפוש: "
             class="feedback-link action-button" target="_blank">לתת פידבק</a>
-        <button id="shareButton" class="action-button">שיתוף</button>
+        <a id="shareButton" class="action-button" target="_blank">שיתוף</a>
     </div>
 
     <div id="copyMessage">הלינק הועתק ללוח</div>
@@ -268,25 +269,20 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const shareButton = document.getElementById('shareButton');
-            const copyMessage = document.getElementById('copyMessage');
 
-            shareButton.addEventListener('click', () => {
+            shareButton.addEventListener('click', (event) => {
                 const currentQuery = currentSearchQuery || '';
-                const shareUrl = `https://yossidisk.github.io/Shamze/cupons.html?source=side&query=${encodeURIComponent(currentQuery)}`;
+                const shareUrl = `https://yossidisk.github.io/Shamze/cupons.html?source=side&search=true&query=${encodeURIComponent(currentQuery)}`;
 
-                navigator.clipboard.writeText(shareUrl).then(() => {
-                    copyMessage.style.display = 'block';
-                    setTimeout(() => {
-                        copyMessage.style.display = 'none';
-                    }, 1000);
+                // Update the href attribute just before opening
+                shareButton.href = shareUrl;
 
-                    // Send Plausible event
-                    sendPlausibleEvent('ShareButtonClicked', {
-                        query: currentQuery
-                    });
-                }).catch(err => {
-                    console.error('Failed to copy: ', err);
+                // Send Plausible event
+                sendPlausibleEvent('ShareButtonClicked', {
+                    query: currentQuery
                 });
+
+                // The default action (opening in a new tab) will proceed
             });
         });
 
