@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בית בסטייל - המדריך השלם לעיצוב הבית</title>
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #2c3e50;
+        }
+
+        .btn-secondary:hover {
+            background: #1a252f;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #f1c40f;
+        }
+
+        /* Search Bar */
+        .search-container {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/api/placeholder/1200/400');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Categories Section */
+        .categories {
+            padding: 3rem 0;
+            background: white;
+            margin-bottom: 3rem;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .category-card {
+            text-align: center;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #3498db;
+        }
+
+        /* Featured Articles */
+        .featured-articles {
+            margin-bottom: 3rem;
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .article-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .article-category {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #3498db;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .article-content {
+            padding: 1.5rem;
+        }
+
+        .article-content h3 {
+            margin-bottom: 1rem;
+            color: #2c3e50;
+            font-size: 1.4rem;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        /* Newsletter Section */
+        .newsletter {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .newsletter h2 {
+            margin-bottom: 1rem;
+        }
+
+        .newsletter-form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            padding: 0 1rem;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            padding: 0 1rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1.5rem;
+            color: #f1c40f;
+            font-size: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #f1c40f;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+
+        .article-full {
+            display: none;
+            padding: 2rem 0;
+            background: white;
+        }
+
+        .article-full.active {
+            display: block;
+        }
+
+        .article-header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 4rem 0 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .article-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .article-content h2 {
+            color: #2c3e50;
+            margin: 2rem 0 1rem;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content ul {
+            margin-bottom: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 2rem;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+        }
+
+        .home-content {
+            display: block;
+        }
+
+        .home-content.hidden {
+            display: none;
+        }
+
+        /* כפתור חזרה */
+        .back-button {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: #3498db;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+        }
+
+        .back-button.visible {
+            display: block;
+        }
+
+        .back-button:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" class="logo">בית בסטייל</a>
+            <div class="nav-links">
+                <a href="#">דף הבית</a>
+                <a href="#">חדרים</a>
+                <a href="#">סגנונות עיצוב</a>
+                <a href="#">מוצרים מומלצים</a>
+                <a href="#">טיפים והשראה</a>
+                <a href="#">צור קשר</a>
+            </div>
+        </nav>
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" placeholder="חפש מוצרים, טיפים או רעיונות לעיצוב...">
+                <button class="btn">חיפוש</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>הבית שלך, בסטייל שלך</h1>
+            <p>מדריכים, טיפים והמלצות מוצרים שיעזרו לך ליצור את הבית המושלם</p>
+            <a href="#categories" class="btn btn-secondary">גלה עוד</a>
+        </div>
+    </section>
+
+    <section id="categories" class="categories">
+        <div class="container">
+            <h2>קטגוריות עיצוב</h2>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-icon">🛋️</div>
+                    <h3>סלון</h3>
+                    <p>עיצוב חלל המגורים המרכזי</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🛏️</div>
+                    <h3>חדרי שינה</h3>
+                    <p>טיפים ליצירת אווירה רגועה</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🍳</div>
+                    <h3>מטבח</h3>
+                    <p>עיצוב פונקציונלי ויפה</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🌅</div>
+                    <h3>מרפסות וגינות</h3>
+                    <p>טיפים לעיצוב חוץ</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured-articles">
+        <div class="container">
+            <h2>כתבות נבחרות</h2>
+            <div class="articles-grid">
+                <article class="article-card">
+                    <div class="article-image" style="background-image: url('/api/placeholder/400/200')">
+                        <span class="article-category">מרפסות</span>
+                    </div>
+                    <div class="article-content">
+                        <h3>איך להפוך את מרפסת הגג לפנינה אורבנית</h3>
+                        <p>מדריך מקיף להפיכת מרפסת הגג למתחם אירוח מושלם, כולל המלצות מוצרים והצעות לסידור החלל</p>
+                        <div class="article-meta">
+                            <span>זמן קריאה: 8 דקות</span>
+                            <a href="#" class="btn">קרא עוד</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-image" style="background-image: url('/api/placeholder/400/200')">
+                        <span class="article-category">חדר שינה</span>
+                    </div>
+                    <div class="article-content">
+                        <h3>עיצוב חדר שינה מושלם</h3>
+                        <p>טיפים מעשיים ליצירת חדר שינה מפנק ונעים, מבחירת הצבעים ועד סידור הריהוט</p>
+                        <div class="article-meta">
+                            <span>זמן קריאה: 6 דקות</span>
+                            <a href="#" class="btn">קרא עוד</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-image" style="background-image: url('/api/placeholder/400/200')">
+                        <span class="article-category">מטבח</span>
+                    </div>
+                    <div class="article-content">
+                        <h3>מטבח חלומות בתקציב שפוי</h3>
+                        <p>מדריך מעשי לשדרוג המטבח שלכם, כולל טיפים לחיסכון והמלצות על מוצרים משתלמים</p>
+                        <div class="article-meta">
+                            <span>זמן קריאה: 7 דקות</span>
+                            <a href="#" class="btn">קרא עוד</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter">
+        <div class="container">
+            <h2>רוצים לקבל טיפים והמלצות?</h2>
+            <p>הצטרפו לניוזלטר שלנו וקבלו עדכונים שבועיים</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="כתובת המייל שלך">
+                <button type="submit" class="btn">הרשמה לניוזלטר</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- מאמרים מלאים -->
+    <section class="full-articles">
+        <!-- מאמר מרפסת הגג -->
+        <article id="rooftop-article" class="article-full">
+            <div class="article-header">
+                <div class="container">
+                    <h1>איך להפוך את מרפסת הגג לפנינה אורבנית</h1>
+                    <div class="article-meta">
+                        <span>פורסם ב: 1.11.2024</span>
+                        <span>זמן קריאה: 8 דקות</span>
+                        <span>קטגוריה: מרפסות</span>
+                    </div>
+                </div>
+            </div>
+            <div class="container article-content">
+                <div class="container article-content">
+                    <h2>הקדמה</h2>
+                    <p>מרפסת גג היא נכס יקר ערך שמאפשר לנו ליצור פינת חמד שקטה מעל המולת העיר. במאמר זה נסקור את האלמנטים החשובים ביותר בעיצוב מרפסת גג ונמליץ על מוצרים שישדרגו את החוויה.</p>
+                
+                    <h2>הצללה - המפתח לשימוש מקסימלי במרפסת</h2>
+                    <p>ההצללה היא אחד האלמנטים החשובים ביותר במרפסת גג. בלעדיה, השימוש במרפסת יהיה מוגבל לשעות מסוימות ביום. אפשרויות ההצללה המומלצות כוללות:</p>
+                    <ul>
+                        <li>פרגולה קבועה - פתרון אלגנטי ועמיד שמספק הצללה קבועה [הכנס לינק למוצר]</li>
+                        <li>מפרש הצללה - אופציה גמישה וקלה להתקנה [הכנס לינק למוצר]</li>
+                        <li>שמשייה גדולה עם בסיס - פתרון נייד שאפשר לכוון לפי הצורך [הכנס לינק למוצר]</li>
+                    </ul>
+                
+                    <h2>ריהוט - נוחות ופונקציונליות</h2>
+                    <p>בחירת הריהוט צריכה להתחשב בשני גורמים עיקריים: עמידות בתנאי חוץ ונוחות. המלצותינו:</p>
+                    <ul>
+                        <li>פינת ישיבה מראטן סינטטי - עמידה במיוחד לתנאי חוץ [הכנס לינק למוצר]</li>
+                        <li>כורסאות נדנדה תלויות - מוסיפות אווירה רגועה ומפנקת [הכנס לינק למוצר]</li>
+                        <li>שולחן מודולרי - מתאים גם לארוחות וגם לאירוח [הכנס לינק למוצר]</li>
+                    </ul>
+                
+                    <!-- [המשך התוכן כפי שמופיע במאמר המקורי] -->
+                </div>            </div>
+        </article>
+
+        <!-- מאמר חדר שינה -->
+        <article id="bedroom-article" class="article-full">
+            <div class="article-header">
+                <div class="container">
+                    <h1>עיצוב חדר שינה מושלם - המדריך המלא</h1>
+                    <div class="article-meta">
+                        <span>פורסם ב: 1.11.2024</span>
+                        <span>זמן קריאה: 6 דקות</span>
+                        <span>קטגוריה: חדר שינה</span>
+                    </div>
+                </div>
+            </div>
+            <div class="container article-content">
+                <h2>הקדמה</h2>
+                <p>חדר השינה הוא המקום האינטימי ביותר בבית, ועיצובו משפיע ישירות על איכות השינה והרגשתנו הכללית. במאמר זה נלמד כיצד ליצור חדר שינה מושלם שמשלב נוחות, פונקציונליות ואסתטיקה.</p>
+
+                <h2>בחירת צבעים וטקסטורות</h2>
+                <p>צבעי חדר השינה משפיעים מאוד על האווירה. מומלץ לבחור:</p>
+                <ul>
+                    <li>גוונים רגועים כמו כחול בהיר, ירוק פסטל או אפור חם</li>
+                    <li>שילוב של 2-3 צבעים לכל היותר</li>
+                    <li>טקסטורות רכות ונעימות למגע</li>
+                </ul>
+
+                <h2>ריהוט מומלץ</h2>
+                <h3>מיטה</h3>
+                <p>המיטה היא הפריט החשוב ביותר בחדר. מומלץ להשקיע ב:</p>
+                <ul>
+                    <li>מיטה איכותית עם מזרן אורתופדי [הכנס לינק למוצר]</li>
+                    <li>מסגרת מיטה יציבה עם אחסון מובנה [הכנס לינק למוצר]</li>
+                    <li>כריות תמיכה איכותיות [הכנס לינק למוצר]</li>
+                </ul>
+
+                <h3>אחסון</h3>
+                <p>פתרונות אחסון חכמים ישמרו על הסדר:</p>
+                <ul>
+                    <li>ארון בגדים עם חלוקה פנימית מותאמת [הכנס לינק למוצר]</li>
+                    <li>שידות צד עם מגירות [הכנס לינק למוצר]</li>
+                    <li>ספסל אחסון לקצה המיטה [הכנס לינק למוצר]</li>
+                </ul>
+
+                <h2>תאורה נכונה</h2>
+                <p>שילוב של מספר מקורות תאורה יוצר אווירה נעימה:</p>
+                <ul>
+                    <li>תאורה מרכזית עמעמת [הכנס לינק למוצר]</li>
+                    <li>מנורות קריאה ליד המיטה [הכנס לינק למוצר]</li>
+                    <li>פסי LED להארה עקיפה [הכנס לינק למוצר]</li>
+                </ul>
+
+                <h2>טקסטיל ואבזור</h2>
+                <p>הטקסטיל מוסיף חמימות ונוחות:</p>
+                <ul>
+                    <li>מצעים איכותיים מכותנה [הכנס לינק למוצר]</li>
+                    <li>שטיח רך ליד המיטה [הכנס לינק למוצר]</li>
+                    <li>וילונות מבודדי אור [הכנס לינק למוצר]</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- מאמר מטבח -->
+        <article id="kitchen-article" class="article-full">
+            <div class="article-header">
+                <div class="container">
+                    <h1>מטבח חלומות בתקציב שפוי</h1>
+                    <div class="article-meta">
+                        <span>פורסם ב: 1.11.2024</span>
+                        <span>זמן קריאה: 7 דקות</span>
+                        <span>קטגוריה: מטבח</span>
+                    </div>
+                </div>
+            </div>
+            <div class="container article-content">
+                <h2>הקדמה</h2>
+                <p>שיפוץ מטבח יכול להיות פרויקט יקר, אבל עם תכנון נכון ובחירות חכמות, אפשר לשדרג את המטבח משמעותית גם בתקציב מוגבל.</p>
+
+                <h2>תכנון חכם</h2>
+                <ul>
+                    <li>מיפוי צרכים מדויק</li>
+                    <li>תכנון משטחי עבודה</li>
+                    <li>ניצול מקסימלי של החלל</li>
+                </ul>
+
+                <h2>ארונות מטבח</h2>
+                <p>טיפים לחיסכון בארונות:</p>
+                <ul>
+                    <li>חידוש חזיתות במקום החלפה מלאה [הכנס לינק למוצר צבע מיוחד לארונות]</li>
+                    <li>החלפת ידיות בלבד [הכנס לינק למוצר]</li>
+                    <li>תוספת מגירות פנימיות [הכנס לינק למוצר]</li>
+                </ul>
+
+                <h2>משטח עבודה</h2>
+                <p>אפשרויות למשטח עבודה איכותי בתקציב סביר:</p>
+                <ul>
+                    <li>משטח אבן קיסר בסיסי [הכנס לינק]</li>
+                    <li>משטח פורמייקה מחוזק [הכנס לינק]</li>
+                    <li>משטח עץ מלא [הכנס לינק]</li>
+                </ul>
+
+                <h2>אחסון חכם</h2>
+                <p>פתרונות אחסון שישדרגו את המטבח:</p>
+                <ul>
+                    <li>מתקנים נשלפים לארונות [הכנס לינק למוצר]</li>
+                    <li>סלסלות תלויות [הכנס לינק למוצר]</li>
+                    <li>מדפים צפים [הכנס לינק למוצר]</li>
+                </ul>
+
+                <h2>תאורה</h2>
+                <p>תאורה נכונה משדרגת את המראה:</p>
+                <ul>
+                    <li>פסי LED תחת ארונות עליונים [הכנס לינק למוצר]</li>
+                    <li>ספוטים שקועים [הכנס לינק למוצר]</li>
+                    <li>תאורה דקורטיבית מעל האי [הכנס לינק למוצר]</li>
+                </ul>
+            </div>
+        </article>
+    </section>
+
+        <!-- כפתור חזרה לדף הבית -->
+        <a href="#" class="back-button" id="backButton">חזרה לדף הבית</a>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const homeContent = document.querySelectorAll('.hero, .categories, .featured-articles, .newsletter');
+                const articles = document.querySelectorAll('.article-full');
+                const backButton = document.getElementById('backButton');
+                
+                // פונקציה להצגת מאמר ספציפי
+                function showArticle(articleId) {
+                    // הסתרת תוכן דף הבית
+                    homeContent.forEach(section => section.style.display = 'none');
+                    
+                    // הסתרת כל המאמרים
+                    articles.forEach(article => article.style.display = 'none');
+                    
+                    // הצגת המאמר הנבחר
+                    const selectedArticle = document.getElementById(articleId);
+                    if (selectedArticle) {
+                        selectedArticle.style.display = 'block';
+                        window.scrollTo(0, 0);
+                    }
+                    
+                    // הצגת כפתור החזרה
+                    backButton.classList.add('visible');
+                }
+                
+                // פונקציה לחזרה לדף הבית
+                function showHome() {
+                    // הסתרת כל המאמרים
+                    articles.forEach(article => article.style.display = 'none');
+                    
+                    // הצגת תוכן דף הבית
+                    homeContent.forEach(section => section.style.display = 'block');
+                    
+                    // הסתרת כפתור החזרה
+                    backButton.classList.remove('visible');
+                }
+                
+                // הוספת מאזיני לחיצה לכל הקישורים בכרטיסי המאמרים
+                document.querySelectorAll('.article-card .btn').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        // מציאת כותרת המאמר
+                        const card = this.closest('.article-card');
+                        const articleTitle = card.querySelector('h3').textContent;
+                        
+                        // בחירת המאמר המתאים
+                        let articleId;
+                        switch(articleTitle) {
+                            case 'איך להפוך את מרפסת הגג לפנינה אורבנית':
+                                articleId = 'rooftop-article';
+                                break;
+                            case 'עיצוב חדר שינה מושלם':
+                                articleId = 'bedroom-article';
+                                break;
+                            case 'מטבח חלומות בתקציב שפוי':
+                                articleId = 'kitchen-article';
+                                break;
+                        }
+                        
+                        // הצגת המאמר
+                        if (articleId) {
+                            showArticle(articleId);
+                        }
+                    });
+                });
+                
+                // מאזין לחיצה לכפתור חזרה ולוגו
+                backButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showHome();
+                });
+            
+                document.querySelector('.logo').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showHome();
+                });
+            });
+            </script>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>ניווט מהיר</h4>
+                <ul>
+                    <li><a href="#">דף הבית</a></li>
+                    <li><a href="#">אודות</a></li>
+                    <li><a href="#">מדריכים</a></li>
+                    <li><a href="#">צור קשר</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>קטגוריות</h4>
+                <ul>
+                    <li><a href="#">סלון</a></li>
+                    <li><a href="#">חדר שינה</a></li>
+                    <li><a href="#">מטבח</a></li>
+                    <li><a href="#">חדרי רחצה</a></li>
+                    <li><a href="#">מרפסות וגינות</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>מדריכים פופולריים</h4>
+                <ul>
+                    <li><a href="#">בחירת צבעים לבית</a></li>
+                    <li><a href="#">תאורה נכונה</a></li>
+                    <li><a href="#">פתרונות אחסון</a></li>
+                    <li><a href="#">עיצוב בתקציב</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>עקבו אחרינו</h4>
+                <ul>
+                    <li><a href="#">פייסבוק</a></li>
+                    <li><a href="#">אינסטגרם</a></li>
+                    <li><a href="#">פינטרסט</a></li>
+                    <li><a href="#">יוטיוב</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>כל הזכויות שמורות © בית בסטייל 2024</p>
+        </div>
+    </footer>
+</body>
+</html>
