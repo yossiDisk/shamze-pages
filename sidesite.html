@@ -423,12 +423,31 @@
                     console.error('Error:', error);
                     log(`Error fetching search results: ${error.message}`);
                     hideLoading();
-                    displayErrorMessage(`
+
+                    // Create retry button as a link that opens in new tab
+                    const retryButtonHtml = `
+                <a id="retryButton" href="#" target="_blank" class="retry-button">נסה שוב</a>
                 <p>עדיין לא נטען?</p>
                 <p>נראה שיש תקלה...</p>
                 <p>כדאי לספר לי על זה כדי שאבדוק</p>
                 <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamzezolyoter@gmail.com&su=פידבק על תוצאות החיפוש&body=היי, נראה שיש תקלה בטעינת תוצאות החיפוש:" target="_blank">לחץ כאן</a>
-            `);
+            `;
+
+                    displayErrorMessage(retryButtonHtml);
+
+                    // Add event listener for retry button
+                    document.getElementById('retryButton').addEventListener('click', (event) => {
+                        const currentQuery = currentSearchQuery || '';
+                        const retryUrl = `https://yossidisk.github.io/Shamze/cupons.html?source=side&search=true&query=${encodeURIComponent(currentQuery)}`;
+
+                        // Update the href attribute
+                        event.target.href = retryUrl;
+
+                        // Send Plausible event
+                        sendPlausibleEvent('RetryButtonClicked', {
+                            query: currentQuery
+                        });
+                    });
 
                     // New event: Results not displayed
                     sendPlausibleEvent('ResultsNotDisplayed', {
