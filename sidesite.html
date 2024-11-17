@@ -396,7 +396,7 @@
             if (priceParam && parseFloat(priceParam) > 0) {
                 const price = parseFloat(priceParam);
                 const minPrice = price / 2;
-                const maxPrice = price * 2;
+                const maxPrice = price + minPrice;
                 apiUrl += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
             }
 
