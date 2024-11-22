@@ -67,6 +67,15 @@
             margin-top: 20px;
             padding: 12px;
         }
+        .debug {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            direction: ltr;
+        }
     </style>
 </head>
 <body>
@@ -79,17 +88,32 @@
             <button onclick="copyCoupon()" class="copy-btn">העתק</button>
         </div>
         <button id="offerLink" class="offer-btn">למעבר להצעה</button>
+        <div id="debug" class="debug"></div>
     </div>
 
     <script>
         function getUrlParams() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const query = urlParams.get('query');
-            const url = urlParams.get('url');
-            const rawData = JSON.parse(decodeURIComponent(urlParams.get('data')));
-            // Extract the nested data object
-            const data = rawData.data || rawData;
-            return { query, url, data };
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const query = urlParams.get('query');
+                const url = urlParams.get('url');
+                const rawData = JSON.parse(decodeURIComponent(urlParams.get('data')));
+                
+                // Debug info
+                document.getElementById('debug').textContent = 
+                    'Raw data:\n' + JSON.stringify(rawData, null, 2);
+                
+                return { 
+                    query, 
+                    url, 
+                    data: rawData.data || rawData 
+                };
+            } catch (error) {
+                document.getElementById('debug').textContent = 
+                    'Error parsing data:\n' + error.toString() + 
+                    '\n\nURL data param:\n' + urlParams.get('data');
+                throw error;
+            }
         }
 
         function copyCoupon() {
