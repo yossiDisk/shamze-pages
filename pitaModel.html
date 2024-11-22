@@ -86,7 +86,9 @@
             const urlParams = new URLSearchParams(window.location.search);
             const query = urlParams.get('query');
             const url = urlParams.get('url');
-            const data = JSON.parse(decodeURIComponent(urlParams.get('data')));
+            const rawData = JSON.parse(decodeURIComponent(urlParams.get('data')));
+            // Extract the nested data object
+            const data = rawData.data || rawData;
             return { query, url, data };
         }
 
@@ -112,6 +114,7 @@
                 };
             } catch (error) {
                 console.error('Error loading data:', error);
+                document.body.innerHTML = '<div class="container"><h1>שגיאה בטעינת הנתונים</h1><p>נא לבדוק את תקינות הפרמטרים</p></div>';
             }
         };
     </script>
