@@ -93,8 +93,8 @@
 
     <script>
         function getUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
             try {
-                const urlParams = new URLSearchParams(window.location.search);
                 const query = urlParams.get('query');
                 const url = urlParams.get('url');
                 const rawData = JSON.parse(decodeURIComponent(urlParams.get('data')));
@@ -138,7 +138,7 @@
                 };
             } catch (error) {
                 console.error('Error loading data:', error);
-                document.body.innerHTML = '<div class="container"><h1>שגיאה בטעינת הנתונים</h1><p>נא לבדוק את תקינות הפרמטרים</p></div>';
+                document.body.innerHTML = '<div class="container"><h1>שגיאה בטעינת הנתונים</h1><p>נא לבדוק את תקינות הפרמטרים</p><p class="debug">' + error.toString() + '</p></div>';
             }
         };
     </script>
