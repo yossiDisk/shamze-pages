@@ -67,15 +67,6 @@
             margin-top: 20px;
             padding: 12px;
         }
-        .debug {
-            margin-top: 20px;
-            padding: 10px;
-            background: #f0f0f0;
-            border-radius: 4px;
-            font-family: monospace;
-            white-space: pre-wrap;
-            direction: ltr;
-        }
     </style>
 </head>
 <body>
@@ -88,7 +79,6 @@
             <button onclick="copyCoupon()" class="copy-btn">העתק</button>
         </div>
         <button id="offerLink" class="offer-btn">למעבר להצעה</button>
-        <div id="debug" class="debug"></div>
     </div>
 
     <script>
@@ -99,7 +89,6 @@
                 const url = params.get('url');
                 const dataStr = params.get('data');
                 
-                // בדיקת תקינות הפרמטרים
                 if (!dataStr) {
                     throw new Error('Missing data parameter');
                 }
@@ -108,24 +97,12 @@
                 try {
                     rawData = JSON.parse(dataStr);
                 } catch (e) {
-                    // אם הפרסור נכשל, ננסה לפרסר את המחרוזת המקודדת
                     rawData = JSON.parse(decodeURIComponent(dataStr));
                 }
                 
-                // שליפת האובייקט data מתוך המבנה המקונן
                 const finalData = rawData.data || rawData;
-                
-                // הצגת מידע דיבאג
-                document.getElementById('debug').textContent = 
-                    'Query: ' + query + '\n' +
-                    'URL: ' + url + '\n' +
-                    'Data: ' + JSON.stringify(finalData, null, 2);
-                
                 return { query, url, data: finalData };
             } catch (error) {
-                document.getElementById('debug').textContent = 
-                    'Error: ' + error.message + '\n' +
-                    'Raw search: ' + window.location.search;
                 throw error;
             }
         }
@@ -148,14 +125,12 @@
                 document.getElementById('coupon').textContent = data.cupon;
                 
                 document.getElementById('offerLink').onclick = () => {
-                    window.location.href = data.affLink;
+                    window.open(data.affLink, '_blank');
                 };
             } catch (error) {
-                console.error('Error loading data:', error);
                 document.body.innerHTML = `<div class="container">
                     <h1>שגיאה בטעינת הנתונים</h1>
                     <p>נא לבדוק את תקינות הפרמטרים</p>
-                    <p dir="ltr" class="debug">${error.toString()}</p>
                 </div>`;
             }
         };
