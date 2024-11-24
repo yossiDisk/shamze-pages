@@ -110,9 +110,7 @@
         }
 
         .action-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
+            display: none;
         }
 
         .action-button {
@@ -125,6 +123,26 @@
             font-size: 16px;
             transition: background-color 0.3s ease;
             text-decoration: none;
+        }
+
+        .product-header {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-header h2 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 1.2em;
+        }
+
+        .product-header p {
+            margin: 5px 0;
+            color: #666;
         }
 
         .action-button:hover {
@@ -165,15 +183,9 @@
 </head>
 
 <body>
-    <div class="action-buttons">
-        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamzezolyoter@gmail.com&su=פידבק על תוצאות החיפוש&body=היי, יש לי פידבק על תוצאות החיפוש: "
-            class="feedback-link action-button" target="_blank">לתת פידבק</a>
-        <a id="shareButton" class="action-button" target="_blank">שיתוף</a>
+    <div id="productHeader" class="product-header">
+        <!-- Product details will be inserted here -->
     </div>
-
-    <div id="copyMessage">הלינק הועתק ללוח</div>
-    <p></p>
-
 
     <div class="sort-container">
         <label for="sort-select">מיין לפי:</label>
@@ -183,16 +195,208 @@
             <option value="price-desc">מחיר - מהגבוה לנמוך</option>
         </select>
     </div>
+
     <div id="loadingContainer" class="loading-container" style="display: none;">
         <div class="loading-spinner"></div>
         <p>אוספים מוצרים מכל האתרים, זה יכול לקחת עד <span id="countdown">10</span> שניות...</p>
-        <p></p>
-        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamzezolyoter@gmail.com&su=יצרת קשר - שם זה זול יותר&body=יצירת קשר מעמוד חיפוש"
-            target="_blank">צור קשר</a>
     </div>
+
     <div id="searchResults" class="search-results"></div>
 
     <script>
+        // Add this at the beginning of your script
+        function extractDomainFromUrl(url) {
+            try {
+                const urlObj = new URL(url);
+                return urlObj.hostname.replace('www.', '');
+            } catch (e) {
+                return url;
+            }
+        }
+
+        // Helper function to clean price string
+        function cleanDisplayPrice(priceStr) {
+            if (!priceStr) return null;
+            // Remove ₪ and any non-numeric characters except commas and dots
+            return priceStr.replace(/[₪]/g, '').trim();
+        }
+
+        function displayProductHeader() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('query');
+            const price = urlParams.get('price');
+            const url = urlParams.get('url');
+
+            const headerDiv = document.getElementById('productHeader');
+            if (headerDiv) {
+                let headerContent = `
+            <div class="header-title-container" style="display: flex; align-items: center; gap: 10px; position: relative;">
+                <h2 style="margin: 0;">${query || 'מוצר'}</h2>
+                <div class="add-button-container" style="position: relative;">
+                    <button 
+                        class="add-to-list-button"
+                        style="
+                            background: none;
+                            border: none;
+                            cursor: pointer;
+                            padding: 5px;
+                            display: flex;
+                            align-items: center;
+                            font-family: inherit;
+                            position: relative;
+                            min-width: 30px;
+                            overflow: hidden;
+                            transition: all 0.3s ease;
+                        "
+                    >
+                        <div class="button-content" style="
+                            display: flex;
+                            align-items: center;
+                            position: relative;
+                            transition: transform 0.3s ease;
+                        ">
+                            <span class="plus-icon" style="
+                                font-size: 24px;
+                                color: #1a73e8;
+                                position: absolute;
+                                right: 0;
+                                transition: opacity 0.3s ease;
+                            ">+</span>
+                            <span class="button-text" style="
+                                white-space: nowrap;
+                                color: #1a73e8;
+                                font-size: 14px;
+                                opacity: 0;
+                                transform: translateX(30px);
+                                transition: all 0.3s ease;
+                            ">+ רשימת קניות</span>
+                        </div>
+                    </button>
+                </div>
+                <div class="feature-message" style="
+                    position: absolute;
+                    top: 100%;
+                    right: 0;
+                    background-color: #333;
+                    color: white;
+                    padding: 8px 16px;
+                    border-radius: 4px;
+                    margin-top: 8px;
+                    font-size: 14px;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: opacity 0.3s ease;
+                    z-index: 1000;
+                ">הפיצר עדיין לא זמין</div>
+            </div>
+        `;
+
+                // מציג מחיר רק אם קיים, לאחר ניקוי
+                if (price) {
+                    const cleanPrice = cleanDisplayPrice(price);
+                    if (cleanPrice) {
+                        headerContent += `<p>מחיר: ₪${cleanPrice}</p>`;
+                    }
+                }
+
+                // מציג אתר רק אם קיים
+                if (url) {
+                    headerContent += `<p>אתר: ${extractDomainFromUrl(url)}</p>`;
+                }
+
+                headerDiv.innerHTML = headerContent;
+
+                // Add button interactions
+                const addButton = headerDiv.querySelector('.add-to-list-button');
+                const buttonText = headerDiv.querySelector('.button-text');
+                const plusIcon = headerDiv.querySelector('.plus-icon');
+                const message = headerDiv.querySelector('.feature-message');
+                let messageTimeout;
+
+                if (addButton) {
+                    // Hover interactions
+                    addButton.addEventListener('mouseenter', function () {
+                        buttonText.style.opacity = '1';
+                        buttonText.style.transform = 'translateX(0)';
+                        plusIcon.style.opacity = '0';
+                        addButton.style.width = 'auto';
+
+                        sendPlausibleEvent('AddToListButtonHover', {
+                            productName: query || 'unknown'
+                        });
+                    });
+
+                    addButton.addEventListener('mouseleave', function () {
+                        buttonText.style.opacity = '0';
+                        buttonText.style.transform = 'translateX(30px)';
+                        plusIcon.style.opacity = '1';
+                        addButton.style.width = '30px';
+                    });
+
+                    // Click interaction
+                    addButton.addEventListener('click', function () {
+                        // Clear any existing timeout
+                        if (messageTimeout) {
+                            clearTimeout(messageTimeout);
+                        }
+
+                        // Show message
+                        message.style.visibility = 'visible';
+                        message.style.opacity = '1';
+
+                        // Hide message after 2 seconds
+                        messageTimeout = setTimeout(() => {
+                            message.style.opacity = '0';
+                            setTimeout(() => {
+                                message.style.visibility = 'hidden';
+                            }, 300); // Wait for fade out animation to complete
+                        }, 2000);
+
+                        // Send Plausible event
+                        sendPlausibleEvent('AddToListButtonClicked', {
+                            productName: query || 'unknown',
+                            price: cleanDisplayPrice(price) || 'unknown',
+                            site: url ? extractDomainFromUrl(url) : 'unknown'
+                        });
+                    });
+                }
+            }
+        }
+
+        // Add this CSS to your existing styles
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+    .add-to-list-button:hover {
+        background-color: rgba(26, 115, 232, 0.1);
+        border-radius: 4px;
+    }
+    
+    .feature-message::before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        right: 10px;
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 6px solid #333;
+    }
+`;
+        document.head.appendChild(styleSheet);
+
+        // Call this when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            displayProductHeader();
+
+            const queryParam = urlParams.get('query');
+            if (queryParam) {
+                search(queryParam).catch(error => {
+                    console.error('Initial search failed:', error);
+                });
+            }
+        });
+
         const imageCache = new Map();
         let logMessages = [];
         let currentResults = [];
@@ -266,25 +470,6 @@
                 console.error("Loading container not found");
             }
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const shareButton = document.getElementById('shareButton');
-
-            shareButton.addEventListener('click', (event) => {
-                const currentQuery = currentSearchQuery || '';
-                const shareUrl = `https://yossidisk.github.io/Shamze/cupons.html?source=side&search=true&query=${encodeURIComponent(currentQuery)}`;
-
-                // Update the href attribute just before opening
-                shareButton.href = shareUrl;
-
-                // Send Plausible event
-                sendPlausibleEvent('ShareButtonClicked', {
-                    query: currentQuery
-                });
-
-                // The default action (opening in a new tab) will proceed
-            });
-        });
 
         function hideLoading() {
             const loadingContainer = document.getElementById('loadingContainer');
@@ -382,23 +567,41 @@
             });
         }
 
+        // Add this helper function at the top of your script
+        function cleanPriceString(priceStr) {
+            if (!priceStr) return null;
+            // Remove non-numeric characters except decimal point, convert to number
+            return parseFloat(priceStr.replace(/[^\d.]/g, ''));
+        }
+
         function fetchSearchResults(query) {
             showLoading();
             startCountdown();
 
-            // Get the price parameter from URL
+            // Get and clean the price parameter from URL
             const priceParam = getUrlParameter('price');
+            const cleanedPrice = cleanPriceString(priceParam);
 
-            // Construct the base URL
+            // Log the cleaning process
+            console.log('Original price:', priceParam);
+            console.log('Cleaned price:', cleanedPrice);
+
+            // Construct the base URL with encoded query
             let apiUrl = `https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=10`;
 
-            // Add price range parameters if price is provided and greater than 0
-            if (priceParam && parseFloat(priceParam) > 0) {
-                const price = parseFloat(priceParam);
-                const minPrice = price / 2;
-                const maxPrice = price + minPrice;
-                apiUrl += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
+            // Add price range parameters if we have a valid price
+            if (cleanedPrice && cleanedPrice > 0) {
+                const minPrice = Math.max(1, cleanedPrice * 0.5); // Ensure minimum price is at least 1
+                const maxPrice = cleanedPrice * 1.5;
+
+                // Log the price range calculation
+                console.log('Price range:', { minPrice, maxPrice });
+
+                apiUrl += `&minPrice=${minPrice.toFixed(2)}&maxPrice=${maxPrice.toFixed(2)}`;
             }
+
+            // Log the final API URL
+            console.log('API URL:', apiUrl);
 
             return fetch(apiUrl, {
                 method: 'GET',
@@ -408,69 +611,92 @@
                 },
             })
                 .then(response => {
+                    // Log the response status
+                    console.log('API Response status:', response.status);
+
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     return response.json();
                 })
                 .then(data => {
+                    // Log the received data
+                    console.log('Received data:', data);
+
+                    if (!Array.isArray(data)) {
+                        throw new Error('Invalid response format: expected array');
+                    }
+
                     log(`Received ${data.length} search results`);
                     currentResults = data;
                     displaySearchResults(data);
                     hideLoading();
 
-                    // New event: Results displayed
                     const searchStats = getSearchStats(data);
-            const eventProps = {
-                query: query,
-                resultCount: data.length,
-                cheapestProduct: searchStats.cheapest?.name || 'N/A',
-                cheapestSite: searchStats.cheapest?.site || 'N/A',
-                cheapestPrice: searchStats.cheapest?.price || 'N/A',
-                mostExpensiveProduct: searchStats.mostExpensive?.name || 'N/A',
-                mostExpensiveSite: searchStats.mostExpensive?.site || 'N/A',
-                mostExpensivePrice: searchStats.mostExpensive?.price || 'N/A',
-                averagePrice: searchStats.averagePrice || 'N/A'
-            };
+                    const eventProps = {
+                        query: query,
+                        resultCount: data.length,
+                        cheapestProduct: searchStats.cheapest?.name || 'N/A',
+                        cheapestSite: searchStats.cheapest?.site || 'N/A',
+                        cheapestPrice: searchStats.cheapest?.price || 'N/A',
+                        mostExpensiveProduct: searchStats.mostExpensive?.name || 'N/A',
+                        mostExpensiveSite: searchStats.mostExpensive?.site || 'N/A',
+                        mostExpensivePrice: searchStats.mostExpensive?.price || 'N/A',
+                        averagePrice: searchStats.averagePrice || 'N/A'
+                    };
+
+                    sendPlausibleEvent('ResultsDisplayed', eventProps);
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    // Enhanced error logging
+                    console.error('Search error details:', {
+                        error: error.message,
+                        query: query,
+                        apiUrl: apiUrl,
+                        timestamp: new Date().toISOString()
+                    });
+
                     log(`Error fetching search results: ${error.message}`);
                     hideLoading();
 
-                    // Create retry button as a link that opens in new tab
                     const retryButtonHtml = `
-                <a id="retryButton" href="#" target="_blank" class="retry-button">נסה שוב</a>
-                <p>עדיין לא נטען?</p>
-                <p>נראה שיש תקלה...</p>
-                <p>כדאי לספר לי על זה כדי שאבדוק</p>
-                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamzezolyoter@gmail.com&su=פידבק על תוצאות החיפוש&body=היי, נראה שיש תקלה בטעינת תוצאות החיפוש:" target="_blank">לחץ כאן</a>
-            `;
+            <div class="error-container" style="text-align: center; padding: 20px;">
+                <p style="color: #666;">לא הצלחנו לטעון את התוצאות</p>
+                <a id="retryButton" href="#" target="_blank" 
+                   style="display: inline-block; margin: 10px; padding: 10px 20px; 
+                   background-color: #1a73e8; color: white; text-decoration: none; 
+                   border-radius: 4px;">נסה שוב</a>
+                <p style="color: #666;">עדיין לא עובד?</p>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamzezolyoter@gmail.com&su=פידבק על תוצאות החיפוש&body=היי, נראה שיש תקלה בטעינת תוצאות החיפוש:"
+                   target="_blank" 
+                   style="color: #1a73e8;">דווח על התקלה</a>
+            </div>
+        `;
 
                     displayErrorMessage(retryButtonHtml);
 
-                    // Add event listener for retry button
-                    document.getElementById('retryButton').addEventListener('click', (event) => {
-                        const currentQuery = currentSearchQuery || '';
-                        const retryUrl = `https://yossidisk.github.io/Shamze/cupons.html?source=side&search=true&query=${encodeURIComponent(currentQuery)}`;
+                    // Configure retry button
+                    const retryButton = document.getElementById('retryButton');
+                    if (retryButton) {
+                        retryButton.addEventListener('click', (event) => {
+                            event.preventDefault();
+                            const currentQuery = currentSearchQuery || '';
+                            const retryUrl = `https://yossidisk.github.io/Shamze/cupons.html?source=side&search=true&query=${encodeURIComponent(currentQuery)}`;
+                            window.open(retryUrl, '_blank');
 
-                        // Update the href attribute
-                        event.target.href = retryUrl;
-
-                        // Send Plausible event
-                        sendPlausibleEvent('RetryButtonClicked', {
-                            query: currentQuery
+                            sendPlausibleEvent('RetryButtonClicked', {
+                                query: currentQuery,
+                                error: error.message
+                            });
                         });
-                    });
+                    }
 
-                    // New event: Results not displayed
                     sendPlausibleEvent('ResultsNotDisplayed', {
                         query: query,
                         error: error.message
                     });
                 });
         }
-
         function getSearchStats(results) {
             let cheapest = results[0];
             let mostExpensive = results[0];
