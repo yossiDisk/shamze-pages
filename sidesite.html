@@ -472,11 +472,35 @@
         }
 
         function getSearchStats(results) {
-            let cheapest = results[0];
-            let mostExpensive = results[0];
+            // בדיקה אם יש תוצאות בכלל
+            if (!results || !Array.isArray(results) || results.length === 0) {
+                return {
+                    cheapest: null,
+                    mostExpensive: null,
+                    averagePrice: 0
+                };
+            }
+
+            // מציאת המוצר הראשון עם מחיר תקין
+            let validProducts = results.filter(product =>
+                product &&
+                product.price &&
+                !isNaN(parseFloat(product.price.replace(/[^\d.]/g, '')))
+            );
+
+            if (validProducts.length === 0) {
+                return {
+                    cheapest: null,
+                    mostExpensive: null,
+                    averagePrice: 0
+                };
+            }
+
+            let cheapest = validProducts[0];
+            let mostExpensive = validProducts[0];
             let totalPrice = 0;
 
-            results.forEach(product => {
+            validProducts.forEach(product => {
                 const price = parseFloat(product.price.replace(/[^\d.]/g, ''));
 
                 if (price < parseFloat(cheapest.price.replace(/[^\d.]/g, ''))) {
@@ -492,22 +516,36 @@
             return {
                 cheapest: cheapest,
                 mostExpensive: mostExpensive,
-                averagePrice: (totalPrice / results.length).toFixed(2)
+                averagePrice: (totalPrice / validProducts.length).toFixed(2)
             };
         }
 
-
         function displaySearchResults(results) {
             const container = document.getElementById('searchResults');
+            if (!container) return;
+
             container.innerHTML = '';
+
+            // בדיקה אם יש תוצאות
+            if (!results || !Array.isArray(results) || results.length === 0) {
+                container.innerHTML = `
+            <div class="no-results">
+                <p>לא נמצאו תוצאות חיפוש</p>
+                <p>נסה לחפש שוב עם מילות חיפוש אחרות</p>
+            </div>
+        `;
+                return;
+            }
 
             // הצג רק 3 תוצאות ראשונות
             const initialResults = results.slice(0, 3);
             const remainingResults = results.slice(3);
 
             initialResults.forEach(product => {
-                const productDiv = createProductElement(product);
-                container.appendChild(productDiv);
+                if (product && product.name) { // בדיקה שהמוצר קיים ויש לו שם
+                    const productDiv = createProductElement(product);
+                    container.appendChild(productDiv);
+                }
             });
 
             if (remainingResults.length > 0) {
@@ -524,8 +562,13 @@
             }
         }
 
-        // פונקציה חדשה ליצירת אלמנט מוצר
         function createProductElement(product) {
+            // בדיקת תקינות המוצר
+            if (!product || !product.name || !product.price || !product.site) {
+                console.warn('Invalid product data:', product);
+                return null;
+            }
+
             const productDiv = document.createElement('div');
             productDiv.className = 'product';
             productDiv.innerHTML = `
@@ -536,22 +579,35 @@
         </div>
         <div class="product-image"></div>
     `;
+
             productDiv.onclick = () => {
-                logClick(product);
-                window.open(product.urlAff, '_blank');
+                if (product.urlAff) {
+                    logClick(product);
+                    window.open(product.urlAff, '_blank');
+                }
             };
-            fetchProductImage(product.url, productDiv.querySelector('.product-image'));
+
+            if (product.url) {
+                fetchProductImage(product.url, productDiv.querySelector('.product-image'));
+            }
+
             return productDiv;
         }
 
-        // פונקציה חדשה להצגת תוצאות נוספות
         function showMoreResults(remainingResults) {
             const container = document.getElementById('searchResults');
+            if (!container) return;
+
             const showMoreButton = container.querySelector('.show-more-button');
+            if (!showMoreButton) return;
 
             remainingResults.forEach(product => {
-                const productDiv = createProductElement(product);
-                container.insertBefore(productDiv, showMoreButton);
+                if (product && product.name) { // בדיקה שהמוצר קיים ויש לו שם
+                    const productDiv = createProductElement(product);
+                    if (productDiv) { // בדיקה שנוצר אלמנט תקין
+                        container.insertBefore(productDiv, showMoreButton);
+                    }
+                }
             });
 
             showMoreButton.remove();
