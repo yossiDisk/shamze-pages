@@ -421,17 +421,17 @@
 
                     // New event: Results displayed
                     const searchStats = getSearchStats(data);
-                    sendPlausibleEvent('ResultsDisplayed', {
-                        query: query,
-                        resultCount: data.length,
-                        cheapestProduct: searchStats.cheapest.name,
-                        cheapestSite: searchStats.cheapest.site,
-                        cheapestPrice: searchStats.cheapest.price,
-                        mostExpensiveProduct: searchStats.mostExpensive.name,
-                        mostExpensiveSite: searchStats.mostExpensive.site,
-                        mostExpensivePrice: searchStats.mostExpensive.price,
-                        averagePrice: searchStats.averagePrice
-                    });
+            const eventProps = {
+                query: query,
+                resultCount: data.length,
+                cheapestProduct: searchStats.cheapest?.name || 'N/A',
+                cheapestSite: searchStats.cheapest?.site || 'N/A',
+                cheapestPrice: searchStats.cheapest?.price || 'N/A',
+                mostExpensiveProduct: searchStats.mostExpensive?.name || 'N/A',
+                mostExpensiveSite: searchStats.mostExpensive?.site || 'N/A',
+                mostExpensivePrice: searchStats.mostExpensive?.price || 'N/A',
+                averagePrice: searchStats.averagePrice || 'N/A'
+            };
                 })
                 .catch(error => {
                     console.error('Error:', error);
