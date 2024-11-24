@@ -214,176 +214,163 @@
             }
         }
 
-        // Helper function to clean price string
+        // Helper function to clean and validate price
         function cleanDisplayPrice(priceStr) {
             if (!priceStr) return null;
             // Remove ₪ and any non-numeric characters except commas and dots
-            return priceStr.replace(/[₪]/g, '').trim();
+            const cleanPrice = priceStr.replace(/[₪]/g, '').trim();
+            // Convert to number for comparison (remove commas first)
+            const numPrice = parseFloat(cleanPrice.replace(/,/g, ''));
+            // Return null if price is 0 or NaN
+            return (!numPrice || isNaN(numPrice)) ? null : cleanPrice;
         }
 
         function displayProductHeader() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const query = urlParams.get('query');
-            const price = urlParams.get('price');
-            const url = urlParams.get('url');
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('query');
+    const price = urlParams.get('price');
+    const url = urlParams.get('url');
 
-            const headerDiv = document.getElementById('productHeader');
-            if (headerDiv) {
-                let headerContent = `
-            <div class="header-title-container" style="display: flex; align-items: center; gap: 10px; position: relative;">
+    const headerDiv = document.getElementById('productHeader');
+    if (headerDiv) {
+        let headerContent = `
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <!-- Product Title -->
                 <h2 style="margin: 0;">${query || 'מוצר'}</h2>
-                <div class="add-button-container" style="position: relative;">
-                    <button 
-                        class="add-to-list-button"
-                        style="
-                            background: none;
-                            border: none;
-                            cursor: pointer;
-                            padding: 5px;
-                            display: flex;
-                            align-items: center;
-                            font-family: inherit;
-                            position: relative;
-                            min-width: 30px;
-                            overflow: hidden;
-                            transition: all 0.3s ease;
-                        "
-                    >
-                        <div class="button-content" style="
-                            display: flex;
-                            align-items: center;
-                            position: relative;
-                            transition: transform 0.3s ease;
-                        ">
-                            <span class="plus-icon" style="
-                                font-size: 24px;
-                                color: #1a73e8;
-                                position: absolute;
-                                right: 0;
-                                transition: opacity 0.3s ease;
-                            ">+</span>
-                            <span class="button-text" style="
-                                white-space: nowrap;
-                                color: #1a73e8;
-                                font-size: 14px;
-                                opacity: 0;
-                                transform: translateX(30px);
-                                transition: all 0.3s ease;
-                            ">+ רשימת קניות</span>
-                        </div>
-                    </button>
+                
+                <!-- Price and Site Grid -->
+                <div style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 15px;
+                    margin-bottom: 10px;
+                ">`;
+        
+        // מציג מחיר רק אם קיים וגדול מ-0
+        const cleanPrice = cleanDisplayPrice(price);
+        if (cleanPrice) {
+            headerContent += `
+                    <div style="
+                        background: #f8f9fa;
+                        padding: 10px 15px;
+                        border-radius: 6px;
+                        text-align: center;
+                    ">₪${cleanPrice}</div>`;
+        }
+        
+        // מציג אתר רק אם קיים
+        if (url) {
+            headerContent += `
+                    <div style="
+                        background: #f8f9fa;
+                        padding: 10px 15px;
+                        border-radius: 6px;
+                        text-align: center;
+                    ">${extractDomainFromUrl(url)}</div>`;
+        }
+        
+        headerContent += `
                 </div>
+
+                <!-- Add to List Button -->
+                <button 
+                    class="add-to-list-button"
+                    style="
+                        background: none;
+                        border: 2px dashed #1a73e8;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        padding: 10px;
+                        color: #1a73e8;
+                        font-family: inherit;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 8px;
+                        width: 100%;
+                        transition: all 0.3s ease;
+                    "
+                >
+                    <span style="font-size: 20px;">+</span>
+                    <span>הוסף לרשימת קניות</span>
+                </button>
+
+                <!-- Feature Message -->
                 <div class="feature-message" style="
                     position: absolute;
-                    top: 100%;
+                    bottom: -45px;
                     right: 0;
+                    left: 0;
                     background-color: #333;
                     color: white;
                     padding: 8px 16px;
                     border-radius: 4px;
-                    margin-top: 8px;
                     font-size: 14px;
                     opacity: 0;
                     visibility: hidden;
                     transition: opacity 0.3s ease;
                     z-index: 1000;
+                    text-align: center;
                 ">הפיצר עדיין לא זמין</div>
             </div>
         `;
+        
+        headerDiv.innerHTML = headerContent;
 
-                // מציג מחיר רק אם קיים, לאחר ניקוי
-                if (price) {
-                    const cleanPrice = cleanDisplayPrice(price);
-                    if (cleanPrice) {
-                        headerContent += `<p>מחיר: ₪${cleanPrice}</p>`;
-                    }
+        // Add button interactions
+        const addButton = headerDiv.querySelector('.add-to-list-button');
+        const message = headerDiv.querySelector('.feature-message');
+        let messageTimeout;
+
+        if (addButton) {
+            // Hover effect
+            addButton.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = 'rgba(26, 115, 232, 0.1)';
+                
+                sendPlausibleEvent('AddToListButtonHover', {
+                    productName: query || 'unknown'
+                });
+            });
+
+            addButton.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = 'transparent';
+            });
+
+            // Click interaction
+            addButton.addEventListener('click', function() {
+                if (messageTimeout) {
+                    clearTimeout(messageTimeout);
                 }
-
-                // מציג אתר רק אם קיים
-                if (url) {
-                    headerContent += `<p>אתר: ${extractDomainFromUrl(url)}</p>`;
-                }
-
-                headerDiv.innerHTML = headerContent;
-
-                // Add button interactions
-                const addButton = headerDiv.querySelector('.add-to-list-button');
-                const buttonText = headerDiv.querySelector('.button-text');
-                const plusIcon = headerDiv.querySelector('.plus-icon');
-                const message = headerDiv.querySelector('.feature-message');
-                let messageTimeout;
-
-                if (addButton) {
-                    // Hover interactions
-                    addButton.addEventListener('mouseenter', function () {
-                        buttonText.style.opacity = '1';
-                        buttonText.style.transform = 'translateX(0)';
-                        plusIcon.style.opacity = '0';
-                        addButton.style.width = 'auto';
-
-                        sendPlausibleEvent('AddToListButtonHover', {
-                            productName: query || 'unknown'
-                        });
-                    });
-
-                    addButton.addEventListener('mouseleave', function () {
-                        buttonText.style.opacity = '0';
-                        buttonText.style.transform = 'translateX(30px)';
-                        plusIcon.style.opacity = '1';
-                        addButton.style.width = '30px';
-                    });
-
-                    // Click interaction
-                    addButton.addEventListener('click', function () {
-                        // Clear any existing timeout
-                        if (messageTimeout) {
-                            clearTimeout(messageTimeout);
-                        }
-
-                        // Show message
-                        message.style.visibility = 'visible';
-                        message.style.opacity = '1';
-
-                        // Hide message after 2 seconds
-                        messageTimeout = setTimeout(() => {
-                            message.style.opacity = '0';
-                            setTimeout(() => {
-                                message.style.visibility = 'hidden';
-                            }, 300); // Wait for fade out animation to complete
-                        }, 2000);
-
-                        // Send Plausible event
-                        sendPlausibleEvent('AddToListButtonClicked', {
-                            productName: query || 'unknown',
-                            price: cleanDisplayPrice(price) || 'unknown',
-                            site: url ? extractDomainFromUrl(url) : 'unknown'
-                        });
-                    });
-                }
-            }
+                
+                message.style.visibility = 'visible';
+                message.style.opacity = '1';
+                
+                messageTimeout = setTimeout(() => {
+                    message.style.opacity = '0';
+                    setTimeout(() => {
+                        message.style.visibility = 'hidden';
+                    }, 300);
+                }, 2000);
+                
+                sendPlausibleEvent('AddToListButtonClicked', {
+                    productName: query || 'unknown',
+                    price: cleanPrice || 'unknown',
+                    site: url ? extractDomainFromUrl(url) : 'unknown'
+                });
+            });
         }
-
-        // Add this CSS to your existing styles
-        const styleSheet = document.createElement('style');
-        styleSheet.textContent = `
-    .add-to-list-button:hover {
-        background-color: rgba(26, 115, 232, 0.1);
-        border-radius: 4px;
     }
-    
-    .feature-message::before {
-        content: '';
-        position: absolute;
-        top: -6px;
-        right: 10px;
-        width: 0;
-        height: 0;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-bottom: 6px solid #333;
+}
+
+// Add this CSS to your existing styles
+const styleSheet = document.createElement('style');
+styleSheet.textContent = `
+    .product-header {
+        position: relative;
+        padding-bottom: 20px;
     }
 `;
-        document.head.appendChild(styleSheet);
+document.head.appendChild(styleSheet);
 
         // Call this when the page loads
         document.addEventListener('DOMContentLoaded', () => {
