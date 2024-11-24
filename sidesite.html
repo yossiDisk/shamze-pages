@@ -226,50 +226,56 @@
         }
 
         function displayProductHeader() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const query = urlParams.get('query');
-    const price = urlParams.get('price');
-    const url = urlParams.get('url');
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('query');
+            const price = urlParams.get('price');
+            const url = urlParams.get('url');
 
-    const headerDiv = document.getElementById('productHeader');
-    if (headerDiv) {
-        let headerContent = `
-            <div style="display: flex; flex-direction: column; gap: 15px;">
+            const headerDiv = document.getElementById('productHeader');
+            if (headerDiv) {
+                let headerContent = `
+            <div style="display: flex; flex-direction: column; gap: 10px;">
                 <!-- Product Title -->
-                <h2 style="margin: 0;">${query || 'מוצר'}</h2>
+                <h2 style="
+                    margin: 0;
+                    font-size: 16px;
+                    line-height: 1.2;
+                ">${query || 'מוצר'}</h2>
                 
                 <!-- Price and Site Grid -->
                 <div style="
                     display: grid;
                     grid-template-columns: 1fr 1fr;
-                    gap: 15px;
-                    margin-bottom: 10px;
+                    gap: 8px;
+                    margin-bottom: 6px;
                 ">`;
-        
-        // מציג מחיר רק אם קיים וגדול מ-0
-        const cleanPrice = cleanDisplayPrice(price);
-        if (cleanPrice) {
-            headerContent += `
+
+                // מציג מחיר רק אם קיים וגדול מ-0
+                const cleanPrice = cleanDisplayPrice(price);
+                if (cleanPrice) {
+                    headerContent += `
                     <div style="
                         background: #f8f9fa;
-                        padding: 10px 15px;
-                        border-radius: 6px;
+                        padding: 6px 10px;
+                        border-radius: 4px;
                         text-align: center;
+                        font-size: 14px;
                     ">₪${cleanPrice}</div>`;
-        }
-        
-        // מציג אתר רק אם קיים
-        if (url) {
-            headerContent += `
+                }
+
+                // מציג אתר רק אם קיים
+                if (url) {
+                    headerContent += `
                     <div style="
                         background: #f8f9fa;
-                        padding: 10px 15px;
-                        border-radius: 6px;
+                        padding: 6px 10px;
+                        border-radius: 4px;
                         text-align: center;
+                        font-size: 14px;
                     ">${extractDomainFromUrl(url)}</div>`;
-        }
-        
-        headerContent += `
+                }
+
+                headerContent += `
                 </div>
 
                 <!-- Add to List Button -->
@@ -277,35 +283,36 @@
                     class="add-to-list-button"
                     style="
                         background: none;
-                        border: 2px dashed #1a73e8;
-                        border-radius: 6px;
+                        border: 1px dashed #1a73e8;
+                        border-radius: 4px;
                         cursor: pointer;
-                        padding: 10px;
+                        padding: 6px;
                         color: #1a73e8;
                         font-family: inherit;
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        gap: 8px;
+                        gap: 6px;
                         width: 100%;
                         transition: all 0.3s ease;
+                        font-size: 13px;
                     "
                 >
-                    <span style="font-size: 20px;">+</span>
+                    <span style="font-size: 16px;">+</span>
                     <span>הוסף לרשימת קניות</span>
                 </button>
 
                 <!-- Feature Message -->
                 <div class="feature-message" style="
                     position: absolute;
-                    bottom: -45px;
+                    bottom: -35px;
                     right: 0;
                     left: 0;
                     background-color: #333;
                     color: white;
-                    padding: 8px 16px;
+                    padding: 6px 12px;
                     border-radius: 4px;
-                    font-size: 14px;
+                    font-size: 13px;
                     opacity: 0;
                     visibility: hidden;
                     transition: opacity 0.3s ease;
@@ -314,63 +321,64 @@
                 ">הפיצר עדיין לא זמין</div>
             </div>
         `;
-        
-        headerDiv.innerHTML = headerContent;
 
-        // Add button interactions
-        const addButton = headerDiv.querySelector('.add-to-list-button');
-        const message = headerDiv.querySelector('.feature-message');
-        let messageTimeout;
+                headerDiv.innerHTML = headerContent;
 
-        if (addButton) {
-            // Hover effect
-            addButton.addEventListener('mouseenter', function() {
-                this.style.backgroundColor = 'rgba(26, 115, 232, 0.1)';
-                
-                sendPlausibleEvent('AddToListButtonHover', {
-                    productName: query || 'unknown'
-                });
-            });
+                // Add button interactions
+                const addButton = headerDiv.querySelector('.add-to-list-button');
+                const message = headerDiv.querySelector('.feature-message');
+                let messageTimeout;
 
-            addButton.addEventListener('mouseleave', function() {
-                this.style.backgroundColor = 'transparent';
-            });
+                if (addButton) {
+                    // Hover effect
+                    addButton.addEventListener('mouseenter', function () {
+                        this.style.backgroundColor = 'rgba(26, 115, 232, 0.1)';
 
-            // Click interaction
-            addButton.addEventListener('click', function() {
-                if (messageTimeout) {
-                    clearTimeout(messageTimeout);
+                        sendPlausibleEvent('AddToListButtonHover', {
+                            productName: query || 'unknown'
+                        });
+                    });
+
+                    addButton.addEventListener('mouseleave', function () {
+                        this.style.backgroundColor = 'transparent';
+                    });
+
+                    // Click interaction
+                    addButton.addEventListener('click', function () {
+                        if (messageTimeout) {
+                            clearTimeout(messageTimeout);
+                        }
+
+                        message.style.visibility = 'visible';
+                        message.style.opacity = '1';
+
+                        messageTimeout = setTimeout(() => {
+                            message.style.opacity = '0';
+                            setTimeout(() => {
+                                message.style.visibility = 'hidden';
+                            }, 300);
+                        }, 2000);
+
+                        sendPlausibleEvent('AddToListButtonClicked', {
+                            productName: query || 'unknown',
+                            price: cleanPrice || 'unknown',
+                            site: url ? extractDomainFromUrl(url) : 'unknown'
+                        });
+                    });
                 }
-                
-                message.style.visibility = 'visible';
-                message.style.opacity = '1';
-                
-                messageTimeout = setTimeout(() => {
-                    message.style.opacity = '0';
-                    setTimeout(() => {
-                        message.style.visibility = 'hidden';
-                    }, 300);
-                }, 2000);
-                
-                sendPlausibleEvent('AddToListButtonClicked', {
-                    productName: query || 'unknown',
-                    price: cleanPrice || 'unknown',
-                    site: url ? extractDomainFromUrl(url) : 'unknown'
-                });
-            });
+            }
         }
-    }
-}
 
-// Add this CSS to your existing styles
-const styleSheet = document.createElement('style');
-styleSheet.textContent = `
+        // Add this CSS to your existing styles
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
     .product-header {
         position: relative;
-        padding-bottom: 20px;
+        padding: 10px;
+        padding-bottom: 15px;
     }
 `;
-document.head.appendChild(styleSheet);
+        document.head.appendChild(styleSheet);
 
         // Call this when the page loads
         document.addEventListener('DOMContentLoaded', () => {
