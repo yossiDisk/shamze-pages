@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>רשימת הקניות שלי - Shamze</title>
+
+    <!-- Google Sign-In SDK -->
+    <script>
+        function loadGoogleScript() {
+            const script = document.createElement('script');
+            script.src = 'https://accounts.google.com/gsi/client';
+            script.async = true;
+            script.defer = true;
+            script.onerror = () => {
+                console.error('Failed to load Google SDK');
+            };
+            document.head.appendChild(script);
+        }
+        window.onload = loadGoogleScript;
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .total-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1a73e8;
+        }
+
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .products-table th {
+            text-align: right;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #ddd;
+            font-weight: normal;
+        }
+
+        .products-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .delete-button {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .delete-button:hover {
+            background-color: #ffeaea;
+        }
+
+        .site-link {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        .site-link:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 40px;
+            color: #dc3545;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>רשימת הקניות שלי - בהרצה</h1>
+            <div class="user-info">
+                <!-- כאן יוצג שם המשתמש -->
+            </div>
+            <div class="total-price">
+                <!-- כאן יוצג הסכום הכולל -->
+            </div>
+        </div>
+
+        <table class="products-table">
+            <thead>
+                <tr>
+                    <th>שם המוצר</th>
+                    <th>מחיר</th>
+                    <th>לינק למוצר</th>
+                    <th>תאריך הוספה</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="productsTableBody">
+                <!-- כאן יוצגו המוצרים -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let currentUser = null;
+
+        function checkLoginStatus() {
+            const token = localStorage.getItem('googleToken');
+            if (token) {
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    if (payload.exp * 1000 > Date.now()) {
+                        currentUser = {
+                            email: payload.email,
+                            name: payload.name,
+                            userId: payload.sub
+                        };
+                        return true;
+                    }
+                    localStorage.removeItem('googleToken');
+                } catch (error) {
+                    console.error('Error parsing token:', error);
+                    localStorage.removeItem('googleToken');
+                }
+            }
+            return false;
+        }
+
+        function displayLoginScreen() {
+            document.querySelector('.container').innerHTML = `
+        <div class="header">
+            <h1>רשימת הקניות שלי</h1>
+        </div>
+        <div style="text-align: center; padding: 40px;">
+            <p style="color: #666; margin-bottom: 20px;">
+                כדי לצפות ברשימת הקניות שלך, יש להתחבר תחילה
+            </p>
+            <div id="googleAuthContainer" style="display: flex; justify-content: center; min-height: 40px;"></div>
+        </div>
+    `;
+
+            // נוודא שה-SDK נטען
+            function initializeGoogleButton() {
+                if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+                    // אתחול הגדרות גוגל
+                    google.accounts.id.initialize({
+                        client_id: "33228757731-fjpimc9l48l3qa8cbt9srtao49ln46ev.apps.googleusercontent.com",
+                        callback: handleCredentialResponse
+                    });
+
+                    // רינדור כפתור גוגל
+                    google.accounts.id.renderButton(
+                        document.getElementById('googleAuthContainer'),
+                        {
+                            theme: 'outline',
+                            size: 'large',
+                            type: 'standard',
+                            text: 'continue_with',
+                            locale: 'he_IL'
+                        }
+                    );
+                } else {
+                    // אם ה-SDK עדיין לא נטען, ננסה שוב בעוד רגע
+                    setTimeout(initializeGoogleButton, 100);
+                }
+            }
+
+            // התחלת תהליך האתחול
+            initializeGoogleButton();
+        }
+
+        // וודא שה-SDK נטען
+        function loadGoogleScript() {
+            const script = document.createElement('script');
+            script.src = 'https://accounts.google.com/gsi/client';
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        }
+        // הוספת פונקציית callback להתחברות
+        function handleCredentialResponse(response) {
+            const token = response.credential;
+            localStorage.setItem('googleToken', token);
+
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            currentUser = {
+                email: payload.email,
+                name: payload.name,
+                userId: payload.sub
+            };
+
+            // רענון הדף ושליפת המוצרים
+            fetchProducts();
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (checkLoginStatus()) {
+                await fetchProducts();
+            } else {
+                // מציג הודעה למשתמש במקום להפנות אותו
+                document.querySelector('.container').innerHTML = `
+            <div class="header">
+                <h1>רשימת הקניות שלי</h1>
+            </div>
+            <div style="text-align: center; padding: 40px;">
+                <p style="color: #666; margin-bottom: 20px;">
+                    כדי לצפות ברשימת הקניות שלך, יש להתחבר תחילה
+                </p>
+                <div id="googleAuthContainer"></div>
+            </div>
+        `;
+
+                // מציג את כפתור ההתחברות
+                renderGoogleSignIn(document.getElementById('googleAuthContainer'));
+            }
+        });
+
+        // פונקציה לעדכון פרטי המשתמש בממשק
+        function updateUserInfo() {
+            const userInfoDiv = document.querySelector('.user-info');
+            if (currentUser) {
+                userInfoDiv.textContent = `שלום, ${currentUser.name}`;
+            }
+        }
+
+        // פונקציה לפורמט תאריך
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('he-IL', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // פונקציה להצגת המוצרים בטבלה
+        function displayProducts(products) {
+            const tbody = document.getElementById('productsTableBody');
+            tbody.innerHTML = '';
+            let totalPrice = 0;
+
+            products.forEach(product => {
+                const price = parseFloat(product.price) || 0;
+                totalPrice += price;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+            <td>${product.productName}</td>
+            <td>₪${product.price}</td>
+            <td>
+                <a href="${product.productUrl}" class="site-link" target="_blank">
+                    ${product.site}
+                </a>
+            </td>
+            <td>${formatDate(product.dateAdded)}</td>
+            <td>
+                <button class="delete-button" onclick="deleteProduct('${product.productId}')" style="display: none">
+                    מחק
+                </button>
+            </td>
+        `;
+                tbody.appendChild(row);
+            });
+
+            // עדכון הסכום הכולל
+            const totalPriceDiv = document.querySelector('.total-price');
+            totalPriceDiv.textContent = `סה"כ: ₪${totalPrice.toFixed(2)}`;
+        }
+
+        async function fetchProducts() {
+            try {
+                if (!currentUser || !currentUser.userId) {
+                    displayLoginScreen();
+                    return;
+                }
+
+                console.log('Fetching for user:', currentUser.userId); // לוג לבדיקה
+
+                const url = `https://1dj3mvq3i6.execute-api.il-central-1.amazonaws.com/prod/list?userId=${encodeURIComponent(currentUser.userId)}`;
+                console.log('Request URL:', url); // לוג לבדיקה
+
+                const response = await fetch(url);
+                console.log('Response status:', response.status); // לוג לבדיקה
+
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                if (data.statusCode && data.body) {
+                    const responseBody = JSON.parse(data.body);
+                    const products = Array.isArray(responseBody) ? responseBody : [];
+                    handleProductsDisplay(products);
+                } else {
+                    const products = Array.isArray(data) ? data : [];
+                    handleProductsDisplay(products);
+                }
+            } catch (error) {
+                console.error('Error fetching products:', error);
+                document.querySelector('.container').innerHTML = `
+            <div class="error-message">
+                אירעה שגיאה בטעינת הרשימה. נסה לרענן את הדף.
+            </div>
+        `;
+            }
+        }
+
+        function handleProductsDisplay(products) {
+            if (products.length === 0) {
+                document.querySelector('.container').innerHTML = `
+            <div class="header">
+                <h1>רשימת הקניות שלי</h1>
+                <div class="user-info">${currentUser.name}</div>
+            </div>
+            <div style="text-align: center; padding: 40px; color: #666;">
+                הרשימה ריקה. אפשר להוסיף מוצרים דרך כפתור "הוסף לרשימת קניות" באתר.
+            </div>
+        `;
+            } else {
+                displayProducts(products);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGoogleScript();
+            if (checkLoginStatus()) {
+                fetchProducts();
+            } else {
+                displayLoginScreen();
+            }
+        });
+
+        // פונקציה למחיקת מוצר
+        async function deleteProduct(productId) {
+            if (!confirm('האם אתה בטוח שברצונך למחוק מוצר זה?')) return;
+
+            try {
+                const response = await fetch(`https://1dj3mvq3i6.execute-api.il-central-1.amazonaws.com/prod/list`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userId: currentUser.userId,
+                        productId: productId
+                    })
+                });
+
+                if (!response.ok) throw new Error('Failed to delete product');
+
+                // רענון הרשימה לאחר מחיקה
+                fetchProducts();
+            } catch (error) {
+                console.error('Error deleting product:', error);
+                alert('אירעה שגיאה במחיקת המוצר');
+            }
+        }
+
+    </script>
+</body>
+
+</html>
