@@ -721,7 +721,7 @@
                 sendPlausibleEvent('ShoppingListOpened', {
                     userId: currentUser.userId
                 });
-                window.open('/Shamze/shopping-list.html', '_blank');
+                window.open(getShoppingListPath(), '_blank');
             };
 
             container.appendChild(buttonContainer);
@@ -776,59 +776,99 @@
         document.addEventListener('DOMContentLoaded', checkLoginStatus);
 
         function updateUIForLoggedInUser() {
-            // החלפת כפתור התחברות עם לינק לרשימת קניות
-            const googleAuthContainer = document.getElementById('googleAuthContainer');
-            if (googleAuthContainer) {
-                // ניקוי כל התוכן הקיים
-                googleAuthContainer.innerHTML = '';
+            // קודם כל נסיר את כפתור גוגל אם קיים
+            const googleSignInButton = document.querySelector('.g_id_signin');
+            if (googleSignInButton) {
+                googleSignInButton.remove();
+            }
 
-                // מוסיף כפתור לרשימת קניות
+            // נוודא שהקונטיינר נקי
+            const container = document.getElementById('googleAuthContainer');
+            if (container) {
+                container.innerHTML = '';
+
+                // יצירת כפתור רשימת קניות בעיצוב שלנו
                 const shoppingListButton = document.createElement('button');
-                shoppingListButton.className = 'action-button';
+                shoppingListButton.className = 'auth-button';
                 shoppingListButton.style.cssText = `
-            padding: 8px 16px;
-            background-color: #1a73e8;
-            color: white;
+            width: auto;
+            height: 40px;
+            padding: 0;
+            background: #1a73e8;
             border: none;
-            border-radius: 4px;
+            border-radius: 20px;
             cursor: pointer;
-            font-size: 14px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            white-space: nowrap;
+            position: absolute;
+            right: 0;
+            color: white;
+            transition: all 0.3s ease;
         `;
-                shoppingListButton.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+
+                const iconContainer = document.createElement('div');
+                iconContainer.style.cssText = `
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        `;
+
+                iconContainer.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" stroke-width="2"/>
             </svg>
-            רשימת הקניות שלי
         `;
+
+                const text = document.createElement('span');
+                text.textContent = 'רשימת הקניות שלי';
+                text.style.cssText = `
+            padding: 0 16px 0 10px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        `;
+
+                shoppingListButton.appendChild(iconContainer);
+                shoppingListButton.appendChild(text);
+                container.appendChild(shoppingListButton);
+
+                // הוספת אפקטים
+                const buttonContainer = shoppingListButton.parentElement;
+                buttonContainer.style.cssText = `
+            position: relative;
+            overflow: hidden;
+            height: 40px;
+            min-width: 40px;
+            transition: min-width 0.3s ease;
+        `;
+
+                buttonContainer.addEventListener('mouseenter', () => {
+                    buttonContainer.style.minWidth = '180px';
+                    text.style.opacity = '1';
+                });
+
+                buttonContainer.addEventListener('mouseleave', () => {
+                    buttonContainer.style.minWidth = '40px';
+                    text.style.opacity = '0';
+                });
 
                 shoppingListButton.onclick = () => {
-                    sendPlausibleEvent('ShoppingListOpened', {
-                        userId: currentUser.userId
-                    });
-                    window.open('/Shamze/shopping-list.html', '_blank');
+                    window.open(getShoppingListPath(), '_blank');
                 };
-
-                googleAuthContainer.appendChild(shoppingListButton);
-            }
-
-            // עדכון כפתור "הוסף לרשימה" שיעבוד
-            const addButton = document.querySelector('.add-to-list-button');
-            if (addButton) {
-                addButton.textContent = '+ הוסף לרשימת הקניות';
-                addButton.style.backgroundColor = 'rgba(26, 115, 232, 0.1)';
-                addButton.style.color = '#1a73e8';
-            }
-
-            // מעדכן את הודעת ההצלחה
-            const featureMessage = document.querySelector('.feature-message');
-            if (featureMessage) {
-                featureMessage.textContent = 'המוצר נוסף לרשימה בהצלחה';
             }
         }
 
+        function getShoppingListPath() {
+            // בודק אם אנחנו בסביבת פיתוח לוקלית
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                return '/shopping-list.html';
+            }
+            // אם אנחנו בגיטהאב
+            return '/Shamze/shopping-list.html';
+        }
         // פונקציה להוספה לרשימת קניות
         async function addToShoppingList() {
             if (!currentUser) {
