@@ -601,12 +601,29 @@
             container.appendChild(buttonContainer);
         }
 
+
+        function saveToken(token) {
+            if (typeof chrome !== 'undefined' && chrome.storage) {
+                chrome.storage.local.set({ 'googleToken': token });
+            }
+            localStorage.setItem('googleToken', token);
+        }
+
         // פונקציה לבדיקת מצב התחברות בטעינת הדף
         function checkLoginStatus() {
-            const container = document.getElementById('googleAuthContainer');
+            return new Promise((resolve) => {
+                if (typeof chrome !== 'undefined' && chrome.storage) {
+                    chrome.storage.local.get(['googleToken'], function (result) {
+                        handleToken(result.googleToken || localStorage.getItem('googleToken'), resolve);
+                    });
+                } else {
+                    handleToken(localStorage.getItem('googleToken'), resolve);
+                }
+            });
+        }
 
-            // בדיקה אם יש טוקן בלוקאל סטורג'
-            const token = localStorage.getItem('googleToken');
+        function handleToken(token, resolve) {
+            const container = document.getElementById('googleAuthContainer');
             if (token) {
                 try {
                     const payload = JSON.parse(atob(token.split('.')[1]));
@@ -616,22 +633,20 @@
                             name: payload.name,
                             userId: payload.sub
                         };
-                        // מציג כפתור רשימת קניות
                         renderShoppingListButton(container);
-                    } else {
-                        localStorage.removeItem('googleToken');
-                        // מציג כפתור התחברות
-                        renderGoogleSignIn(container);
+                        resolve(true);
+                        return;
                     }
                 } catch (error) {
                     console.error('Error parsing token:', error);
-                    localStorage.removeItem('googleToken');
-                    renderGoogleSignIn(container);
                 }
-            } else {
-                renderGoogleSignIn(container);
             }
+
+            renderGoogleSignIn(container);
+            resolve(false);
         }
+
+
 
 
         // פונקציה להצגת כפתור רשימת קניות
@@ -750,7 +765,7 @@
 
         function handleCredentialResponse(response) {
             const token = response.credential;
-            localStorage.setItem('googleToken', token);
+            saveToken(token);
 
             const payload = JSON.parse(atob(token.split('.')[1]));
             currentUser = {
@@ -759,17 +774,12 @@
                 userId: payload.sub
             };
 
-            // Clear and update UI
             const googleAuthContainer = document.getElementById('googleAuthContainer');
             if (googleAuthContainer) {
                 googleAuthContainer.innerHTML = '';
             }
 
             updateUIForLoggedInUser();
-
-            sendPlausibleEvent('UserLogin', {
-                email: currentUser.email
-            });
         }
 
         // הוספת קריאה לפונקציה בטעינת הדף
