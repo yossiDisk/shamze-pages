@@ -603,10 +603,13 @@
 
 
         function saveToken(token) {
-            if (typeof chrome !== 'undefined' && chrome.storage) {
-                chrome.storage.local.set({ 'googleToken': token });
-            }
+            // שמירה ב-localStorage
             localStorage.setItem('googleToken', token);
+            // שליחת הודעה לתוסף
+            window.parent.postMessage({
+                type: 'SAVE_TOKEN',
+                token: token
+            }, '*');
         }
 
         // פונקציה לבדיקת מצב התחברות בטעינת הדף
