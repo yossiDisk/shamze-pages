@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>זול יותר - Shamze</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap');
+
+        :root {
+            --primary-green: #166534;
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .search-container {
+            padding: 16px;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-top: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .clear-button {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            color: #666;
+            display: none;  /* מוסתר כברירת מחדל */
+            font-size: 18px;
+            z-index: 2;
+        }
+
+        .clear-button:active {
+            color: #333;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            padding-left: 36px;
+        }
+
+        .results-container {
+            padding: 16px;
+        }
+
+        .tabs {
+            display: flex;
+            margin: 16px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: #f5f5f5;
+            border: none;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .product-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .product-price {
+            color: var(--primary-green);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .product-site {
+            color: #666;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .popular-searches {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 16px;
+        }
+
+        .search-tag {
+            background: white;
+            padding: 8px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+        }
+
+        .coupon-badge {
+            background: var(--primary-green);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        .coupon-content {
+            margin-top: 8px;
+            padding: 8px;
+            background: #f5f5f5;
+            border-radius: 4px;
+        }
+
+        .copy-button {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 4px;
+            margin-right: 8px;
+            font-size: 12px;
+        }
+
+        .site-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            gap: 12px;
+            background: white;
+            border-bottom: 1px solid #eee;
+        }
+
+        .site-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .site-header h1 {
+            margin: 0;
+            font-size: 20px;
+            color: var(--primary-green);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="site-header">
+        <img src="https://lh3.googleusercontent.com/Sp3b24fVCvCVewv5udOP_e-qNVWGuxcZX9DEgYmKncXjeO9kp6KKCJ8NFcVs0VQNFeWo1P9p8-aYV1fDyq1Ct0ZCXec=s60" 
+             alt="Shamze לוגו" />
+        <h1>Shamze - זול יותר</h1>
+    </div>
+
+    <div class="search-container">
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" class="search-input" placeholder="חיפוש מוצרים, אתרים וקופונים...">
+            <button id="clearButton" class="clear-button">✕</button>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab" data-tab="products">השוואת מחירים</button>
+        <button class="tab active" data-tab="sites">אתרים וקופונים</button>
+    </div>
+
+    <div id="popularSearches" class="popular-searches">
+        <!-- יתמלא דינמית -->
+    </div>
+
+    <div id="loading" class="loading" style="display: none;">
+        טוען תוצאות...
+    </div>
+
+    <div id="results" class="results-container">
+        <!-- יתמלא דינמית -->
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const resultsContainer = document.getElementById('results');
+            const loadingElement = document.getElementById('loading');
+            const popularSearchesContainer = document.getElementById('popularSearches');
+            const tabs = document.querySelectorAll('.tab');
+            
+            let currentTab = 'sites';
+            let allSites = [];
+            let lastSearchQuery = '';
+    
+            function isWebKit() {
+                return window.webkit && window.webkit.messageHandlers;
+            }
+
+            const clearButton = document.getElementById('clearButton');
+            
+            // טיפול בכפתור הניקוי
+            clearButton.addEventListener('click', () => {
+                searchInput.value = '';
+                clearButton.style.display = 'none';
+                displayPopularSearches();
+                if (currentTab === 'sites') {
+                    searchSites('');
+                } else {
+                    resultsContainer.innerHTML = '';
+                }
+                lastSearchQuery = '';
+                popularSearchesContainer.style.display = 'block';
+            });
+
+            // עדכון הצגת כפתור הניקוי בהתאם לתוכן
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                const query = e.target.value.trim();
+                
+                // הצגה/הסתרה של כפתור הניקוי
+                clearButton.style.display = query ? 'block' : 'none';
+                
+                if (query) {
+                    searchTimeout = setTimeout(() => performSearch(query), 500);
+                } else {
+                    displayPopularSearches();
+                    popularSearchesContainer.style.display = 'block';
+                    if (currentTab === 'sites') {
+                        searchSites('');
+                    }
+                }
+            });
+    
+            function openUrl(url, title, site) {
+                if (isWebKit()) {
+                    window.webkit.messageHandlers.openUrl.postMessage({
+                        url: url,
+                        title: title,
+                        site: site
+                    });
+                } else {
+                    window.open(url, '_blank');
+                }
+            }
+    
+            function displayPopularSearches() {
+                const popularSearches = [
+                    "Ali express", "Golf", "המשביר", "ACE",
+                    "איירפודס", "NAUTICA", "בושם לגבר", "Toys R us"
+                ];
+    
+                popularSearchesContainer.innerHTML = '';
+                popularSearches.forEach(term => {
+                    const tag = document.createElement('span');
+                    tag.className = 'search-tag';
+                    tag.textContent = term;
+                    tag.onclick = () => {
+                        searchInput.value = term;
+                        performSearch(term);
+                    };
+                    popularSearchesContainer.appendChild(tag);
+                });
+            }
+    
+            fetch("https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/sites")
+                .then(response => response.json())
+                .then(data => {
+                    allSites = data;
+                    displayPopularSearches();
+                    searchSites('');
+                })
+                .catch(error => console.error("Error fetching sites:", error));
+    
+            let searchTimeout;
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                const query = e.target.value.trim();
+                
+                if (query) {
+                    searchTimeout = setTimeout(() => performSearch(query), 500);
+                } else {
+                    displayPopularSearches();
+                    if (currentTab === 'sites') {
+                        searchSites('');
+                    }
+                }
+            });
+    
+            function performSearch(query) {
+                lastSearchQuery = query;
+                loadingElement.style.display = 'block';
+                resultsContainer.innerHTML = '';
+                popularSearchesContainer.style.display = 'none';
+    
+                if (currentTab === 'products') {
+                    searchProducts(query);
+                } else {
+                    searchSites(query);
+                }
+            }
+    
+            function searchProducts(query) {
+                fetch(`https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=20`)
+                    .then(response => response.json())
+                    .then(products => {
+                        loadingElement.style.display = 'none';
+                        displayProductResults(products);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        loadingElement.style.display = 'none';
+                        resultsContainer.innerHTML = '<div class="error">אירעה שגיאה בחיפוש</div>';
+                    });
+            }
+    
+            function searchSites(query) {
+                const results = allSites.filter(site =>
+                    !query || 
+                    site.siteName.toLowerCase().includes(query.toLowerCase()) ||
+                    (site.cuponDetails && site.cuponDetails.toLowerCase().includes(query.toLowerCase()))
+                );
+                loadingElement.style.display = 'none';
+                displaySiteResults(results);
+            }
+    
+            function displayProductResults(products) {
+                resultsContainer.innerHTML = '';
+                
+                products.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    
+                    const siteInfo = allSites.find(site => site.siteName === product.site);
+                    
+                    card.innerHTML = `
+                        <div class="product-title">${product.name}</div>
+                        <div class="product-price">${product.price}</div>
+                        <div class="product-site">${product.site}</div>
+                        ${siteInfo && siteInfo.cupon ? `
+                            <div class="coupon-badge">קופון זמין</div>
+                            <div class="coupon-content">
+                                <span>${siteInfo.cupon}</span>
+                                <button class="copy-button" onclick="event.stopPropagation(); copyToClipboard('${siteInfo.cupon}')">העתק</button>
+                                <div class="coupon-details">${siteInfo.cuponDetails || ''}</div>
+                            </div>
+                        ` : ''}
+                    `;
+    
+                    card.onclick = () => {
+                        const finalUrl = product.urlAff || product.url;
+                        openUrl(finalUrl, product.name, product.site);
+                    };
+    
+                    resultsContainer.appendChild(card);
+                });
+            }
+    
+            function displaySiteResults(sites) {
+                resultsContainer.innerHTML = '';
+                
+                sites.forEach(site => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    
+                    card.innerHTML = `
+                        <div class="product-title">${site.siteName}</div>
+                        ${site.cupon ? `
+                            <div class="coupon-badge">קופון זמין</div>
+                            <div class="coupon-content">
+                                <span>${site.cupon}</span>
+                                <button class="copy-button" onclick="event.stopPropagation(); copyToClipboard('${site.cupon}')">העתק</button>
+                                <div class="coupon-details">${site.cuponDetails || ''}</div>
+                            </div>
+                        ` : ''}
+                    `;
+    
+                    card.onclick = () => {
+                        const finalUrl = site.affLink || site.URL;
+                        openUrl(finalUrl, site.siteName, site.siteName);
+                    };
+    
+                    resultsContainer.appendChild(card);
+                });
+            }
+    
+            function copyToClipboard(text) {
+                navigator.clipboard.writeText(text)
+                    .then(() => {
+                        if (isWebKit()) {
+                            window.webkit.messageHandlers.showMessage.postMessage({
+                                message: 'הקופון הועתק בהצלחה'
+                            });
+                        } else {
+                            alert('הקופון הועתק בהצלחה');
+                        }
+                    })
+                    .catch(err => console.error('Failed to copy:', err));
+            }
+    
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentTab = tab.dataset.tab;
+                    if (lastSearchQuery) {
+                        performSearch(lastSearchQuery);
+                    } else if (currentTab === 'sites') {
+                        searchSites('');
+                    }
+                });
+            });
+    
+            window.copyToClipboard = copyToClipboard;
+            window.openUrl = openUrl;
+        });
+    </script>
+</body>
+</html>
