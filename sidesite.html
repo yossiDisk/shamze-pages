@@ -1131,6 +1131,20 @@
     .price-container {
         position: relative !important;
     }
+
+    .vat-info-link {
+        display: block;
+        text-align: center;
+        color: #666;
+        font-size: 12px;
+        margin-top: 12px;
+        text-decoration: none;
+    }
+
+    .vat-info-link:hover {
+        text-decoration: underline;
+        color: #1a73e8;
+    }
 `;
 
 
@@ -1193,17 +1207,22 @@ function showVatMessage(query, price, url) {
     const formattedOldPrice = oldPriceILS.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     
     messageDiv.innerHTML = `
-        <button class="vat-message-close">&times;</button>
-        <div class="vat-message-content">
-            <div>מחיר נוכחי: ₪${formattedPrice}</div>
-            <div>מחיר צפוי: ₪${formattedOldPrice}</div>
-        </div>
-        <div class="vat-message-separator"></div>
-        <div class="vat-message-cta">
-            רוצה לוודא שלא מנצלים את המצב כדי להעלות את המחיר יותר?
-        </div>
-        <button class="vat-message-action">לחץ כאן להוספה למעקב שלנו</button>
-    `;
+    <button class="vat-message-close">&times;</button>
+    <div class="vat-message-content">
+        <div>מחיר נוכחי: ₪${formattedPrice}</div>
+        <div>מחיר צפוי: ₪${formattedOldPrice}</div>
+    </div>
+    <div class="vat-message-separator"></div>
+    <div class="vat-message-cta">
+        רוצה לוודא שלא מנצלים את המצב כדי להעלות את המחיר יותר?
+    </div>
+    <button class="vat-message-action">לחץ כאן להוספה למעקב שלנו</button>
+    <a href="https://docs.google.com/document/d/1UyhbyQ1lB7xJtlBhBtqOgmCWBFk12-vc58yu0KU9ySA/edit?usp=sharing" 
+       target="_blank" 
+       class="vat-info-link">
+        מה זה בעצם?
+    </a>
+`;
 
     if (priceContainer) {
         priceContainer.style.position = 'relative';
