@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,16 +15,19 @@
             margin: 0;
             background-color: #f0f0f0;
         }
+
         #message {
             text-align: center;
             padding: 20px;
             background-color: white;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
     </style>
-    <script defer data-domain="yossidisk.github.io/shamze/alilinksgen.html" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="yossidisk.github.io/shamze/AliLinksGen.html"
+        src="https://plausible.io/js/script.js"></script>
 </head>
+
 <body>
     <div id="message">טוען...</div>
     <script>
@@ -50,12 +54,13 @@
                     })
                 });
                 if (!response.ok) {
-                    throw new Error('Failed to fetch data');
+                    onsole.error('Error:', error);
+                    return url;
                 }
                 return await response.text();
             } catch (error) {
                 console.error('Error:', error);
-                return null;
+                return url;
             }
         }
 
@@ -88,15 +93,15 @@
             }
 
             document.getElementById('message').textContent = 'מעבד את הקישור...';
-            
+
             const generatedLink = await generateAliExpressLink(cleanLink);
             if (generatedLink) {
                 const cleanGeneratedLink = generatedLink.replace(/^"|"$/g, '');
-                
-                trackEvent('LinkGenerated', { 
-                    source: source, 
+
+                trackEvent('LinkGenerated', {
+                    source: source,
                     originalLink: cleanLink,
-                    generatedLink: cleanGeneratedLink 
+                    generatedLink: cleanGeneratedLink
                 });
 
                 setTimeout(() => {
@@ -112,4 +117,5 @@
         window.addEventListener('load', processAndRedirect);
     </script>
 </body>
+
 </html>
