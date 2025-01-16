@@ -1162,6 +1162,7 @@
 
             // Get and clean the price parameter from URL
             const priceParam = getUrlParameter('price');
+            const referrerUrl = getUrlParameter('url');
             const cleanedPrice = cleanPriceString(priceParam);
 
             // Log the cleaning process
@@ -1180,6 +1181,10 @@
                 console.log('Price range:', { minPrice, maxPrice });
 
                 apiUrl += `&minPrice=${minPrice.toFixed(2)}&maxPrice=${maxPrice.toFixed(2)}`;
+
+                if (referrerUrl) {
+                    apiUrl += `&url=${encodeURIComponent(referrerUrl)}`;
+                }
             }
 
             // Log the final API URL
@@ -1279,6 +1284,7 @@
                     });
                 });
         }
+
         function getSearchStats(results) {
             let cheapest = results[0];
             let mostExpensive = results[0];
