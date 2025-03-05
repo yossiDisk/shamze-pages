@@ -1395,23 +1395,49 @@
             }
         }
 
+        // עדכון משופר לפונקציית logClick בקובץ sidesite.html
         function logClick(product) {
-            // בדיקה שהאובייקט product קיים ומכיל את השדה site
-            if (!product || typeof product.site === 'undefined') {
-                console.warn('Product data is incomplete:', product);
+            // בדיקה שהאובייקט product קיים
+            if (!product) {
+                console.warn('Product data is missing');
                 return;
             }
 
+            // מידע על פרמטרי החיפוש המקורי
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // תיעוד מלא של הלחיצה
             const clickData = {
+                // מידע על החיפוש
+                searchParams: {
+                    query: urlParams.get('query') || currentSearchQuery || 'unknown',
+                    referencePrice: urlParams.get('price') || 'none',
+                    referrerUrl: urlParams.get('url') || 'none',
+                    originalDomain: urlParams.get('url') ? extractDomainFromUrl(urlParams.get('url')) : 'unknown'
+                },
+
+                // מידע על המוצר שנלחץ - כל האובייקט המקורי
+                productInfo: { ...product },
+
+                // מידע ספציפי על המוצר לנוחות הגישה
                 productName: product.name || 'unknown',
-                targetSite: product.site || 'unknown',
                 productPrice: product.price || 'unknown',
-                searchQuery: currentSearchQuery || 'unknown',
-                timestamp: new Date().toISOString()
+                numericPrice: parseFloat(product.price?.replace(/[^\d.]/g, '')) || 0,
+                targetSite: product.site || 'unknown',
+                targetUrl: product.urlAff || product.url || 'unknown',
+
+                // מידע נוסף
+                timestamp: new Date().toISOString(),
+                deviceInfo: {
+                    screenWidth: window.innerWidth,
+                    screenHeight: window.innerHeight,
+                    userAgent: navigator.userAgent
+                }
             };
 
-            console.log('Logging click:', clickData);
+            console.log('Comprehensive click data:', clickData);
 
+            // שליחת האירוע לאנליטיקס
             if (window.plausible) {
                 try {
                     window.plausible('ProductClick', {
@@ -1419,19 +1445,38 @@
                             productName: clickData.productName,
                             targetSite: clickData.targetSite,
                             productPrice: clickData.productPrice,
-                            searchQuery: clickData.searchQuery
+                            searchQuery: clickData.searchParams.query,
+                            priceDifference: clickData.numericPrice - parseFloat(clickData.searchParams.referencePrice || '0')
                         }
                     });
                 } catch (error) {
                     console.error('Error sending data to Plausible:', error);
                 }
-            } else {
-                console.warn('Plausible is not available');
             }
 
+            // שמירה מקומית
             let clicks = JSON.parse(localStorage.getItem('productClicks') || '[]');
+            // שמירת רק 50 הלחיצות האחרונות כדי לא לתפוס יותר מדי זיכרון
+            if (clicks.length >= 50) {
+                clicks = clicks.slice(-49);
+            }
             clicks.push(clickData);
             localStorage.setItem('productClicks', JSON.stringify(clicks));
+
+            // שליחת הודעה לתוסף
+            try {
+                window.parent.postMessage({
+                    type: 'PRODUCT_CLICK_FROM_IFRAME',
+                    data: clickData,
+                    timestamp: Date.now()
+                }, '*');
+                console.log('Enhanced click data sent to parent window');
+            } catch (error) {
+                console.error('Error sending message to parent window:', error);
+            }
+
+            // החזרת המידע למקרה שצריך אותו להמשך הטיפול בפונקציה הקוראת
+            return clickData;
         }
 
         function sortResults() {
