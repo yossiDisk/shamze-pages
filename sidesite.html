@@ -1437,7 +1437,7 @@
 
             console.log('Comprehensive click data:', clickData);
 
-            // שליחת האירוע לאנליטיקס
+            // שליחת האירוע לאנליטיקס - אם קיים
             if (window.plausible) {
                 try {
                     window.plausible('ProductClick', {
