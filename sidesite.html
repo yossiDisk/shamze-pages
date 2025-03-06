@@ -1354,7 +1354,7 @@
                 logClick(product);
                 window.open(product.urlAff, '_blank');
             };
-            fetchProductImage(product.url, productDiv.querySelector('.product-image'));
+            fetchAndDisplayProductImage(product.url, productDiv.querySelector('.product-image'));
             return productDiv;
         }
 
@@ -1502,37 +1502,188 @@
             displaySearchResults(sortedResults);
         }
 
-        function fetchProductImage(productUrl, imageContainer) {
-            log(`Attempting to fetch image for product: ${productUrl}`);
-            if (imageCache.has(productUrl)) {
-                log(`Image found in cache for ${productUrl}`);
-                displayImage(imageCache.get(productUrl), imageContainer);
+        function fetchAndDisplayProductImage(productUrl, imageContainer) {
+            // אם אין URL תקין, הסתר את מיכל התמונה
+            if (!productUrl || !productUrl.startsWith('http')) {
+                console.warn('Invalid product URL');
+                imageContainer.style.display = 'none';
                 return;
             }
 
-            const directImageUrl = buildDirectImageUrl(productUrl);
+            // פונקציה פנימית לאחזור כתובת תמונה ישירה
+            function getDirectImageUrl(url) {
+                const imageUrlMap = {
+                    'zap.co.il': () => {
+                        const sku = url.match(/(\d+)$/)?.[1];
+                        return sku ? `https://img.zap.co.il/pics/new/${sku}.gif` : null;
+                    },
+                    'ksp.co.il': () => {
+                        const sku = url.match(/item\/(\d+)/)?.[1];
+                        return sku ? `https://img.ksp.co.il/item/${sku}/b_1.jpg` : null;
+                    }
+                };
+
+                for (const [domain, urlGenerator] of Object.entries(imageUrlMap)) {
+                    if (url.includes(domain)) {
+                        return urlGenerator();
+                    }
+                }
+                return null;
+            }
+
+            // ניסיון טעינה ישירה של תמונה
+            const directImageUrl = getDirectImageUrl(productUrl);
             if (directImageUrl) {
-                tryLoadingDirectImage(directImageUrl, productUrl, imageContainer);
+                loadImage(directImageUrl);
                 return;
             }
 
-            fetch(productUrl)
+            // הגדרת מגבלת זמן
+            const timeoutPromise = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Image fetch timeout')), 5000)
+            );
+
+            // ניסיון לאחזר תמונה מה-HTML
+            const fetchHtmlPromise = fetch(productUrl, {
+                method: 'GET',
+                mode: 'no-cors',
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+                }
+            })
                 .then(response => {
-                    log(`Received response from ${productUrl}. Status: ${response.status}`);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     return response.text();
                 })
                 .then(html => {
-                    log(`Successfully fetched HTML for ${productUrl}`);
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(html, 'text/html');
-                    findAndLoadImage(doc, productUrl, imageContainer);
+                    return findBestImage(doc, productUrl);
+                });
+
+            // טיפול בהבטחות תוך שימוש ב-race
+            Promise.race([fetchHtmlPromise, timeoutPromise])
+                .then(imageUrl => {
+                    if (imageUrl) {
+                        loadImage(imageUrl);
+                    } else {
+                        throw new Error('No image found');
+                    }
                 })
                 .catch(error => {
-                    log(`Error fetching product page ${productUrl}: ${error}`);
-                    console.error('Error fetching product page:', error);
+                    console.warn('Image fetch error:', error);
                     imageContainer.style.display = 'none';
                 });
+
+            // פונקציה לטעינת תמונה
+            function loadImage(imageUrl) {
+                const img = new Image();
+                img.onload = () => {
+                    if (img.width > 50 && img.height > 50) {
+                        imageContainer.innerHTML = '';
+                        const imgElement = document.createElement('img');
+                        imgElement.src = imageUrl;
+                        imgElement.alt = 'תמונת מוצר';
+                        imgElement.style.maxWidth = '100%';
+                        imgElement.style.maxHeight = '100%';
+                        imgElement.style.objectFit = 'contain';
+                        imageContainer.appendChild(imgElement);
+                        imageContainer.style.display = 'flex';
+                    } else {
+                        imageContainer.style.display = 'none';
+                    }
+                };
+                img.onerror = () => {
+                    imageContainer.style.display = 'none';
+                };
+                img.src = imageUrl;
+            }
+
+            // פונקציה לאיתור התמונה הטובה ביותר
+            function findBestImage(doc, baseUrl) {
+                // מערך של שיטות לאיתור תמונות
+                const imageFinders = [
+                    // חיפוש תגיות meta עם תמונות
+                    () => doc.querySelector('meta[property="og:image"]')?.content,
+                    () => doc.querySelector('meta[name="twitter:image"]')?.content,
+
+                    // חיפוש קישורים לתמונות
+                    () => doc.querySelector('link[rel="image_src"]')?.href,
+
+                    // חיפוש תמונות עם קלאסים ספציפיים
+                    () => {
+                        const selectors = [
+                            '.product-image img',
+                            '.main-image img',
+                            '.product-img',
+                            '.productImage',
+                            '.gallery-image',
+                            '.product-thumbnail'
+                        ];
+                        for (const selector of selectors) {
+                            const img = doc.querySelector(selector);
+                            if (img) return img.src;
+                        }
+                        return null;
+                    },
+
+                    // חיפוש תמונות עם alt מתאים
+                    () => {
+                        const imgs = Array.from(doc.querySelectorAll('img'));
+                        const productImg = imgs.find(img =>
+                            img.alt.toLowerCase().includes('product') ||
+                            img.alt.toLowerCase().includes('מוצר') ||
+                            img.src.toLowerCase().includes('product')
+                        );
+                        return productImg ? productImg.src : null;
+                    },
+
+                    // חיפוש תמונה ראשונה בגודל סביר
+                    () => {
+                        const imgs = Array.from(doc.querySelectorAll('img'));
+                        const validImg = imgs.find(img => {
+                            try {
+                                const rect = img.getBoundingClientRect();
+                                return rect.width > 100 && rect.height > 100;
+                            } catch {
+                                return false;
+                            }
+                        });
+                        return validImg ? validImg.src : null;
+                    }
+                ];
+
+                // נסה כל שיטה עד שתמצא תמונה
+                for (const finder of imageFinders) {
+                    const imageUrl = finder();
+                    if (imageUrl) {
+                        // המרת כתובת יחסית לכתובת מלאה
+                        return normalizeImageUrl(imageUrl, baseUrl);
+                    }
+                }
+
+                return null;
+            }
+
+            // פונקציה להמרת כתובות יחסיות לכתובות מלאות
+            function normalizeImageUrl(imageUrl, baseUrl) {
+                try {
+                    if (imageUrl.startsWith('//')) {
+                        return `https:${imageUrl}`;
+                    } else if (imageUrl.startsWith('/')) {
+                        const urlObj = new URL(baseUrl);
+                        return `${urlObj.protocol}//${urlObj.hostname}${imageUrl}`;
+                    } else if (!imageUrl.startsWith('http')) {
+                        return new URL(imageUrl, baseUrl).href;
+                    }
+                    return imageUrl;
+                } catch (error) {
+                    console.error('URL normalization error:', error);
+                    return null;
+                }
+            }
         }
+
 
         function buildDirectImageUrl(productUrl) {
             if (productUrl.includes('zap.co.il')) {
