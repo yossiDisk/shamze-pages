@@ -1395,7 +1395,6 @@
             }
         }
 
-        // עדכון משופר לפונקציית logClick בקובץ sidesite.html
         function logClick(product) {
             // בדיקה שהאובייקט product קיים
             if (!product) {
@@ -1413,7 +1412,7 @@
                     query: urlParams.get('query') || currentSearchQuery || 'unknown',
                     referencePrice: urlParams.get('price') || 'none',
                     referrerUrl: urlParams.get('url') || 'none',
-                    originalDomain: urlParams.get('url') ? extractDomainFromUrl(urlParams.get('url')) : 'unknown'
+                    originalDomain: urlParams.get('url') ? new URL(urlParams.get('url')).hostname : 'unknown'
                 },
 
                 // מידע על המוצר שנלחץ - כל האובייקט המקורי
@@ -1422,7 +1421,7 @@
                 // מידע ספציפי על המוצר לנוחות הגישה
                 productName: product.name || 'unknown',
                 productPrice: product.price || 'unknown',
-                numericPrice: parseFloat(product.price?.replace(/[^\d.]/g, '')) || 0,
+                numericPrice: parseFloat(String(product.price || '0').replace(/[^\d.]/g, '')) || 0,
                 targetSite: product.site || 'unknown',
                 targetUrl: product.urlAff || product.url || 'unknown',
 
@@ -1435,9 +1434,23 @@
                 }
             };
 
-            console.log('Comprehensive click data:', clickData);
+            console.log('Product click data prepared:', clickData);
 
-            // שליחת האירוע לאנליטיקס - אם קיים
+            // שמירה מקומית (בתוך ה-iframe)
+            try {
+                let localClicks = JSON.parse(localStorage.getItem('productClicks') || '[]');
+                // הגבלת גודל
+                if (localClicks.length >= 50) {
+                    localClicks = localClicks.slice(-49);
+                }
+                localClicks.push(clickData);
+                localStorage.setItem('productClicks', JSON.stringify(localClicks));
+                console.log('Product click saved locally');
+            } catch (error) {
+                console.error('Error saving click locally:', error);
+            }
+
+            // שליחת אירוע אנליטיקס אם זמין
             if (window.plausible) {
                 try {
                     window.plausible('ProductClick', {
@@ -1445,39 +1458,29 @@
                             productName: clickData.productName,
                             targetSite: clickData.targetSite,
                             productPrice: clickData.productPrice,
-                            searchQuery: clickData.searchParams.query,
-                            priceDifference: clickData.numericPrice - parseFloat(clickData.searchParams.referencePrice || '0')
+                            searchQuery: clickData.searchParams.query
                         }
                     });
                 } catch (error) {
-                    console.error('Error sending data to Plausible:', error);
+                    console.error('Error sending analytics event:', error);
                 }
             }
 
-            // שמירה מקומית
-            let clicks = JSON.parse(localStorage.getItem('productClicks') || '[]');
-            // שמירת רק 50 הלחיצות האחרונות כדי לא לתפוס יותר מדי זיכרון
-            if (clicks.length >= 50) {
-                clicks = clicks.slice(-49);
-            }
-            clicks.push(clickData);
-            localStorage.setItem('productClicks', JSON.stringify(clicks));
-
-            // שליחת הודעה לתוסף
+            // שליחת המידע לדף המארח (האתר שבו מוצג ה-iframe)
             try {
                 window.parent.postMessage({
                     type: 'PRODUCT_CLICK_FROM_IFRAME',
                     data: clickData,
                     timestamp: Date.now()
                 }, '*');
-                console.log('Enhanced click data sent to parent window');
+                console.log('Message sent to parent window');
             } catch (error) {
                 console.error('Error sending message to parent window:', error);
             }
 
-            // החזרת המידע למקרה שצריך אותו להמשך הטיפול בפונקציה הקוראת
-            return clickData;
+            return clickData; // החזרת הנתונים למקרה שהפונקציה הקוראת צריכה אותם
         }
+
 
         function sortResults() {
             const sortType = document.getElementById('sort-select').value;
