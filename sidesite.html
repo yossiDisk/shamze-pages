@@ -1003,6 +1003,9 @@
             document.getElementById('loadingContainer').style.display = 'none';
         }
 
+        let countdownIntervalId = null;
+
+        // 2. עדכן את פונקציית startCountdown הקיימת
         function startCountdown() {
             let countdown = 10;
             const countdownElement = document.getElementById('countdown');
@@ -1015,13 +1018,20 @@
 
             console.log("Starting countdown");
 
-            const intervalId = setInterval(() => {
+            // נקה ספירה קודמת אם קיימת
+            if (countdownIntervalId) {
+                clearInterval(countdownIntervalId);
+            }
+
+            // שמור את ה-interval ID במשתנה הגלובלי
+            countdownIntervalId = setInterval(() => {
                 countdown--;
                 console.log("Countdown: ", countdown);
                 countdownElement.textContent = countdown;
 
                 if (countdown <= 0) {
-                    clearInterval(intervalId);
+                    clearInterval(countdownIntervalId);
+                    countdownIntervalId = null;
                     console.log("Countdown finished");
 
                     // בדיקה אם יש תוצאות
@@ -1032,6 +1042,15 @@
                     }
                 }
             }, 1000);
+        }
+
+        // 3. הוסף פונקציה חדשה לעצירת הספירה
+        function stopCountdown() {
+            if (countdownIntervalId) {
+                clearInterval(countdownIntervalId);
+                countdownIntervalId = null;
+                console.log("Countdown stopped manually");
+            }
         }
 
         function displayErrorMessage(message) {
@@ -1072,7 +1091,6 @@
         // Call this function when the page loads
         document.addEventListener('DOMContentLoaded', () => {
             console.log("Page loaded");
-            testLoading();
         });
 
         document.addEventListener('DOMContentLoaded', (event) => {
@@ -1149,6 +1167,7 @@
             });
         }
 
+
         // Add this helper function at the top of your script
         function cleanPriceString(priceStr) {
             if (!priceStr) return null;
@@ -1209,6 +1228,8 @@
                 .then(data => {
                     // Log the received data
                     console.log('Received data:', data);
+                    stopCountdown();
+
 
                     if (!Array.isArray(data)) {
                         throw new Error('Invalid response format: expected array');
@@ -1315,6 +1336,49 @@
             const container = document.getElementById('searchResults');
             container.innerHTML = '';
 
+            // בדיקה אם יש תוצאות - אם אין, הצג את הודעת השגיאה הקיימת
+            if (!results || results.length === 0) {
+                // שימוש באותה הודעת שגיאה קיימת עם שינויים קלים
+                const noResultsHtml = `
+        <div class="error-container" style="text-align: center; padding: 20px;">
+            <p style="color: #666;">לא נמצאו תוצאות למוצר "${currentSearchQuery}"</p>
+            <a id="retryButton" href="#" target="_blank" 
+               style="display: inline-block; margin: 10px; padding: 10px 20px; 
+               background-color: #1a73e8; color: white; text-decoration: none; 
+               border-radius: 4px;">נסה בדרך אחרת</a>
+            <p style="color: #666;">לא מוצא את מה שחיפשת?</p>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamzezolyoter@gmail.com&su=משוב על חיפוש ללא תוצאות&body=היי, חיפשתי '${currentSearchQuery}' אבל לא קיבלתי תוצאות:"
+               target="_blank" 
+               style="color: #1a73e8;">דווח לנו והצע שיפור</a>
+        </div>
+        `;
+
+                displayErrorMessage(noResultsHtml);
+
+                // הוסף התנהגות לכפתור הניסיון מחדש
+                const retryButton = document.getElementById('retryButton');
+                if (retryButton) {
+                    retryButton.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        // פתיחת דף החיפוש הראשי עם פרמטר החיפוש הנוכחי
+                        const retryUrl = `https://yossidisk.github.io/Shamze/cupons.html?source=side&search=true&query=${encodeURIComponent(currentSearchQuery)}`;
+                        window.open(retryUrl, '_blank');
+
+                        sendPlausibleEvent('NoResultsRetryClicked', {
+                            query: currentSearchQuery
+                        });
+                    });
+                }
+
+                // שליחת אירוע אנליטיקס על חיפוש ללא תוצאות
+                sendPlausibleEvent('NoResultsFound', {
+                    query: currentSearchQuery
+                });
+
+                return; // יוצאים מהפונקציה, אין צורך להמשיך
+            }
+
+            // המשך הקוד הקיים להצגת תוצאות...
             // הצג רק 3 תוצאות ראשונות
             const initialResults = results.slice(0, 3);
             const remainingResults = results.slice(3);
@@ -1685,6 +1749,7 @@
         }
 
 
+
         function buildDirectImageUrl(productUrl) {
             if (productUrl.includes('zap.co.il')) {
                 const sku = productUrl.match(/(\d+)$/)?.[1];
@@ -1785,14 +1850,14 @@
         const priceParam = urlParams.get('price');
         const urlParam = urlParams.get('url');
 
-        if (queryParam) {
-            search(queryParam).then(() => {
-                displayLogs();
-            }).catch(error => {
-                console.error('Initial search failed:', error);
-                displayLogs();
-            });
-        }
+        // if (queryParam) {
+        //     search(queryParam).then(() => {
+        //         displayLogs();
+        //     }).catch(error => {
+        //         console.error('Initial search failed:', error);
+        //         displayLogs();
+        //     });
+        // }
     </script>
 </body>
 
