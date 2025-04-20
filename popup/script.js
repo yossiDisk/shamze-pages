@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const siteId = urlParams.get('siteId');
     const query = urlParams.get('query');
+    const currentUrl = urlParams.get('currentUrl');
     const compareButton = document.getElementById('compareButton');
     const couponButton = document.getElementById('couponButton');
     const content = document.getElementById('content');
@@ -12,35 +13,149 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('header-title').innerText = query;
     }
     
-
-    if (siteId && query) {
-        const apiUrl = `https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/items?siteId=${siteId}&query=${query}`;
-        
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                let formattedData = [];
-                if (isOldFormat(data)) {
-                    formattedData = formatOldData(data);
-                } else {
-                    formattedData = formatNewData(data);
-                }
-                window.allData = formattedData; // Store all data globally
-                const uniqueData = getUniqueData(formattedData);
-                populateTable(uniqueData);
-                addSortAndFilter(uniqueData);
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    }
-
+    // Fetch sites data first for both normal and currentUrl modes
     fetch('https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/sites')
         .then((response) => response.json())
-        .then((data) => {
-            generateButtons(data);
+        .then((sitesData) => {
+            // If we have currentUrl parameter, handle that mode
+            if (currentUrl) {
+                handleCurrentUrlMode(currentUrl, sitesData);
+            } else {
+                // Normal mode - handle regular site selection buttons
+                generateButtons(sitesData);
+                
+                // Continue with API request if siteId and query are provided
+                if (siteId && query) {
+                    const apiUrl = `https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/items?siteId=${siteId}&query=${query}`;
+                    
+                    fetch(apiUrl)
+                        .then(response => response.json())
+                        .then(data => {
+                            let formattedData = [];
+                            if (isOldFormat(data)) {
+                                formattedData = formatOldData(data);
+                            } else {
+                                formattedData = formatNewData(data);
+                            }
+                            window.allData = formattedData; // Store all data globally
+                            const uniqueData = getUniqueData(formattedData);
+                            populateTable(uniqueData);
+                            addSortAndFilter(uniqueData);
+                        })
+                        .catch(error => console.error('Error fetching data:', error));
+                }
+            }
         })
         .catch((error) => {
-            console.error('Error fetching data:', error);
+            console.error('Error fetching sites data:', error);
         });
+
+    function handleCurrentUrlMode(url, sitesData) {
+        // Clear existing content
+        if (content) {
+            content.innerHTML = '';
+        }
+        
+        // Hide the top buttons in currentUrl mode
+        if (compareButton) compareButton.style.display = 'none';
+        if (couponButton) couponButton.style.display = 'none';
+        if (searchInput) searchInput.style.display = 'none';
+        
+        // Extract baseUrl from the current URL
+        const baseUrl = extractBaseUrl(url);
+        
+        // Create container for site information
+        const siteInfoContainer = document.createElement('div');
+        siteInfoContainer.className = 'site-info-container';
+        
+        // Find if the site exists in our database
+        const siteInfo = findSiteByUrl(baseUrl, sitesData);
+        
+        // Create site name/title element
+        const siteTitle = document.createElement('h2');
+        siteTitle.className = 'site-title';
+        siteTitle.textContent = siteInfo ? siteInfo.siteName : baseUrl;
+        siteInfoContainer.appendChild(siteTitle);
+        
+        // Always show review button, regardless of whether the site exists in our database
+        const reviewButton = document.createElement('a');
+        reviewButton.href = `https://docs.google.com/forms/d/e/1FAIpQLSed14bO55vne_cKNb25S39lUNw-4RWjceeeU13NAb-tOqbxow/viewform?usp=pp_url&entry.1214730731=${encodeURIComponent(baseUrl)}`;
+        reviewButton.className = 'button';
+        reviewButton.textContent = 'לחץ להשארת ביקורת';
+        reviewButton.target = '_blank';
+        siteInfoContainer.appendChild(reviewButton);
+        
+        // Create coupon section
+        const couponSection = document.createElement('div');
+        couponSection.className = 'coupon-section';
+        
+        // Check if coupon is available
+        let hasCoupon = false;
+        if (siteInfo && siteInfo.cupon && siteInfo.cupon.trim() !== '') {
+            hasCoupon = true;
+            
+            // Create coupon container
+            const couponContainer = document.createElement('div');
+            couponContainer.className = 'coupon-container';
+            
+            // Create coupon code element
+            const couponCode = document.createElement('div');
+            couponCode.className = 'coupon-code';
+            couponCode.textContent = siteInfo.cupon;
+            couponCode.onclick = function() {
+                navigator.clipboard.writeText(siteInfo.cupon)
+                    .then(() => {
+                        // Show copy notification
+                        couponCode.setAttribute('data-copied', 'true');
+                        setTimeout(() => {
+                            couponCode.removeAttribute('data-copied');
+                        }, 2000);
+                    });
+            };
+            couponCode.title = 'לחץ להעתקה';
+            couponContainer.appendChild(couponCode);
+            
+            // If coupon details available, show them
+            if (siteInfo.cuponDetails) {
+                const couponDetails = document.createElement('div');
+                couponDetails.className = 'coupon-details';
+                couponDetails.textContent = siteInfo.cuponDetails;
+                couponContainer.appendChild(couponDetails);
+            }
+            
+            couponSection.appendChild(couponContainer);
+        } else {
+            // No coupon available
+            const noCouponMsg = document.createElement('div');
+            noCouponMsg.className = 'no-coupon-message';
+            noCouponMsg.textContent = 'אין קופון זמין';
+            couponSection.appendChild(noCouponMsg);
+        }
+        
+        siteInfoContainer.appendChild(couponSection);
+        content.appendChild(siteInfoContainer);
+    }
+
+    function extractBaseUrl(url) {
+        try {
+            const urlObj = new URL(url);
+            return urlObj.hostname;
+        } catch (e) {
+            // If not a valid URL, return as is
+            return url;
+        }
+    }
+
+    function findSiteByUrl(baseUrl, sitesData) {
+        return sitesData.find(site => {
+            try {
+                const siteHostname = new URL(site.URL).hostname;
+                return siteHostname === baseUrl || site.URL.includes(baseUrl);
+            } catch (e) {
+                return false;
+            }
+        });
+    }
 
     function generateButtons(data) {
         if (content) {
@@ -166,48 +281,48 @@ document.addEventListener('DOMContentLoaded', () => {
         return itemMap;
     }
 
-function populateTable(data) {
-    const tbody = document.querySelector('#data-table tbody');
-    if (tbody) {
-        tbody.innerHTML = '';
-        const itemMap = createItemMap(getAllData());
+    function populateTable(data) {
+        const tbody = document.querySelector('#data-table tbody');
+        if (tbody) {
+            tbody.innerHTML = '';
+            const itemMap = createItemMap(getAllData());
 
-        data.forEach(item => {
-            const row = document.createElement('tr');
-            const key = `${item.name}-${item.website}`;
-            const itemHistory = itemMap.get(key);
-            const itemCount = itemHistory.length;
-            const buttonDisabled = itemCount <= 1 ? 'disabled' : '';
-            
-            itemHistory.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-            
-            const mostRecentItem = itemHistory[0];
-            const insight = getInsight(itemHistory);
-            const domainName = extractDomain(mostRecentItem.url);
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                const key = `${item.name}-${item.website}`;
+                const itemHistory = itemMap.get(key);
+                const itemCount = itemHistory.length;
+                const buttonDisabled = itemCount <= 1 ? 'disabled' : '';
+                
+                itemHistory.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                
+                const mostRecentItem = itemHistory[0];
+                const insight = getInsight(itemHistory);
+                const domainName = extractDomain(mostRecentItem.url);
 
-            row.innerHTML = `
-                <td>${mostRecentItem.name}</td>
-                <td>${mostRecentItem.priceILS}</td>
-                <td><a href="${mostRecentItem.url}" target="_blank" title="${mostRecentItem.url}">Link</a></td>
-                <td title="${mostRecentItem.url}">${domainName}</td>
-                <td>${new Date(mostRecentItem.createdAt).toLocaleString()}</td>
-                <td><button class="price-history-btn" data-name="${mostRecentItem.name}" data-website="${domainName}" ${buttonDisabled}>הסטוריית מחירים</button></td>
-                <td>${insight}</td>
-            `;
-            tbody.appendChild(row);
-        });
-    
-            document.querySelectorAll('.price-history-btn').forEach(button => {
-                button.addEventListener('click', event => {
-                    const name = event.target.dataset.name;
-                    const website = event.target.dataset.website;
-                    if (!event.target.disabled) {
-                        displayPriceHistory(name, website);
-                    }
-                });
+                row.innerHTML = `
+                    <td>${mostRecentItem.name}</td>
+                    <td>${mostRecentItem.priceILS}</td>
+                    <td><a href="${mostRecentItem.url}" target="_blank" title="${mostRecentItem.url}">Link</a></td>
+                    <td title="${mostRecentItem.url}">${domainName}</td>
+                    <td>${new Date(mostRecentItem.createdAt).toLocaleString()}</td>
+                    <td><button class="price-history-btn" data-name="${mostRecentItem.name}" data-website="${domainName}" ${buttonDisabled}>הסטוריית מחירים</button></td>
+                    <td>${insight}</td>
+                `;
+                tbody.appendChild(row);
             });
+        
+                document.querySelectorAll('.price-history-btn').forEach(button => {
+                    button.addEventListener('click', event => {
+                        const name = event.target.dataset.name;
+                        const website = event.target.dataset.website;
+                        if (!event.target.disabled) {
+                            displayPriceHistory(name, website);
+                        }
+                    });
+                });
+            }
         }
-    }
 
     function extractDomain(url) {
         let domain;
@@ -370,7 +485,6 @@ function populateTable(data) {
             return matchesWebsite && matchesPriceFrom && matchesPriceTo;
         });
     }
-
 
     function displayPriceHistory(name, website) {
         const allData = getAllData();
