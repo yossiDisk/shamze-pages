@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('page-title').innerText = query;
         document.getElementById('header-title').innerText = query;
     }
+    
 
     if (siteId && query) {
         const apiUrl = `https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/items?siteId=${siteId}&query=${query}`;
