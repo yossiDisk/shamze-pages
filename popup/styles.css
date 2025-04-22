@@ -18,6 +18,34 @@ body {
   text-align: right;
 }
 
+/* הוספת סגנונות לתצוגת התכונות הנתמכות */
+.features-section {
+  margin: 15px 0;
+  padding: 10px 15px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.features-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.features-content {
+  color: #2196F3;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* התאמה להצגה במסכים קטנים */
+@media (max-width: 480px) {
+  .features-content {
+    font-size: 13px;
+  }
+}
+
 .sites-list h3 {
   color: #2196F3;
   margin-top: 20px;

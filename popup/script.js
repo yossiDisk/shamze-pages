@@ -80,11 +80,27 @@ document.addEventListener('DOMContentLoaded', () => {
             siteTitle.textContent = siteInfo.siteName;
             siteInfoContainer.appendChild(siteTitle);
 
+            // Add supported features section
+            const featuresSection = document.createElement('div');
+            featuresSection.className = 'features-section';
+
+            const featuresLabel = document.createElement('p');
+            featuresLabel.className = 'features-label';
+            featuresLabel.textContent = 'תכונות נתמכות באתר זה:';
+            featuresSection.appendChild(featuresLabel);
+
+            const featuresContent = document.createElement('p');
+            featuresContent.className = 'features-content';
+            featuresContent.textContent = getSupportedFeatures(siteInfo);
+            featuresSection.appendChild(featuresContent);
+
+            siteInfoContainer.appendChild(featuresSection);
+
             // Create review button
             const reviewButton = document.createElement('a');
             reviewButton.href = `https://docs.google.com/forms/d/e/1FAIpQLSed14bO55vne_cKNb25S39lUNw-4RWjceeeU13NAb-tOqbxow/viewform?usp=pp_url&entry.1214730731=${encodeURIComponent(baseUrl)}`;
             reviewButton.className = 'button';
-            reviewButton.textContent = 'לחץ להשארת ביקורת';
+            reviewButton.textContent = 'דירוג ההזמנה שלכם באתר זה';
             reviewButton.target = '_blank';
             siteInfoContainer.appendChild(reviewButton);
 
@@ -164,6 +180,61 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         content.appendChild(siteInfoContainer);
+    }
+
+    function getSupportedFeatures(siteInfo) {
+        if (!siteInfo || !siteInfo.compareWith) return ''; // No data available
+
+        const features = [];
+
+        // Check for different types of support based on compareWith properties
+        if (siteInfo.compareWith.fetchProvider === "ksp") {
+            features.push('השוואת מחירים מול KSP');
+        }
+
+        if (siteInfo.compareWith.format === "supers") {
+            features.push('השוואת מחירים בין סופרים');
+        }
+
+        // Check for different types
+        switch (siteInfo.compareWith.type) {
+            case "json":
+                features.push('השוואת מחירים');
+                break;
+            case "generalSearch":
+                features.push('השוואת מחירים - לא זמין עקב תקלה זמנית');
+                break;
+            case "modalIframe":
+                features.push('השוואת מחירים - לא זמין עקב תקלה זמנית');
+                break;
+            case "KuponAndCompere":
+                features.push('השוואת מחירים וקופונים');
+                break;
+            case "generalSearchIncode":
+                features.push('השוואת מחירים - לא זמין עקב תקלה זמנית');
+                break;
+            case "combinedPriceComparisonCoupon":
+                features.push('השוואת מחירים וקופונים');
+                break;
+            case "CouponContentJson":
+                features.push('קופונים');
+                break;
+            case "modalFlightComparison":
+                features.push('השוואת מחירי טיסות');
+                break;
+        }
+
+        // Check for kupon property
+        if (siteInfo.compareWith.kupon === 'cupons') {
+            features.push('איתור קופון');
+        }
+
+        // If no features found
+        if (features.length === 0) {
+            return 'לא זוהו תכונות נתמכות';
+        }
+
+        return features.join(' • ');
     }
 
     function extractBaseUrl(url) {
