@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>שגיאה בהפניה למוצר</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      color: #333;
+      text-align: center;
+      padding: 40px;
+    }
+    .container {
+      background-color: white;
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .product-info {
+      margin: 20px 0;
+    }
+    .product-info h2 {
+      margin-bottom: 10px;
+      font-size: 1.3em;
+    }
+    .search-suggestion {
+      margin-top: 20px;
+      color: #555;
+    }
+    .site-name {
+      font-weight: bold;
+      color: #007bff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>לא ניתן להפנות למוצר</h1>
+    <div class="product-info">
+      <h2 id="itemName">שם המוצר</h2>
+      <p id="itemPrice">מחיר</p>
+      <p id="siteName">שם האתר</p>
+    </div>
+    <p>עקב תקלה זמנית, לא ניתן להפנות ישירות למוצר.</p>
+    <p class="search-suggestion">
+      ניתן לחפש את המוצר ישירות באתר <span id="siteName2" class="site-name"></span>
+    </p>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const itemName = urlParams.get('itemName') || '—';
+    const itemPrice = urlParams.get('itemPrice') || '—';
+    const siteName = urlParams.get('siteName') || '—';
+
+    document.getElementById('itemName').textContent = itemName;
+    document.getElementById('itemPrice').textContent = `מחיר: ${itemPrice}`;
+    document.getElementById('siteName').textContent = `מאתר: ${siteName}`;
+    document.getElementById('siteName2').textContent = siteName;
+  </script>
+</body>
+</html>
