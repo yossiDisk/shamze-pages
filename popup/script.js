@@ -207,6 +207,9 @@ document.addEventListener('DOMContentLoaded', () => {
             case "modalIframe":
                 features.push('השוואת מחירים - לא זמין עקב תקלה זמנית');
                 break;
+            case "STOPgeneralSearch":
+                features.push('השוואת מחירים - לא זמין עקב תקלה זמנית');
+                break;
             case "KuponAndCompere":
                 features.push('השוואת מחירים וקופונים');
                 break;
