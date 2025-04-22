@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Check for different types of support based on compareWith properties
         if (siteInfo.compareWith.fetchProvider === "ksp") {
-            features.push('השוואת מחירים מול KSP');
+            features.push('השוואת מחירים');
         }
 
         if (siteInfo.compareWith.format === "supers") {
@@ -202,10 +202,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 features.push('השוואת מחירים');
                 break;
             case "generalSearch":
-                features.push('השוואת מחירים - לא זמין עקב תקלה זמנית');
+                features.push('השוואת מחירים');
                 break;
             case "modalIframe":
-                features.push('השוואת מחירים - לא זמין עקב תקלה זמנית');
+                features.push('השוואת מחירים');
                 break;
             case "STOPgeneralSearch":
                 features.push('השוואת מחירים - לא זמין עקב תקלה זמנית');
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 features.push('השוואת מחירים וקופונים');
                 break;
             case "generalSearchIncode":
-                features.push('השוואת מחירים - לא זמין עקב תקלה זמנית');
+                features.push('השוואת מחירים');
                 break;
             case "combinedPriceComparisonCoupon":
                 features.push('השוואת מחירים וקופונים');
