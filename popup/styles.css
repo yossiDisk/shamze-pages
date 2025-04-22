@@ -13,6 +13,46 @@ body {
   text-align: center;
 }
 
+.sites-list {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.sites-list h3 {
+  color: #2196F3;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+}
+
+.sites-list ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sites-list li {
+  padding: 8px 0;
+  border-bottom: 1px dashed #eee;
+}
+
+.sites-list li:last-child {
+  border-bottom: none;
+}
+
+/* עיצוב מודל */
+#availableSitesModal .modal-content {
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* כפתור חדש */
+.button + .button {
+  margin-top: 15px;
+}
+
 .site-info-container {
   max-width: 600px;
   margin: 20px auto;

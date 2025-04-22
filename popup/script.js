@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('page-title').innerText = query;
         document.getElementById('header-title').innerText = query;
     }
-    
+
     // Fetch sites data first for both normal and currentUrl modes
     fetch('https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/sites')
         .then((response) => response.json())
@@ -23,11 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 // Normal mode - handle regular site selection buttons
                 generateButtons(sitesData);
-                
+
                 // Continue with API request if siteId and query are provided
                 if (siteId && query) {
                     const apiUrl = `https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/items?siteId=${siteId}&query=${query}`;
-                    
+
                     fetch(apiUrl)
                         .then(response => response.json())
                         .then(data => {
@@ -55,84 +55,114 @@ document.addEventListener('DOMContentLoaded', () => {
         if (content) {
             content.innerHTML = '';
         }
-        
+
         // Hide the top buttons in currentUrl mode
         if (compareButton) compareButton.style.display = 'none';
         if (couponButton) couponButton.style.display = 'none';
         if (searchInput) searchInput.style.display = 'none';
-        
+
         // Extract baseUrl from the current URL
         const baseUrl = extractBaseUrl(url);
-        
+
         // Create container for site information
         const siteInfoContainer = document.createElement('div');
         siteInfoContainer.className = 'site-info-container';
-        
+
         // Find if the site exists in our database
         const siteInfo = findSiteByUrl(baseUrl, sitesData);
-        
+
         // Create site name/title element
         const siteTitle = document.createElement('h2');
         siteTitle.className = 'site-title';
-        siteTitle.textContent = siteInfo ? siteInfo.siteName : baseUrl;
-        siteInfoContainer.appendChild(siteTitle);
-        
-        // Always show review button, regardless of whether the site exists in our database
-        const reviewButton = document.createElement('a');
-        reviewButton.href = `https://docs.google.com/forms/d/e/1FAIpQLSed14bO55vne_cKNb25S39lUNw-4RWjceeeU13NAb-tOqbxow/viewform?usp=pp_url&entry.1214730731=${encodeURIComponent(baseUrl)}`;
-        reviewButton.className = 'button';
-        reviewButton.textContent = 'לחץ להשארת ביקורת';
-        reviewButton.target = '_blank';
-        siteInfoContainer.appendChild(reviewButton);
-        
-        // Create coupon section
-        const couponSection = document.createElement('div');
-        couponSection.className = 'coupon-section';
-        
-        // Check if coupon is available
-        let hasCoupon = false;
-        if (siteInfo && siteInfo.cupon && siteInfo.cupon.trim() !== '') {
-            hasCoupon = true;
-            
-            // Create coupon container
-            const couponContainer = document.createElement('div');
-            couponContainer.className = 'coupon-container';
-            
-            // Create coupon code element
-            const couponCode = document.createElement('div');
-            couponCode.className = 'coupon-code';
-            couponCode.textContent = siteInfo.cupon;
-            couponCode.onclick = function() {
-                navigator.clipboard.writeText(siteInfo.cupon)
-                    .then(() => {
-                        // Show copy notification
-                        couponCode.setAttribute('data-copied', 'true');
-                        setTimeout(() => {
-                            couponCode.removeAttribute('data-copied');
-                        }, 2000);
-                    });
-            };
-            couponCode.title = 'לחץ להעתקה';
-            couponContainer.appendChild(couponCode);
-            
-            // If coupon details available, show them
-            if (siteInfo.cuponDetails) {
-                const couponDetails = document.createElement('div');
-                couponDetails.className = 'coupon-details';
-                couponDetails.textContent = siteInfo.cuponDetails;
-                couponContainer.appendChild(couponDetails);
+
+        if (siteInfo) {
+            // Site exists in our database
+            siteTitle.textContent = siteInfo.siteName;
+            siteInfoContainer.appendChild(siteTitle);
+
+            // Create review button
+            const reviewButton = document.createElement('a');
+            reviewButton.href = `https://docs.google.com/forms/d/e/1FAIpQLSed14bO55vne_cKNb25S39lUNw-4RWjceeeU13NAb-tOqbxow/viewform?usp=pp_url&entry.1214730731=${encodeURIComponent(baseUrl)}`;
+            reviewButton.className = 'button';
+            reviewButton.textContent = 'לחץ להשארת ביקורת';
+            reviewButton.target = '_blank';
+            siteInfoContainer.appendChild(reviewButton);
+
+            // Create coupon section
+            const couponSection = document.createElement('div');
+            couponSection.className = 'coupon-section';
+
+            // Check if coupon is available
+            let hasCoupon = false;
+            if (siteInfo.cupon && siteInfo.cupon.trim() !== '') {
+                hasCoupon = true;
+
+                // Create coupon container
+                const couponContainer = document.createElement('div');
+                couponContainer.className = 'coupon-container';
+
+                // Create coupon code element
+                const couponCode = document.createElement('div');
+                couponCode.className = 'coupon-code';
+                couponCode.textContent = siteInfo.cupon;
+                couponCode.onclick = function () {
+                    navigator.clipboard.writeText(siteInfo.cupon)
+                        .then(() => {
+                            // Show copy notification
+                            couponCode.setAttribute('data-copied', 'true');
+                            setTimeout(() => {
+                                couponCode.removeAttribute('data-copied');
+                            }, 2000);
+                        });
+                };
+                couponCode.title = 'לחץ להעתקה';
+                couponContainer.appendChild(couponCode);
+
+                // If coupon details available, show them
+                if (siteInfo.cuponDetails) {
+                    const couponDetails = document.createElement('div');
+                    couponDetails.className = 'coupon-details';
+                    couponDetails.textContent = siteInfo.cuponDetails;
+                    couponContainer.appendChild(couponDetails);
+                }
+
+                couponSection.appendChild(couponContainer);
+            } else {
+                // No coupon available
+                const noCouponMsg = document.createElement('div');
+                noCouponMsg.className = 'no-coupon-message';
+                noCouponMsg.textContent = 'אין קופון זמין';
+                couponSection.appendChild(noCouponMsg);
             }
-            
-            couponSection.appendChild(couponContainer);
+
+            siteInfoContainer.appendChild(couponSection);
         } else {
-            // No coupon available
-            const noCouponMsg = document.createElement('div');
-            noCouponMsg.className = 'no-coupon-message';
-            noCouponMsg.textContent = 'אין קופון זמין';
-            couponSection.appendChild(noCouponMsg);
+            // Site does not exist in our database
+            siteTitle.textContent = '״שם זה זול יותר׳׳ לא נתמך עדיין באתר זה';
+            siteInfoContainer.appendChild(siteTitle);
+
+            // Display current site URL
+            const siteUrlElement = document.createElement('p');
+            siteUrlElement.textContent = baseUrl;
+            siteUrlElement.className = 'site-url';
+            siteInfoContainer.appendChild(siteUrlElement);
+
+            // Create button to show available sites
+            const showSitesButton = document.createElement('a');
+            showSitesButton.className = 'button';
+            showSitesButton.textContent = 'הצג אתרים זמינים';
+            showSitesButton.href = window.location.pathname; // Redirect to the main page without parameters
+            siteInfoContainer.appendChild(showSitesButton);
+
+            // Create button for request to add site
+            const addSiteButton = document.createElement('a');
+            addSiteButton.href = `https://mail.google.com/mail/?view=cm&fs=1&to=shamzezolyoter@gmail.com&su=בקשה להוספת אתר&body=היי, אני רוצה לבקש הוספת האתר ${baseUrl} למערכת שם זה זול יותר.`;
+            addSiteButton.className = 'button';
+            addSiteButton.textContent = 'בקשה להוספת אתר';
+            addSiteButton.target = '_blank';
+            siteInfoContainer.appendChild(addSiteButton);
         }
-        
-        siteInfoContainer.appendChild(couponSection);
+
         content.appendChild(siteInfoContainer);
     }
 
@@ -162,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
             content.innerHTML = ''; // Clear existing buttons
             const compereData = data.filter((item) => item.compareWith.kupon !== 'cupons');
             const kuponData = data.filter((item) => item.compareWith.kupon === 'cupons');
-    
+
             if (compareButton) {
                 compareButton.addEventListener('click', () => {
                     compareButton.classList.add('selected');
@@ -170,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     displayData(compereData);
                 });
             }
-    
+
             if (couponButton) {
                 couponButton.addEventListener('click', () => {
                     couponButton.classList.add('selected');
@@ -178,10 +208,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     displayData(kuponData);
                 });
             }
-    
+
             // Initialize with the default data (השוואה list) when the page loads
             displayData(compereData);
-    
+
             // Listen for changes in the search input field
             if (searchInput) {
                 searchInput.addEventListener('input', () => {
@@ -204,16 +234,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (item.URL) {
                     const buttonContainer = document.createElement('div');
                     buttonContainer.className = 'button-container';
-    
+
                     const buttonLink = document.createElement('a');
                     buttonLink.href = item.affLink;
                     buttonLink.target = '_blank'; // Open in a new tab
                     buttonLink.className = 'button-link';
-    
+
                     const button = document.createElement('button');
                     button.textContent = item.siteName || item.site;
                     button.className = 'button';
-    
+
                     buttonLink.appendChild(button);
                     buttonContainer.appendChild(buttonLink);
                     content.appendChild(buttonContainer);
@@ -251,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function getUniqueData(data) {
         const uniqueItems = [];
         const itemMap = new Map();
-    
+
         data.forEach(item => {
             const key = `${item.name}-${item.website}`;
             if (!itemMap.has(key)) {
@@ -259,17 +289,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             itemMap.get(key).push(item);
         });
-    
+
         itemMap.forEach(items => {
             uniqueItems.push(items[0]);
         });
-    
+
         return uniqueItems;
     }
 
     function createItemMap(data) {
         const itemMap = new Map();
-    
+
         data.forEach(item => {
             const key = `${item.name}-${item.website}`;
             if (!itemMap.has(key)) {
@@ -277,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             itemMap.get(key).push(item);
         });
-    
+
         return itemMap;
     }
 
@@ -293,9 +323,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const itemHistory = itemMap.get(key);
                 const itemCount = itemHistory.length;
                 const buttonDisabled = itemCount <= 1 ? 'disabled' : '';
-                
+
                 itemHistory.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                
+
                 const mostRecentItem = itemHistory[0];
                 const insight = getInsight(itemHistory);
                 const domainName = extractDomain(mostRecentItem.url);
@@ -311,18 +341,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 tbody.appendChild(row);
             });
-        
-                document.querySelectorAll('.price-history-btn').forEach(button => {
-                    button.addEventListener('click', event => {
-                        const name = event.target.dataset.name;
-                        const website = event.target.dataset.website;
-                        if (!event.target.disabled) {
-                            displayPriceHistory(name, website);
-                        }
-                    });
+
+            document.querySelectorAll('.price-history-btn').forEach(button => {
+                button.addEventListener('click', event => {
+                    const name = event.target.dataset.name;
+                    const website = event.target.dataset.website;
+                    if (!event.target.disabled) {
+                        displayPriceHistory(name, website);
+                    }
                 });
-            }
+            });
         }
+    }
 
     function extractDomain(url) {
         let domain;
@@ -336,18 +366,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getInsight(itemHistory) {
         if (itemHistory.length < 2) return '';
-    
+
         // Sort by date, most recent first
         itemHistory.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    
+
         const currentPrice = parseFloat(itemHistory[0].priceILS);
         const previousPrice = parseFloat(itemHistory[1].priceILS);
-    
+
         if (isNaN(currentPrice) || isNaN(previousPrice)) return '';
-    
+
         const priceDifference = currentPrice - previousPrice;
         const percentageChange = (priceDifference / previousPrice) * 100;
-    
+
         if (percentageChange <= -20) {
             return 'ירידת מחיר חדה';
         } else if (percentageChange >= 20) {
@@ -363,16 +393,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createPriceHistoryGraph(data) {
         const ctx = document.getElementById('priceHistoryChart').getContext('2d');
-        
+
         if (window.priceHistoryChart instanceof Chart) {
             window.priceHistoryChart.destroy();
         }
-        
+
         const chartData = data.map(item => ({
             x: new Date(item.createdAt),
             y: parseFloat(item.priceILS)
         })).reverse();
-    
+
         window.priceHistoryChart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -425,7 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 populateTable(sortedData);
             });
         });
-    
+
         const filterInput = document.getElementById('filterKey');
         if (filterInput) {
             filterInput.addEventListener('input', () => {
@@ -433,25 +463,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 populateTable(filteredData);
             });
         }
-    
+
         const priceFromInput = document.getElementById('priceFrom');
         const priceToInput = document.getElementById('priceTo');
         const filterWebsiteInput = document.getElementById('filterWebsite');
-    
+
         if (priceFromInput) {
             priceFromInput.addEventListener('input', () => {
                 const filteredData = filterDataByPrice(data, priceFromInput.value, priceToInput.value, filterWebsiteInput.value);
                 populateTable(filteredData);
             });
         }
-    
+
         if (priceToInput) {
             priceToInput.addEventListener('input', () => {
                 const filteredData = filterDataByPrice(data, priceFromInput.value, priceToInput.value, filterWebsiteInput.value);
                 populateTable(filteredData);
             });
         }
-    
+
         if (filterWebsiteInput) {
             filterWebsiteInput.addEventListener('input', () => {
                 const filteredData = filterDataByPrice(data, priceFromInput.value, priceToInput.value, filterWebsiteInput.value);
@@ -509,7 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modal) {
             modal.style.display = 'block';
         }
-        
+
         // Add graph
         createPriceHistoryGraph(sortedHistoryData);
     }
