@@ -41,7 +41,7 @@
   <header id="routeHeader">טעינת מידע…</header>
   <div id="summary" hidden></div>
   <form id="passengerForm" novalidate>
-    <label for="adults">מבוגרים (18+)</label>
+    <label for="adults">מבוגרים (12+)</label>
     <input type="number" id="adults" name="adults" min="1" max="8" value="1" required />
 
     <label for="children">ילדים (2‑11)</label>
@@ -86,10 +86,21 @@
       const loader=document.getElementById('loader');const loadMain=document.getElementById('loaderMain');const loadTip=document.getElementById('loaderTip');
       const progress=document.getElementById('progressBar');
 
-      [ad,ch,inf].forEach(el=>el.addEventListener('input',()=>{inf.max=Math.min(+ad.value,8-+ch.value);if(+inf.value>+inf.max)inf.value=inf.max;validate();}));
+      [ad,ch,inf].forEach(el=>el.addEventListener('input',()=>{inf.max = Math.min(+ad.value, 8 - +ch.value);if(+inf.value>+inf.max)inf.value=inf.max;validate();}));
       function showErr(m){eMsg.textContent=m;eMsg.hidden=false;btn.disabled=true}
       function hideErr(){eMsg.hidden=true;btn.disabled=false}
-      function validate(){const a=+ad.value,c=+ch.value,i=+inf.value,k=c+i;if(a<1||a>8)return showErr('מספר המבוגרים חייב להיות בין 1 ל‑8.');if(c>8)return showErr('לא ניתן לבחור יותר מ‑8 ילדים.');if(k>8)return showErr('המספר הכולל של ילדים ותינוקות לא יכול להיות מעל 8.');if(i>a)return showErr('מספר התינוקות חייב להיות בין 0 ובין מספר המבוגרים.');hideErr();return true}
+      function validate(){
+        const a=+ad.value,c=+ch.value,i=+inf.value,k=c+i;
+        if(a<1||a>8)                 return showErr('מספר המבוגרים חייב להיות בין 1 ל‑8.');
+        if(c>8)                      return showErr('לא ניתן לבחור יותר מ‑8 ילדים.');
+        if(k>8)                      return showErr('המספר הכולל של ילדים ותינוקות לא יכול להיות מעל 8.');
+        if(i>a)                      return showErr('מספר התינוקות חייב להיות בין 0 ובין מספר המבוגרים.');
+        // הודעות גבול כדי שהמשתמש יבין למה אינו יכול להוסיף עוד
+        if(c===8)                    return showErr('הגעת למקסימום 8 ילדים.');
+        if(k===8)                    return showErr('הגעת למקסימום 8 בסך‑הכל (ילדים + תינוקות).');
+        if(i===a)                    return showErr('מספר התינוקות לא יכול לחרוג ממספר המבוגרים.');
+        hideErr();return true;
+      }
 
       f.addEventListener('submit',ev=>{ev.preventDefault();if(!validate())return;const url=new URL(flightUrl);url.pathname=url.pathname.replace('redirect','redirect-page');url.searchParams.set('adults',ad.value);url.searchParams.set('children',ch.value);url.searchParams.set('infants',inf.value);startPreload(url.toString());});
 
