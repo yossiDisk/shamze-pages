@@ -13,6 +13,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Debug remote access
+        run: |
+          echo "Remote URL: $(git remote get-url target)"
+          echo -n "Trying ls-remote… "
+          git ls-remote target HEAD && echo "✅ OK" || echo "❌ FAILED"
+
       - name: Mirror to target repo
         run: |
           git config user.name "github-actions[bot]"
