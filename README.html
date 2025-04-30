@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שם זה זול יותר - חסכו בקניות אונליין</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <script async defer data-domain="yossidisk.github.io/shamze/home.html" src="https://plausible.io/js/plausible.js"></script>
+    <meta name="google-site-verification" content="Hn94auoav4UfigxK9-lUVfEjpWmh9REt56yCor_d3uw" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;900&display=swap');
+        body {
+            font-family: 'Heebo', sans-serif;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-green-600 text-white p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <div class="flex items-center w-full sm:w-auto justify-between">
+                <div class="flex items-center">
+                    <img src="https://lh3.googleusercontent.com/Sp3b24fVCvCVewv5udOP_e-qNVWGuxcZX9DEgYmKncXjeO9kp6KKCJ8NFcVs0VQNFeWo1P9p8-aYV1fDyq1Ct0ZCXec=s60" alt="לוגו שם זה זול יותר" class="w-10 h-10 mr-2">
+                    <h1 class="text-xl font-bold">שם זה זול יותר</h1>
+                </div>
+                <button id="menu-toggle" class="sm:hidden text-2xl focus:outline-none" aria-label="תפריט">
+                    ☰
+                </button>
+            </div>
+            <nav id="nav-menu" class="hidden sm:flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 sm:space-x-reverse w-full sm:w-auto mt-4 sm:mt-0">
+                <a href="#features" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto text-center">יתרונות</a>
+                <a href="#how-it-works" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto text-center">איך זה עובד</a>
+                <a href="#media" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto text-center">מדיה</a>
+                <a href="#testimonials" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto text-center">המלצות</a>
+                <a href="#community" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto text-center">קהילה</a>
+                <a href="#stores" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto text-center">חנויות נתמכות</a>
+                <div class="flex flex-col sm:flex-row w-full sm:w-auto mt-4 sm:mt-0 space-y-2 sm:space-y-0 sm:space-x-2 sm:space-x-reverse">
+                    <a href="https://yossidisk.github.io/Shamze/cupons.html" 
+                       class="bg-yellow-400 text-green-600 px-4 py-2 rounded-full font-bold hover:bg-yellow-300 transition duration-300 text-center">
+                        מצא הנחה
+                    </a>
+                    <a href="https://chromewebstore.google.com/detail/%D7%A9%D7%9D-%D7%96%D7%94-%D7%96%D7%95%D7%9C-%D7%99%D7%95%D7%AA%D7%A8/neigoggljhfnodeneidndcflnclldnpm?hl=iw" 
+                       class="bg-white text-green-600 px-4 py-2 rounded-full font-bold hover:bg-green-100 transition duration-300 text-center">
+                        התקן עכשיו
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <style>
+        @media (max-width: 640px) {
+            #nav-menu {
+                background-color: #166534; /* bg-green-800 */
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                padding: 1rem;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            #nav-menu.hidden {
+                display: none;
+            }
+        }
+        @media (min-width: 641px) and (max-width: 1024px) {
+            #nav-menu a, #nav-menu div a {
+                font-size: 0.875rem; /* text-sm */
+                padding: 0.25rem 0.5rem; /* p-1 px-2 */
+            }
+        }
+    </style>
+
+    <main class="container mx-auto mt-8 px-4">
+        <section class="text-center">
+            <h2 class="text-4xl font-bold mb-4">חסכו מאות שקלים בכל קנייה אונליין</h2>
+            <p class="text-xl mb-8">התוסף שלנו מציג לכם קופונים והשוואות מחירים בזמן אמת</p>
+            <a href="https://chromewebstore.google.com/detail/%D7%A9%D7%9D-%D7%96%D7%94-%D7%96%D7%95%D7%9C-%D7%99%D7%95%D7%AA%D7%A8/neigoggljhfnodeneidndcflnclldnpm?hl=iw" 
+               class="bg-green-500 text-white px-6 py-3 rounded-full text-xl font-bold hover:bg-green-600 transition duration-300 inline-block mb-4"
+               onclick="plausible('Download Extension')">
+                התקן את התוסף בחינם
+            </a>
+        </section>
+
+        <section id="features" class="mt-16">
+            <h2 class="text-3xl font-bold text-center mb-8">למה כדאי להשתמש ב"שם זה זול יותר"</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-4">חיסכון כספי</h3>
+                    <p>מצאו את המחירים הטובים ביותר ברשת בקלות ובמהירות</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-4">קופונים אוטומטיים</h3>
+                    <p>התוסף מחפש ומחיל קופונים באופן אוטומטי בזמן הקנייה</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-4">השוואת מחירים</h3>
+                    <p>השוו מחירים בין מאות אתרים ישראליים בלחיצת כפתור</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="mt-16">
+            <h2 class="text-3xl font-bold text-center mb-8">איך זה עובד?</h2>
+            <div class="flex flex-col md:flex-row items-center justify-center">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <img src="https://pricing-data-bucket-dev.s3.il-central-1.amazonaws.com/assets/zapcomper.gif" alt="הדגמת התוסף" class="rounded-lg shadow-md mx-auto w-full max-w-md">
+                </div>
+                <div class="md:w-1/2 md:pr-8">
+                    <ol class="list-decimal list-inside">
+                        <li class="mb-4">התקינו את התוסף בדפדפן Chrome</li>
+                        <li class="mb-4">גלשו לאתרי קניות כרגיל</li>
+                        <li class="mb-4">התוסף יציג לכם קופונים והשוואות מחירים באופן אוטומטי</li>
+                        <li>חסכו כסף בכל קנייה!</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section id="media" class="mt-16">
+            <h2 class="text-3xl font-bold text-center mb-8">שם זה זול יותר בתקשורת</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-4">תוכנית הצינור</h3>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/oDj3rOpaJbY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-4">תוכנית חיסכון</h3>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/v_MYHLGf8XM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-4">TheMarker</h3>
+                    <p>"שם זה זול יותר": התוסף לדפדפן שיחסוך לכם מאות שקלים בקניית מתנות לחג</p>
+                    <a href="https://www.themarker.com/captain-internet/2023-09-20/ty-article/.premium/0000018a-b2c7-d13d-a98f-fbf79e340000" class="text-green-600 hover:underline mt-2 inline-block" target="_blank">קרא עוד</a>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-4">Geektime</h3>
+                    <p>מ-KSP ועד סופרפארם: תוסף ישראלי חדש יעזור לכם לחסוך כסף בקנייה הבאה</p>
+                    <a href="https://www.geektime.co.il/new-extension-will-make-your-online-shopping-a-little-easier/" class="text-green-600 hover:underline mt-2 inline-block" target="_blank">קרא עוד</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="mt-16">
+            <h2 class="text-3xl font-bold text-center mb-8">המלצות משתמשים</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-bold">Dror Yekutiel</span>
+                        <span class="text-yellow-400">★★★★★</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-2">10 בספט' 2024</p>
+                    <p class="mb-4">תוסף מעולה, עושה את העבודה כמו שצריך ולא מפריע שלא צריך, מה אכפת לכם זה חינם ליטרלי כסף על הרצפה</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-bold">Karen Ohayon</span>
+                        <span class="text-yellow-400">★★★★★</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-2">22 במאי 2024</p>
+                    <p class="mb-4">חדשני ביותר, רעיון נפלא ! עובד מצויין, והשירות בנייל יוצא מן הכלל ! כל הכבוד !</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-bold">דניס זברינצקי</span>
+                        <span class="text-yellow-400">★★★★★</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-2">21 באפר' 2024</p>
+                    <p class="mb-4">רעיון מצויין! פוטנציאל אדיר לחסוך המון כסף!</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-bold">Anna Pivovarchik</span>
+                        <span class="text-yellow-400">★★★★★</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-2">7 במרץ 2024</p>
+                    <p class="mb-4">מאוד שימושי! אהבה של תוסף שחוסך כסף :)</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-bold">Yosef</span>
+                        <span class="text-yellow-400">★★★★★</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-2">29 בנוב' 2024</p>
+                    <p class="mb-4">תוסף מעולה ממליץ מאוד חסך לי בנובמבר כמה מאות שקלים!!</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="community" class="mt-16">
+            <h2 class="text-3xl font-bold text-center mb-8">הצטרפו לקהילה שלנו</h2>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-8">
+                <a href="https://chat.whatsapp.com/HVpVlib1K1UFAt9KuXNgfo" 
+                   class="bg-green-500 text-white px-6 py-3 rounded-full text-xl font-bold hover:bg-green-600 transition duration-300"
+                   onclick="plausible('Join WhatsApp Group')"
+                   target="_blank">
+                    הצטרפו לקבוצת הוואטסאפ
+                </a>
+                <a href="https://yossidisk.github.io/Shamze/cupons.html" 
+                   class="bg-green-500 text-white px-6 py-3 rounded-full text-xl font-bold hover:bg-green-600 transition duration-300"
+                   onclick="plausible('Visit Coupons Site')"
+                   target="_blank">
+                    אתר הקופונים שלנו
+                </a>
+            </div>
+        </section>
+
+        <section id="stores" class="mt-16">
+            <h2 class="text-3xl font-bold text-center mb-8">חנויות נתמכות</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <p class="text-center mb-4">התוסף שלנו תומך במאות חנויות מקוונות בישראל, כולל:</p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 text-center">
+                    <div class="p-2 bg-gray-100 rounded">KSP</div>
+                    <div class="p-2 bg-gray-100 rounded">Ivory</div>
+                    <div class="p-2 bg-gray-100 rounded">Lastprice</div>
+                    <div class="p-2 bg-gray-100 rounded">סופרפארם</div>
+                    <div class="p-2 bg-gray-100 rounded">BUG</div>
+                    <div class="p-2 bg-gray-100 rounded">מחסני חשמל</div>
+                    <div class="p-2 bg-gray-100 rounded">AliExpress</div>
+                    <div class="p-2 bg-gray-100 rounded">Renuar</div>
+                    <div class="p-2 bg-gray-100 rounded">Zap</div>
+                    <div class="p-2 bg-gray-100 rounded">Terminal X</div>
+                    <div class="p-2 bg-gray-100 rounded">Amazon</div>
+                    <div class="p-2 bg-gray-100 rounded">Shufersal</div>
+                </div>
+                <p class="text-center mt-4">ועוד רבות אחרות!</p>
+            </div>
+        </section>
+
+        <section id="faq" class="mt-16">
+            <h2 class="text-3xl font-bold text-center mb-8">שאלות נפוצות</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="faq-item mb-4">
+                    <button class="flex justify-between items-center w-full text-left font-bold text-xl mb-2">
+                        <span>האם השימוש בתוסף הוא בחינם?</span>
+                        <span class="transform transition-transform duration-200">▼</span>
+                    </button>
+                    <p class="hidden mt-2">כן, התוסף הוא לגמרי חינמי לשימוש. אנחנו מאמינים בלעזור לאנשים לחסוך כסף בלי שזה יעלה להם.</p>
+                </div>
+                <div class="faq-item mb-4">
+                    <button class="flex justify-between items-center w-full text-left font-bold text-xl mb-2">
+                        <span>האם התוסף בטוח לשימוש?</span>
+                        <span class="transform transition-transform duration-200">▼</span>
+                    </button>
+                    <p class="hidden mt-2">בהחלט. אנחנו מקפידים על אבטחה ופרטיות. התוסף שלנו לא אוסף מידע אישי ופועל רק כדי למצוא לכם את ההנחות הטובות ביותר.</p>
+                </div>
+                <div class="faq-item mb-4">
+                    <button class="flex justify-between items-center w-full text-left font-bold text-xl mb-2">
+                        <span>איך אני מתקין את התוסף?</span>
+                        <span class="transform transition-transform duration-200">▼</span>
+                    </button>
+                    <p class="hidden mt-2">פשוט לחצו על כפתור "התקן את התוסף בחינם" בראש העמוד. זה יוביל אתכם לחנות התוספים של Chrome, שם תוכלו להתקין את התוסף בקליק אחד.</p>
+                </div>
+                <div class="faq-item mb-4">
+                    <button class="flex justify-between items-center w-full text-left font-bold text-xl mb-2">
+                        <span>איך משתמשים בתוסף לאחר ההתקנה?</span>
+                        <span class="transform transition-transform duration-200">▼</span>
+                    </button>
+                    <p class="hidden mt-2">השימוש בתוסף הוא פשוט וללא מאמץ! לאחר ההתקנה, אין צורך לעשות שום פעולה נוספת. התוסף יפעל אוטומטית כאשר תגלשו לאתרי קניות נתמכים. הוא יקפוץ מעצמו ויציג לכם קופונים והשוואות מחירים בזמן אמת, בלי שתצטרכו לעשות דבר. פשוט המשיכו לגלוש ולקנות כרגיל, והתוסף יעשה את כל העבודה בשבילכם!</p>
+                </div>
+                <div class="faq-item">
+                    <button class="flex justify-between items-center w-full text-left font-bold text-xl mb-2">
+                        <span>באילו אתרים התוסף עובד?</span>
+                        <span class="transform transition-transform duration-200">▼</span>
+                    </button>
+                    <p class="hidden mt-2">התוסף שלנו עובד עם מאות אתרי קניות מובילים בישראל. תוכלו למצוא רשימה חלקית בחלק "חנויות נתמכות" באתר זה.</p>
+                </div>
+            </div>
+        </section>
+    
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-16 py-8">
+        <div class="container mx-auto text-center">
+            <div class="flex flex-wrap justify-center mb-4">
+                <a href="#" class="mx-2 hover:underline">מדיניות פרטיות</a>
+                <a href="#" class="mx-2 hover:underline">תנאי שימוש</a>
+                <a href="mailto:shamzezolyoter@gmail.com" class="mx-2 hover:underline">צור קשר</a>
+            </div>
+            <p>&copy; 2024 שם זה זול יותר - כל הזכויות שמורות</p>
+        </div>
+    </footer>
+
+    <script>
+        // Plausible Analytics setup
+        window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) };
+        
+        // Function to track events
+        function trackEvent(eventName, props = {}) {
+            plausible(eventName, { props: props });
+        }
+        
+        // Track page view with source parameter
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const source = urlParams.get('source');
+            if (source) {
+                trackEvent('pageview', { source: source });
+            }
+        });
+        
+        // Menu toggle tracking
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        
+        menuToggle.addEventListener('click', (event) => {
+            event.stopPropagation();
+            navMenu.classList.toggle('hidden');
+            menuToggle.setAttribute('aria-expanded', navMenu.classList.contains('hidden') ? 'false' : 'true');
+            
+            if (!navMenu.classList.contains('hidden')) {
+                navMenu.style.maxHeight = navMenu.scrollHeight + 'px';
+                trackEvent('Toggle Mobile Menu', { action: 'open' });
+            } else {
+                navMenu.style.maxHeight = '0px';
+                trackEvent('Toggle Mobile Menu', { action: 'close' });
+            }
+        });
+        
+        document.addEventListener('click', (event) => {
+            if (!navMenu.contains(event.target) && !menuToggle.contains(event.target) && !navMenu.classList.contains('hidden')) {
+                navMenu.classList.add('hidden');
+                menuToggle.setAttribute('aria-expanded', 'false');
+                navMenu.style.maxHeight = '0px';
+                trackEvent('Toggle Mobile Menu', { action: 'close' });
+            }
+        });
+        
+        navMenu.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
+        
+        // Navigation click tracking
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                trackEvent('Nav Click', { section: link.textContent.trim() });
+                if (window.innerWidth < 640) {
+                    navMenu.classList.add('hidden');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                    navMenu.style.maxHeight = '0px';
+                }
+            });
+        });
+        
+        // FAQ click tracking
+        document.querySelectorAll('#faq button').forEach(button => {
+            button.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                const arrow = this.querySelector('span:last-child');
+                answer.classList.toggle('hidden');
+                arrow.classList.toggle('rotate-180');
+                trackEvent('FAQ Click', { question: this.querySelector('span:first-child').textContent.trim(), action: answer.classList.contains('hidden') ? 'close' : 'open' });
+            });
+        });
+        
+        // Link click tracking
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (!this.getAttribute('onclick')) {
+                    const isExternal = this.hostname !== window.location.hostname;
+                    trackEvent('Click Link', { 
+                        href: this.href,
+                        text: this.textContent.trim(),
+                        isExternal: isExternal
+                    });
+                    if (isExternal) {
+                        e.preventDefault();
+                        setTimeout(() => {
+                            window.location.href = this.href;
+                        }, 100);
+                    }
+                }
+            });
+        });
+        
+        // Scroll tracking
+        let hasScrolledToBottom = false;
+        window.addEventListener('scroll', function() {
+            if (!hasScrolledToBottom && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+                trackEvent('Scroll to Bottom');
+                hasScrolledToBottom = true;
+            }
+        });
+        
+        // Video load tracking
+        document.querySelectorAll('iframe').forEach(iframe => {
+            iframe.addEventListener('load', function() {
+                trackEvent('Video Loaded', { video: this.src });
+            });
+        });
+        
+        // Button click tracking
+        document.querySelectorAll('button, .bg-green-500, .bg-yellow-400').forEach(button => {
+            button.addEventListener('click', function() {
+                trackEvent('Button Click', { 
+                    text: this.textContent.trim(),
+                    class: this.className
+                });
+            });
+        });
+        
+        // Form submission tracking (if you have any forms)
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                trackEvent('Form Submit', { 
+                    formId: this.id || 'unnamed',
+                    formAction: this.action
+                });
+            });
+        });
+        </script>
+    <style>
+        #nav-menu {
+            transition: max-height 0.3s ease-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        @media (min-width: 640px) {
+            #nav-menu {
+                max-height: none !important;
+                overflow: visible;
+            }
+        }
+    </style>
+</body>
+</html>
