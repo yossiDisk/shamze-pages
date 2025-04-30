@@ -6,40 +6,40 @@ on:
 
 jobs:
   mirror:
+    if: github.repository == 'yossiDisk/Shamze'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          persist-credentials: false    # <— הוסף שורה זו
-
+          persist-credentials: false
 
       - name: Mirror to target repo (with debug)
         env:
           TOKEN: ${{ secrets.MIRROR_TOKEN }}
         run: |
-          set -x   # הדפס כל פקודה לפני ביצועה
+          set -x
 
-          # Debug טוקן
+          # וידוא שה‐TOKEN לא ריק
           if [ -z "$TOKEN" ]; then
             echo "❌ MIRROR_TOKEN is empty!" >&2
             exit 1
           else
-            echo "✅ MIRROR_TOKEN present (masked)"
+            echo "✅ MIRROR_TOKEN present"
           fi
 
-          # קונפיגורציה
+          # קונפיגורציה של git
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # הסרת remote קיים (אם קיים) כדי למנוע duplicate
+          # הסרת remote קיים (אם יש) כדי למנוע כפילויות
           git remote remove target || true
 
-          # הוספת ה-remote החדש
+          # הוספת ה-remote עם ה-PAT
           git remote add target https://$TOKEN@github.com/yossiDisk/shamze-pages.git
 
-          # בדיקת קישור
+          # בדיקת קישור (ללא חשיפת הטוקן)
           git remote get-url target | sed -e 's#//.*@#//<token>@#' -e 's#\.git#<…>.git#'
           echo -n "Trying git ls-remote… "
           git ls-remote target HEAD && echo "✅ ls-remote OK" || { echo "❌ ls-remote FAILED"; exit 1; }
