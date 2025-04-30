@@ -13,30 +13,34 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Inspect MIRROR_TOKEN
+      - name: Mirror to target repo (with debug)
+        env:
+          TOKEN: ${{ secrets.MIRROR_TOKEN }}
         run: |
-          echo "MIRROR_TOKEN is set? " 
-          if [ -z "${{ secrets.MIRROR_TOKEN }}" ]; then
-            echo ">> MIRROR_TOKEN is empty! 🚨" 
+          set -x   # הדפס כל פקודה לפני ביצועה
+
+          # Debug טוקן
+          if [ -z "$TOKEN" ]; then
+            echo "❌ MIRROR_TOKEN is empty!" >&2
             exit 1
           else
-            echo ">> OK (masked)" 
+            echo "✅ MIRROR_TOKEN present (masked)"
           fi
-    
-      - name: Add and inspect remote URL
-        run: |
-          git remote add target https://${{ secrets.MIRROR_TOKEN }}@github.com/yossiDisk/shamze-pages.git
-          # נציג רק את הפריפיקס והסופאקס, בלי להדליף טוקן
-          git remote get-url target | sed -e 's#//.*@#//<token>@#' -e 's#\.git#<…>.git#'
-    
-      - name: Test connectivity
-        run: |
-          echo -n "Trying git ls-remote… "
-          git ls-remote target HEAD && echo "✅ OK" || echo "❌ FAILED"
 
-      - name: Mirror to target repo
-        run: |
+          # קונפיגורציה
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote add target https://x-access-token:${{ secrets.MIRROR_TOKEN }}@github.com/yossiDisk/shamze-pages.git
+
+          # הסרת remote קיים (אם קיים) כדי למנוע duplicate
+          git remote remove target || true
+
+          # הוספת ה-remote החדש
+          git remote add target https://$TOKEN@github.com/yossiDisk/shamze-pages.git
+
+          # בדיקת קישור
+          git remote get-url target | sed -e 's#//.*@#//<token>@#' -e 's#\.git#<…>.git#'
+          echo -n "Trying git ls-remote… "
+          git ls-remote target HEAD && echo "✅ ls-remote OK" || { echo "❌ ls-remote FAILED"; exit 1; }
+
+          # הדחיפה בפועל
           git push --force target main:main
