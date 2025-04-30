@@ -9,4 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
   });
+  console.log("fix-iframes.js: found", document.querySelectorAll("iframe").length, "iframes");
+
 });
