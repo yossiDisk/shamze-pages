@@ -13,10 +13,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Debug remote access
+      - name: Inspect MIRROR_TOKEN
         run: |
-          echo "Remote URL: $(git remote get-url target)"
-          echo -n "Trying ls-remote… "
+          echo "MIRROR_TOKEN is set? " 
+          if [ -z "${{ secrets.MIRROR_TOKEN }}" ]; then
+            echo ">> MIRROR_TOKEN is empty! 🚨" 
+            exit 1
+          else
+            echo ">> OK (masked)" 
+          fi
+    
+      - name: Add and inspect remote URL
+        run: |
+          git remote add target https://${{ secrets.MIRROR_TOKEN }}@github.com/yossiDisk/shamze-pages.git
+          # נציג רק את הפריפיקס והסופאקס, בלי להדליף טוקן
+          git remote get-url target | sed -e 's#//.*@#//<token>@#' -e 's#\.git#<…>.git#'
+    
+      - name: Test connectivity
+        run: |
+          echo -n "Trying git ls-remote… "
           git ls-remote target HEAD && echo "✅ OK" || echo "❌ FAILED"
 
       - name: Mirror to target repo
