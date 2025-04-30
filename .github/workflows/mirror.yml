@@ -1,0 +1,21 @@
+name: Mirror to shamze-pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Mirror to target repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote add target https://x-access-token:${{ secrets.MIRROR_TOKEN }}@github.com/YOUR_USERNAME/shamze-pages.git
+          git push --force target main:main
