@@ -834,7 +834,7 @@
           if (estimatedPrice) {
             const minPrice = Math.floor(estimatedPrice * 0.5);  // 50% below
             const maxPrice = Math.floor(estimatedPrice * 1.5);  // 150% above
-            urlString += `&minPrice=${minPrice}&maxPrice=${maxPrice}&wideSearch=true`;
+            urlString += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
           }
 
           fetch(urlString)
