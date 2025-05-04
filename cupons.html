@@ -827,7 +827,7 @@
           showLoading();
           sortContainer.style.display = 'none';
 
-          let urlString = `https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=20`;
+          let urlString = `https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=20&wideSearch=true`;
 
           // Add price range if estimated price is provided
           const estimatedPrice = document.getElementById('estimatedPrice').value;
