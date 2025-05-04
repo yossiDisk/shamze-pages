@@ -868,38 +868,51 @@
         function displayComparisonResults(results) {
           resultsContainer.innerHTML = '<div class="comparison-result"></div>';
           const comparisonContainer = resultsContainer.querySelector('.comparison-result');
-          results.forEach(product => {
-            const productDiv = document.createElement('div');
-            productDiv.className = 'comparison-item';
+results.forEach(product => {
+  const productDiv = document.createElement('div');
+  productDiv.className = 'comparison-item';
 
-            const siteInfo = findSiteInfo(product.url);
+  const siteInfo = findSiteInfo(product.url);
 
-            let productContent = `
-            <h3 onclick="goToProduct('${product.urlAff}', '${product.site}', '${product.name}')">${product.name}</h3>
-            <p>מחיר: ${product.price}</p>
-            <p>אתר: ${product.site}</p>
-        `;
+  // --- NEW --- תמונה (אם קיימת)
+  const imageTag = product.image
+    ? `<img src="${product.image}"
+            alt="${product.name}"
+            class="w-full h-40 object-contain mb-3 rounded">`
+    : '';
 
-            if (siteInfo && siteInfo.cupon && siteInfo.cupon !== "") {
-              productContent += `
-                <div class="coupon-details">
-                    <button class="coupon-toggle">פרטי קופון</button>
-                    <div class="coupon-content">
-                        <span>${siteInfo.cupon}</span>
-                        <span class="copy-icon" onclick="copyCoupon('${siteInfo.cupon}', event)">📋</span>
-                        <a href="${product.urlAff}" class="site-link" target="_blank">עבור לאתר</a>
-                        <p class="coupon-info">${siteInfo.cuponDetails || ''}</p>
-                    </div>
-                </div>
-            `;
-            } else {
-              productContent += `<a href="${product.urlAff}" class="site-link" target="_blank">עבור לאתר</a>`;
-            }
+  // הטקסט שהיה קודם
+  let productContent = `
+    ${imageTag}
+    <h3 onclick="goToProduct('${product.urlAff}', '${product.site}', '${product.name}')">
+      ${product.name}
+    </h3>
+    <p>מחיר: ${product.price}</p>
+    <p>אתר: ${product.site}</p>
+  `;
 
-            productDiv.innerHTML = productContent;
-            productDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
-            comparisonContainer.appendChild(productDiv);
-          });
+  // המשך הקוד ללא שינוי (קופונים, לינק וכו')
+  if (siteInfo && siteInfo.cupon && siteInfo.cupon !== "") {
+    productContent += `
+      <div class="coupon-details">
+        <button class="coupon-toggle">פרטי קופון</button>
+        <div class="coupon-content">
+          <span>${siteInfo.cupon}</span>
+          <span class="copy-icon" onclick="copyCoupon('${siteInfo.cupon}', event)">📋</span>
+          <a href="${product.urlAff}" class="site-link" target="_blank">עבור לאתר</a>
+          <p class="coupon-info">${siteInfo.cuponDetails || ''}</p>
+        </div>
+      </div>
+    `;
+  } else {
+    productContent += `<a href="${product.urlAff}" class="site-link" target="_blank">עבור לאתר</a>`;
+  }
+
+  productDiv.innerHTML = productContent;
+  productDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
+  comparisonContainer.appendChild(productDiv);
+});
+
 
           // הצג את הלינקים החברתיים גם עם תוצאות השוואת מחירים
           const socialLinksContainer = document.getElementById('socialLinksContainer');
