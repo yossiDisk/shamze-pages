@@ -5,6 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>העמוד לא נמצא</title>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YQ1TWGGS3E"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YQ1TWGGS3E');
+    </script>
+    
     <style>
         body {
             margin: 0;
@@ -162,6 +172,27 @@
         const product_id = urlParams.get('product_id') || '';
         const isWide = urlParams.get('wide') === 'true';
 
+        // שליחת נתונים ראשוניים ל-Google Analytics
+        function trackPageLoad() {
+            // שליחת מידע על פרמטרי URL
+            gtag('event', 'page_view_parameters', {
+                'item_name': itemName,
+                'item_price': itemPrice,
+                'site_name': siteName,
+                'google_id_type': googleIdType,
+                'google_id_value': googleIdValue,
+                'product_id': product_id,
+                'is_wide': isWide.toString()
+            });
+
+            // שליחת מידע על מקור תנועה
+            const referrer = document.referrer || 'direct';
+            gtag('event', 'page_source', {
+                'source': referrer,
+                'page_url': window.location.href
+            });
+        }
+
         // בדיקה אם צריך להפנות דרך ה-API
         if (isWide && product_id) {
             console.log('Wide mode detected - trying to redirect via API');
@@ -173,6 +204,12 @@
         async function redirectViaAPI() {
             const loadingDiv = document.getElementById('loading');
             loadingDiv.style.display = 'flex';
+
+            // שליחת event על התחלת ניסיון ההפניה
+            gtag('event', 'redirect_attempt', {
+                'product_id': product_id,
+                'api_type': 'direct_shopping_link'
+            });
 
             try {
                 const apiUrl = `https://vpfi5d6dw9.execute-api.il-central-1.amazonaws.com/default/getDirectShoppingLink?product_id=${product_id}`;
@@ -191,6 +228,13 @@
                     const redirectUrl = response.headers.get('Location') || apiUrl;
                     console.log('Redirecting to:', redirectUrl);
                     
+                    // שליחת event על הצלחת ההפניה
+                    gtag('event', 'redirect_success', {
+                        'product_id': product_id,
+                        'redirect_url': redirectUrl,
+                        'api_status': response.status
+                    });
+                    
                     // ביצוע הצורת ניתוב
                     window.location.href = redirectUrl;
                 } 
@@ -205,6 +249,13 @@
                     console.error('Error from API:', errorData);
                     loadingDiv.style.display = 'none';
                     
+                    // שליחת event על כשלון ההפניה
+                    gtag('event', 'redirect_failure', {
+                        'product_id': product_id,
+                        'api_status': response.status,
+                        'error_message': errorData.message || 'Unknown error'
+                    });
+                    
                     // הצגת הדף הרגיל במקום הפניה
                     showDefaultPage();
                     
@@ -216,6 +267,14 @@
             } catch (error) {
                 console.error('Error fetching API:', error);
                 loadingDiv.style.display = 'none';
+                
+                // שליחת event על כשלון ההפניה בגלל שגיאה
+                gtag('event', 'redirect_error', {
+                    'product_id': product_id,
+                    'error_message': error.message,
+                    'error_type': 'fetch_error'
+                });
+                
                 showDefaultPage();
                 
                 // הוספת הודעת שגיאה
@@ -250,12 +309,27 @@
             if (itemName) {
                 document.getElementById('searchInput').value = decodeURIComponent(itemName);
             }
+            
+            // שליחת event על הצגת הדף הרגיל
+            gtag('event', 'default_page_shown', {
+                'has_item_name': !!itemName,
+                'has_item_price': !!itemPrice,
+                'has_site_name': !!siteName
+            });
         }
 
         function searchInGoogle() {
             const searchInput = document.getElementById('searchInput').value;
             if (searchInput) {
                 const searchUrl = `https://yossidisk.github.io/Shamze/cupons.html?query=${encodeURIComponent(searchInput)}&search=true`;
+                
+                // שליחת event על חיפוש
+                gtag('event', 'search', {
+                    'search_term': searchInput,
+                    'original_item': itemName || '',
+                    'search_url': searchUrl
+                });
+                
                 window.open(searchUrl, '_blank');
             }
         }
@@ -265,6 +339,16 @@
             if (e.key === 'Enter') {
                 searchInGoogle();
             }
+        });
+
+        // קריאה לפונקציה כשהדף נטען
+        window.addEventListener('load', trackPageLoad);
+        
+        // מעקב אחר יציאה מהדף
+        window.addEventListener('beforeunload', function() {
+            gtag('event', 'page_unload', {
+                'time_on_page': (Date.now() - performance.timing.navigationStart) / 1000 // זמן שהיה בדף בשניות
+            });
         });
     </script>
 </body>
