@@ -45,6 +45,50 @@
     /* פס-התקדמות */
     #progressWrap{width:70%;max-width:420px;height:8px;background:#e0e0e0;border-radius:5px;overflow:hidden;margin-top:.2rem}
     #progressBar{height:100%;width:0;background:#007bff;transition:width .25s linear}
+    
+    /* באנר ביטוח נסיעות */
+    #insuranceBanner {
+      margin-top: 1.8rem;
+      width: 85%;
+      max-width: 460px;
+      background: #f8f9fa;
+      border: 2px solid #ffc107;
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    
+    #insuranceBanner:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    
+    #insuranceBanner h3 {
+      color: #0056b3;
+      margin-top: 0;
+      margin-bottom: 0.8rem;
+      font-size: 1.2rem;
+    }
+    
+    #insuranceBanner p {
+      margin: 0.5rem 0;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+    
+    #insuranceBanner .highlight {
+      font-weight: bold;
+      color: #0056b3;
+    }
+    
+    #insuranceBanner .note {
+      font-size: 0.85rem;
+      color: #6c757d;
+      margin-top: 0.8rem;
+    }
   </style>
 </head>
 
@@ -80,6 +124,14 @@
      <div id="loaderMain">מכינים עבורך את הדיל הטוב ביותר…</div>
      <div id="loaderTip">טיפ: תמיד כדאי לבדוק ביטוח נסיעות מראש!</div>
      <div id="progressWrap"><div id="progressBar"></div></div>
+
+     <!-- באנר ביטוח נסיעות -->
+     <div id="insuranceBanner" onclick="window.open('https://shukabit.co.il/node/124?affiliate_program=177', '_blank')">
+       <h3>דקה להשוואת מחירי ביטוח נסיעות</h3>
+       <p>בזמן שאתה משווה מחירי טיסות - <span class="highlight">אפשר גם להשוות מחירי ביטוח נסיעות!</span></p>
+       <p>לחיצה כאן תפתח השוואת ביטוח נסיעות בטאב חדש</p>
+       <p class="note">אל דאגה, החיפוש שלך עדיין ממשיך במקביל.</p>
+     </div>
   </div>
 
 <script>
@@ -132,8 +184,17 @@
 
   /* ----- ולידציה בזמן אמת ----- */
   [ad, ch, inf].forEach(el => el.addEventListener('input', () => {
-    inf.max = Math.min(+ad.value, 8 - +ch.value);
-    if (+inf.value > +inf.max) inf.value = inf.max;
+    // עדכון ערך מקסימום עבור תינוקות - רק לפי מגבלת סך ילדים (8-מספר הילדים)
+    // הוסרה ההגבלה של מספר מבוגרים
+    const maxInfants = 8 - +ch.value;
+    inf.max = maxInfants;
+    
+    // עדכון אטריבוט max בפועל בשדה ה-HTML
+    inf.setAttribute('max', maxInfants);
+    
+    // אם ערך התינוקות גדול מהמקסימום, הגבל אותו
+    if (+inf.value > maxInfants) inf.value = maxInfants;
+    
     validate();
   }));
 
@@ -145,7 +206,7 @@
     if (a < 1 || a > 8) return showErr('מספר המבוגרים חייב להיות בין 1 ל-8.');
     if (c > 8)          return showErr('לא ניתן לבחור יותר מ-8 ילדים.');
     if (k > 8)          return showErr('המספר הכולל של ילדים ותינוקות לא יכול להיות מעל 8.');
-    if (i > a)          return showErr('מספר התינוקות לא יכול לחרוג ממספר המבוגרים.');
+    // הוסרה הבדיקה: if (i > a) return showErr('מספר התינוקות לא יכול לחרוג ממספר המבוגרים.');
     hideErr(); return true;
   }
 
