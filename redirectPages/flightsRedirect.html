@@ -33,7 +33,7 @@
     .error{color:#dc3545;font-size:.9rem;margin-top:.5px;min-height:1.2rem}
 
     /* שכבת טעינה */
-    #loader{position:fixed;inset:0;background:#ffffff;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:9999;gap:1.4rem}
+    #loader{position:fixed;inset:0;background:#ffffff;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:9999;gap:1.4rem;padding:2rem}
     .sky{position:relative;width:100%;height:140px;overflow:hidden}
     .plane{position:absolute;font-size:3rem;animation:fly 6s linear infinite}
     .cloud{position:absolute;font-size:2.2rem;color:#b0c4de;opacity:.8;animation:cloud 14s linear infinite}
@@ -46,48 +46,118 @@
     #progressWrap{width:70%;max-width:420px;height:8px;background:#e0e0e0;border-radius:5px;overflow:hidden;margin-top:.2rem}
     #progressBar{height:100%;width:0;background:#007bff;transition:width .25s linear}
     
-    /* באנר ביטוח נסיעות */
-    #insuranceBanner {
+    /* כרטיס ביטוח נסיעות */
+    #insuranceSection {
       margin-top: 1.8rem;
-      width: 85%;
-      max-width: 460px;
+      width: 90%;
+      max-width: 600px;
       background: #f8f9fa;
-      border: 2px solid #ffc107;
+      border: 2px solid #dee2e6;
       border-radius: 12px;
-      padding: 1rem 1.5rem;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    #insuranceHeader {
       text-align: center;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 1.2rem;
     }
     
-    #insuranceBanner:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    #insuranceHeader h3 {
+      color: #495057;
+      margin: 0 0 0.5rem 0;
+      font-size: 1.1rem;
+      font-weight: 600;
     }
     
-    #insuranceBanner h3 {
-      color: #0056b3;
-      margin-top: 0;
-      margin-bottom: 0.8rem;
-      font-size: 1.2rem;
-    }
-    
-    #insuranceBanner p {
-      margin: 0.5rem 0;
-      font-size: 0.95rem;
-      line-height: 1.4;
-    }
-    
-    #insuranceBanner .highlight {
-      font-weight: bold;
-      color: #0056b3;
-    }
-    
-    #insuranceBanner .note {
-      font-size: 0.85rem;
+    #insuranceHeader p {
+      margin: 0;
+      font-size: 0.9rem;
       color: #6c757d;
+    }
+    
+    /* פרטי הטיסה */
+    #flightDetails {
+      background: white;
+      padding: 1rem 1.2rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      border: 1px solid #e9ecef;
+      text-align: center;
+    }
+    
+    .flight-info {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 0.8rem;
+    }
+    
+    .info-item {
+      text-align: center;
+      min-width: 80px;
+    }
+    
+    .info-label {
+      font-size: 0.75rem;
+      color: #6c757d;
+      margin-bottom: 0.2rem;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    
+    .info-value {
+      font-size: 1rem;
+      color: #495057;
+      font-weight: 600;
+    }
+    
+    #compareBtn {
+      width: 100%;
+      padding: 1rem;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    #compareBtn:hover {
+      background: #0056b3;
+    }
+    
+    .benefits {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+    
+    .benefit {
+      background: rgba(255,255,255,0.8);
+      padding: 0.8rem;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 0.8rem;
+      border: 1px solid #e9ecef;
+    }
+    
+    .benefit-icon {
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+      display: block;
+    }
+    
+    #interactionStatus {
+      text-align: center;
       margin-top: 0.8rem;
+      font-size: 0.8rem;
+      color: #6c757d;
+      font-style: italic;
     }
   </style>
 </head>
@@ -125,12 +195,51 @@
      <div id="loaderTip">טיפ: תמיד כדאי לבדוק ביטוח נסיעות מראש!</div>
      <div id="progressWrap"><div id="progressBar"></div></div>
 
-     <!-- באנר ביטוח נסיעות -->
-     <div id="insuranceBanner" onclick="window.open('https://shukabit.co.il/node/124?affiliate_program=177', '_blank')">
-       <h3>דקה להשוואת מחירי ביטוח נסיעות</h3>
-       <p>בזמן שאתה משווה מחירי טיסות - <span class="highlight">אפשר גם להשוות מחירי ביטוח נסיעות!</span></p>
-       <p>לחיצה כאן תפתח השוואת ביטוח נסיעות בטאב חדש</p>
-       <p class="note">אל דאגה, החיפוש שלך עדיין ממשיך במקביל.</p>
+     <!-- כרטיס ביטוח נסיעות -->
+     <div id="insuranceSection">
+       <div id="insuranceHeader">
+         <h3>רגע - חשבת על ביטוח נסיעות?</h3>
+         <p>בזמן שאנחנו מחפשים עבורך טיסות, תוכל להשוות ביטוח</p>
+       </div>
+       
+       <div id="flightDetails">
+         <div class="flight-info">
+           <div class="info-item">
+             <div class="info-label">יעד</div>
+             <div class="info-value" id="tripDestination">-</div>
+           </div>
+           <div class="info-item">
+             <div class="info-label">נוסעים</div>
+             <div class="info-value" id="tripPassengers">-</div>
+           </div>
+           <div class="info-item">
+             <div class="info-label">ימים</div>
+             <div class="info-value" id="tripDays">-</div>
+           </div>
+         </div>
+         
+         <button type="button" id="compareBtn">השווה מחירי ביטוח לנסיעה הזו</button>
+       </div>
+       
+       <div class="benefits">
+         <div class="benefit">
+           <span class="benefit-icon">💰</span>
+           <strong>חיסכון</strong><br>
+           השוואה בין כל החברות
+         </div>
+         <div class="benefit">
+           <span class="benefit-icon">⚡</span>
+           <strong>מהיר</strong><br>
+           תוצאות תוך דקה
+         </div>
+         <div class="benefit">
+           <span class="benefit-icon">🛡️</span>
+           <strong>מקיף</strong><br>
+           רפואי + ביטול + אבדן
+         </div>
+       </div>
+       
+       <div id="interactionStatus">לחיצה על הכפתור תפתח בטאב חדש - החיפוש ימשיך כרגיל</div>
      </div>
   </div>
 
@@ -177,24 +286,102 @@
   const inf   = document.getElementById('infants');
 
   /* overlay */
-  const loader    = document.getElementById('loader');
-  const loadMain  = document.getElementById('loaderMain');
-  const loadTip   = document.getElementById('loaderTip');
-  const progress  = document.getElementById('progressBar');
+  const loader       = document.getElementById('loader');
+  const loadMain     = document.getElementById('loaderMain');
+  const loadTip      = document.getElementById('loaderTip');
+  const progress     = document.getElementById('progressBar');
+  
+  /* רכיבי כרטיס ביטוח */
+  const compareBtn   = document.getElementById('compareBtn');
+  const statusDiv    = document.getElementById('interactionStatus');
+  const tripDest     = document.getElementById('tripDestination');
+  const tripPass     = document.getElementById('tripPassengers');
+  const tripDaysEl   = document.getElementById('tripDays');
+
+  /* ----- מעקב אחר לחיצה על ביטוח ----- */
+  let userClickedInsurance = false;
+
+  // חישוב מספר ימים
+  function calculateDays(outDate, inDate) {
+    if (!outDate || !inDate) return null;
+    try {
+      const out = new Date(outDate);
+      const inD = new Date(inDate);
+      const diffTime = inD - out;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays > 0 ? diffDays : null;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  // עדכון פרטי הנסיעה בכרטיס הביטוח
+  function updateTripDetails() {
+    // יעד
+    if (dest) {
+      tripDest.textContent = dest;
+    }
+    
+    // מספר נוסעים - יחושב לפי הטופס הראשי
+    function updatePassengerCount() {
+      const adults = +ad.value || 0;
+      const children = +ch.value || 0;
+      const infants = +inf.value || 0;
+      const total = adults + children + infants;
+      tripPass.textContent = total > 0 ? total : '-';
+    }
+    
+    // מספר ימים
+    const days = calculateDays(outD, inD);
+    if (days) {
+      tripDaysEl.textContent = days;
+    }
+    
+    updatePassengerCount();
+    
+    // עדכון מספר נוסעים כאשר משנים בטופס הראשי
+    [ad, ch, inf].forEach(el => {
+      el.addEventListener('input', updatePassengerCount);
+    });
+  }
+
+  // עדכון פרטי הנסיעה
+  updateTripDetails();
+
+  // לחיצה על כפתור השוואת ביטוח
+  compareBtn.addEventListener('click', function() {
+    userClickedInsurance = true;
+    
+    // בניית URL עם פרמטרים
+    let insuranceUrl = 'https://shukabit.co.il/node/124?affiliate_program=177';
+    const params = new URLSearchParams();
+    
+    if (dest) params.append('destination', dest);
+    if (outD && inD) params.append('dates', `${outD} - ${inD}`);
+    
+    const totalPassengers = (+ad.value || 0) + (+ch.value || 0) + (+inf.value || 0);
+    if (totalPassengers > 0) params.append('travelers', totalPassengers.toString());
+    
+    if (params.toString()) {
+      insuranceUrl += '&' + params.toString();
+    }
+    
+    // פתיחה בטאב חדש
+    window.open(insuranceUrl, '_blank');
+    
+    // עדכון המראה
+    compareBtn.textContent = '✅ נפתח בטאב חדש';
+    compareBtn.style.background = '#28a745';
+    statusDiv.textContent = 'נפתח בטאב חדש - החיפוש ממשיך כאן';
+    statusDiv.style.color = '#28a745';
+  });
 
   /* ----- ולידציה בזמן אמת ----- */
   [ad, ch, inf].forEach(el => el.addEventListener('input', () => {
-    // עדכון ערך מקסימום עבור תינוקות - רק לפי מגבלת סך ילדים (8-מספר הילדים)
-    // הוסרה ההגבלה של מספר מבוגרים
     const maxInfants = 8 - +ch.value;
     inf.max = maxInfants;
-    
-    // עדכון אטריבוט max בפועל בשדה ה-HTML
     inf.setAttribute('max', maxInfants);
-    
-    // אם ערך התינוקות גדול מהמקסימום, הגבל אותו
     if (+inf.value > maxInfants) inf.value = maxInfants;
-    
     validate();
   }));
 
@@ -206,7 +393,6 @@
     if (a < 1 || a > 8) return showErr('מספר המבוגרים חייב להיות בין 1 ל-8.');
     if (c > 8)          return showErr('לא ניתן לבחור יותר מ-8 ילדים.');
     if (k > 8)          return showErr('המספר הכולל של ילדים ותינוקות לא יכול להיות מעל 8.');
-    // הוסרה הבדיקה: if (i > a) return showErr('מספר התינוקות לא יכול לחרוג ממספר המבוגרים.');
     hideErr(); return true;
   }
 
@@ -239,7 +425,7 @@
   ];
   let idx = 0, interval;
 
-  const total = 20000;   // 20 שניות המתנה
+  const total = 30000;   // 30 שניות המתנה
   function rotate(){
     loadMain.textContent = msgs[idx % msgs.length];
     loadTip.textContent  = tips[idx % tips.length];
@@ -247,7 +433,7 @@
   }
 
   /* ----- טעינה מוקדמת ----- */
-  function startPreload(u){
+  function startPreload(finalUrl){
     loader.style.display = 'flex';
     rotate();
     interval = setInterval(rotate, 2500);
@@ -262,19 +448,32 @@
     }, 200);
 
     /* iframe hidden preload */
-    const iframe = document.createElement('iframe');
-    iframe.style.width = iframe.style.height = '0';
-    iframe.style.border = '0';
-    document.body.appendChild(iframe);
+    const hiddenIframe = document.createElement('iframe');
+    hiddenIframe.style.width = hiddenIframe.style.height = '0';
+    hiddenIframe.style.border = '0';
+    document.body.appendChild(hiddenIframe);
 
     let first = true;
-    iframe.onload = () => {
-      if (first) first = false;
-      else { clearInterval(interval); location.href = iframe.src; }
+    hiddenIframe.onload = () => {
+      if (first) {
+        first = false;
+      } else {
+        clearInterval(interval);
+        
+        // תמיד הפנה את הטאב הנוכחי לתוצאות הטיסות
+        // לא משנה אם המשתמש לחץ על ביטוח או לא
+        location.href = finalUrl;
+      }
     };
 
-    iframe.src = u;
-    setTimeout(() => { clearInterval(interval); location.href = u; }, total);
+    hiddenIframe.src = finalUrl;
+    
+    // backup timeout
+    setTimeout(() => { 
+      clearInterval(interval); 
+      // תמיד הפנה לתוצאות הטיסות
+      location.href = finalUrl;
+    }, total);
   }
 
   validate();
