@@ -5,16 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>העמוד לא נמצא</title>
-    
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YQ1TWGGS3E"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-YQ1TWGGS3E');
     </script>
-    
+
     <style>
         body {
             margin: 0;
@@ -129,13 +129,69 @@
                 transform: rotate(360deg);
             }
         }
+
+        .loading-animation {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadein 0.8s ease-in-out;
+        }
+
+        .magnifier {
+            font-size: 48px;
+            animation: shake 1.5s infinite ease-in-out;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(5deg);
+            }
+
+            50% {
+                transform: rotate(0deg);
+            }
+
+            75% {
+                transform: rotate(-5deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+
+        .loading-text {
+            margin-top: 16px;
+            font-size: 18px;
+            color: #444;
+            text-align: center;
+            max-width: 80%;
+        }
+
+        @keyframes fadein {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 
 <body>
     <!-- מסך טעינה -->
     <div id="loading" class="loading" style="display: none;">
-        <div class="loading-spinner"></div>
+        <div class="loading-animation">
+            <div class="magnifier">🔍</div>
+            <div id="product-loading-text" class="loading-text">טוען...</div>
+        </div>
+
     </div>
 
     <div class="container">
@@ -204,6 +260,13 @@
         async function redirectViaAPI() {
             const loadingDiv = document.getElementById('loading');
             loadingDiv.style.display = 'flex';
+            const productText = document.getElementById('product-loading-text');
+            if (itemName) {
+                productText.innerHTML = `טוענים את <strong>${decodeURIComponent(itemName)}</strong> מיד נפנה אותך...`;
+            } else {
+                productText.innerHTML = "מחפשים את המוצר שלך... עוד רגע זה מגיע!";
+            }
+
 
             // שליחת event על התחלת ניסיון ההפניה
             gtag('event', 'redirect_attempt', {
@@ -213,7 +276,7 @@
 
             try {
                 const apiUrl = `https://vpfi5d6dw9.execute-api.il-central-1.amazonaws.com/default/getDirectShoppingLink?product_id=${product_id}`;
-                
+
                 // שליחת בקשה ב-fetch ללא אפשרות follow לredirects (manual)
                 const response = await fetch(apiUrl, {
                     method: 'GET',
@@ -227,56 +290,56 @@
                 if (response.status === 302 || response.type === 'opaqueredirect') {
                     const redirectUrl = response.headers.get('Location') || apiUrl;
                     console.log('Redirecting to:', redirectUrl);
-                    
+
                     // שליחת event על הצלחת ההפניה
                     gtag('event', 'redirect_success', {
                         'product_id': product_id,
                         'redirect_url': redirectUrl,
                         'api_status': response.status
                     });
-                    
+
                     // ביצוע הצורת ניתוב
                     window.location.href = redirectUrl;
-                } 
+                }
                 // במקרה של שגיאת 404, 400, 500 או כל שגיאה אחרת
                 else {
                     console.log('No valid redirect received');
-                    const errorData = await response.json().catch(() => ({ 
-                        status: 'error', 
-                        message: 'Unknown error occurred' 
+                    const errorData = await response.json().catch(() => ({
+                        status: 'error',
+                        message: 'Unknown error occurred'
                     }));
-                    
+
                     console.error('Error from API:', errorData);
                     loadingDiv.style.display = 'none';
-                    
+
                     // שליחת event על כשלון ההפניה
                     gtag('event', 'redirect_failure', {
                         'product_id': product_id,
                         'api_status': response.status,
                         'error_message': errorData.message || 'Unknown error'
                     });
-                    
+
                     // הצגת הדף הרגיל במקום הפניה
                     showDefaultPage();
-                    
+
                     // הוספת הודעת שגיאה
                     const errorMessage = document.getElementById('errorMessage');
                     errorMessage.innerHTML = `מצטערים, לא ניתן למצוא קישור ישיר למוצר.<br>${errorData.message || ''}`;
                 }
-                
+
             } catch (error) {
                 console.error('Error fetching API:', error);
                 loadingDiv.style.display = 'none';
-                
+
                 // שליחת event על כשלון ההפניה בגלל שגיאה
                 gtag('event', 'redirect_error', {
                     'product_id': product_id,
                     'error_message': error.message,
                     'error_type': 'fetch_error'
                 });
-                
+
                 showDefaultPage();
-                
+
                 // הוספת הודעת שגיאה
                 const errorMessage = document.getElementById('errorMessage');
                 errorMessage.innerHTML = `מצטערים, חלה שגיאה בחיבור למערכת.<br>${error.message}`;
@@ -309,7 +372,7 @@
             if (itemName) {
                 document.getElementById('searchInput').value = decodeURIComponent(itemName);
             }
-            
+
             // שליחת event על הצגת הדף הרגיל
             gtag('event', 'default_page_shown', {
                 'has_item_name': !!itemName,
@@ -322,14 +385,14 @@
             const searchInput = document.getElementById('searchInput').value;
             if (searchInput) {
                 const searchUrl = `https://yossidisk.github.io/Shamze/cupons.html?query=${encodeURIComponent(searchInput)}&search=true`;
-                
+
                 // שליחת event על חיפוש
                 gtag('event', 'search', {
                     'search_term': searchInput,
                     'original_item': itemName || '',
                     'search_url': searchUrl
                 });
-                
+
                 window.open(searchUrl, '_blank');
             }
         }
@@ -343,9 +406,9 @@
 
         // קריאה לפונקציה כשהדף נטען
         window.addEventListener('load', trackPageLoad);
-        
+
         // מעקב אחר יציאה מהדף
-        window.addEventListener('beforeunload', function() {
+        window.addEventListener('beforeunload', function () {
             gtag('event', 'page_unload', {
                 'time_on_page': (Date.now() - performance.timing.navigationStart) / 1000 // זמן שהיה בדף בשניות
             });
