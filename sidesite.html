@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 
 <head>
-    
+
     <!-- Google tag (gtag.js) -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script defer data-domain="yossidisk.github.io/shamze/sidesite.html"
@@ -1332,14 +1332,47 @@
             };
         }
 
+        function sortResultsByClosestToPrice(results, referencePrice) {
+            if (!referencePrice || results.length === 0) return results;
 
+            const cleanedRef = parseFloat(referencePrice.replace(/[^\d.]/g, ''));
+            if (isNaN(cleanedRef)) return results;
+
+            console.log('Sorting by reference price:', cleanedRef);
+
+            // מיון התוצאות לקטגוריות
+            let belowRefProducts = [];
+            let aboveRefProducts = [];
+
+            for (const product of results) {
+                const price = parseFloat(product.price.replace(/[^\d.]/g, ''));
+                if (isNaN(price)) continue;
+
+                if (price < cleanedRef) {
+                    belowRefProducts.push({ ...product, numericPrice: price });
+                } else {
+                    aboveRefProducts.push({ ...product, numericPrice: price });
+                }
+            }
+
+            // מיון המוצרים מתחת למחיר - מהיקר ביותר (הכי קרוב למחיר) לזול ביותר
+            belowRefProducts.sort((a, b) => b.numericPrice - a.numericPrice);
+
+            // מיון המוצרים מעל המחיר - מהזול ביותר (הכי קרוב למחיר) ליקר ביותר
+            aboveRefProducts.sort((a, b) => a.numericPrice - b.numericPrice);
+
+            console.log('Below reference:', belowRefProducts.length, 'products');
+            console.log('Above reference:', aboveRefProducts.length, 'products');
+
+            // החזרת הסדר המבוקש: מוצרים מתחת למחיר ואז מוצרים מעל המחיר
+            return [...belowRefProducts, ...aboveRefProducts];
+        }
         function displaySearchResults(results) {
             const container = document.getElementById('searchResults');
             container.innerHTML = '';
 
-            // בדיקה אם יש תוצאות - אם אין, הצג את הודעת השגיאה הקיימת
+            // בדיקה אם יש תוצאות
             if (!results || results.length === 0) {
-                // שימוש באותה הודעת שגיאה קיימת עם שינויים קלים
                 const noResultsHtml = `
         <div class="error-container" style="text-align: center; padding: 20px;">
             <p style="color: #666;">לא נמצאו תוצאות למוצר "${currentSearchQuery}"</p>
@@ -1356,12 +1389,10 @@
 
                 displayErrorMessage(noResultsHtml);
 
-                // הוסף התנהגות לכפתור הניסיון מחדש
                 const retryButton = document.getElementById('retryButton');
                 if (retryButton) {
                     retryButton.addEventListener('click', (event) => {
                         event.preventDefault();
-                        // פתיחת דף החיפוש הראשי עם פרמטר החיפוש הנוכחי
                         const retryUrl = `https://yossidisk.github.io/Shamze/cupons.html?source=side&search=true&query=${encodeURIComponent(currentSearchQuery)}`;
                         window.open(retryUrl, '_blank');
 
@@ -1371,15 +1402,20 @@
                     });
                 }
 
-                // שליחת אירוע אנליטיקס על חיפוש ללא תוצאות
                 sendPlausibleEvent('NoResultsFound', {
                     query: currentSearchQuery
                 });
 
-                return; // יוצאים מהפונקציה, אין צורך להמשיך
+                return;
             }
 
-            // המשך הקוד הקיים להצגת תוצאות...
+            // אם לא בוחרו מיון ספציפי, השתמש בסדר ברירת המחדל
+            const sortType = document.getElementById('sort-select')?.value;
+            if (!sortType || sortType === 'default') {
+                const priceParam = getUrlParameter('price');
+                results = sortResultsByClosestToPrice(results, priceParam);
+            }
+
             // הצג רק 3 תוצאות ראשונות
             const initialResults = results.slice(0, 3);
             const remainingResults = results.slice(3);
@@ -1404,14 +1440,14 @@
         }
 
         function createProductElement(product) {
-    const productDiv = document.createElement('div');
-    productDiv.className = 'product';
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product';
 
-    const imageHtml = product.image
-        ? `<img src="${product.image}" alt="תמונת מוצר" style="max-width: 100%; max-height: 100%; object-fit: contain;" />`
-        : '';
+            const imageHtml = product.image
+                ? `<img src="${product.image}" alt="תמונת מוצר" style="max-width: 100%; max-height: 100%; object-fit: contain;" />`
+                : '';
 
-    productDiv.innerHTML = `
+            productDiv.innerHTML = `
         <div class="product-image">
             ${imageHtml}
         </div>
@@ -1422,18 +1458,18 @@
         </div>
     `;
 
-    productDiv.onclick = () => {
-        logClick(product);
-        window.open(product.urlAff || product.url, '_blank');
-    };
+            productDiv.onclick = () => {
+                logClick(product);
+                window.open(product.urlAff || product.url, '_blank');
+            };
 
-    // רק אם לא סופקה תמונה, ננסה לשלוף אותה מה-URL
-    if (!product.image) {
-        fetchAndDisplayProductImage(product.url, productDiv.querySelector('.product-image'));
-    }
+            // רק אם לא סופקה תמונה, ננסה לשלוף אותה מה-URL
+            if (!product.image) {
+                fetchAndDisplayProductImage(product.url, productDiv.querySelector('.product-image'));
+            }
 
-    return productDiv;
-}
+            return productDiv;
+        }
 
 
         // פונקציה חדשה להצגת תוצאות נוספות
@@ -1564,7 +1600,12 @@
             const sortType = document.getElementById('sort-select').value;
             let sortedResults = [...currentResults];
 
-            if (sortType === 'price-asc' || sortType === 'price-desc') {
+            if (sortType === 'default') {
+                // שימוש בסדר ברירת המחדל עם מחיר הפרמטר
+                const priceParam = getUrlParameter('price');
+                sortedResults = sortResultsByClosestToPrice(currentResults, priceParam);
+            } else if (sortType === 'price-asc' || sortType === 'price-desc') {
+                // מיון לפי מחיר (מבטל את סדר ברירת המחדל)
                 sortedResults.sort((a, b) => {
                     const priceA = parseFloat(a.price.replace(/[^\d.]/g, ''));
                     const priceB = parseFloat(b.price.replace(/[^\d.]/g, ''));
@@ -1575,8 +1616,8 @@
                     return sortType === 'price-asc' ? priceA - priceB : priceB - priceA;
                 });
             }
-            sendPlausibleEvent('SortResults', { sortType });
 
+            sendPlausibleEvent('SortResults', { sortType });
             displaySearchResults(sortedResults);
         }
 
