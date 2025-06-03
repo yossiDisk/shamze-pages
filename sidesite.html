@@ -1190,7 +1190,7 @@
             console.log('Cleaned price:', cleanedPrice);
 
             // Construct the base URL with encoded query
-            let apiUrl = `https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=10`;
+            let apiUrl = `https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=10&wideSearch=true`;
 
             // Add price range parameters if we have a valid price
             if (cleanedPrice && cleanedPrice > 0) {
@@ -1403,25 +1403,38 @@
             }
         }
 
-        // פונקציה חדשה ליצירת אלמנט מוצר
         function createProductElement(product) {
-            const productDiv = document.createElement('div');
-            productDiv.className = 'product';
-            productDiv.innerHTML = `
+    const productDiv = document.createElement('div');
+    productDiv.className = 'product';
+
+    const imageHtml = product.image
+        ? `<img src="${product.image}" alt="תמונת מוצר" style="max-width: 100%; max-height: 100%; object-fit: contain;" />`
+        : '';
+
+    productDiv.innerHTML = `
+        <div class="product-image">
+            ${imageHtml}
+        </div>
         <div class="product-info">
             <h3>${product.name}</h3>
             <p>מחיר: ${product.price}</p>
             <p>אתר: ${product.site}</p>
         </div>
-        <div class="product-image"></div>
     `;
-            productDiv.onclick = () => {
-                logClick(product);
-                window.open(product.urlAff, '_blank');
-            };
-            fetchAndDisplayProductImage(product.url, productDiv.querySelector('.product-image'));
-            return productDiv;
-        }
+
+    productDiv.onclick = () => {
+        logClick(product);
+        window.open(product.urlAff || product.url, '_blank');
+    };
+
+    // רק אם לא סופקה תמונה, ננסה לשלוף אותה מה-URL
+    if (!product.image) {
+        fetchAndDisplayProductImage(product.url, productDiv.querySelector('.product-image'));
+    }
+
+    return productDiv;
+}
+
 
         // פונקציה חדשה להצגת תוצאות נוספות
         function showMoreResults(remainingResults) {
