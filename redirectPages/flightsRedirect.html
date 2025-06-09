@@ -269,6 +269,12 @@
   const air    = fp.get('deal_airline');
   const price  = priceR ? Math.round(parseFloat(priceR)) : null;
 
+  // 🔥 מעקב Analytics - כניסה לעמוד
+  gtag('event', 'page_entry', {
+    event_category: 'passenger_selection',
+    event_label: 'started_process'
+  });
+
   /* ----- כותרת + סיכום ----- */
   const header = document.getElementById('routeHeader');
   header.textContent = (origin && dest && outD && inD)
@@ -468,9 +474,16 @@
       } else {
         clearInterval(interval);
         
-        // תמיד הפנה את הטאב הנוכחי לתוצאות הטיסות
-        // לא משנה אם המשתמש לחץ על ביטוח או לא
-        location.href = finalUrl;
+        // 🔥 מעקב Analytics - השלמת התהליך
+        gtag('event', 'process_completed', {
+          event_category: 'passenger_selection', 
+          event_label: 'redirected_to_booking'
+        });
+
+        // המתן רגע שהאירוע יישלח ואז הפנה
+        setTimeout(() => {
+          location.href = finalUrl;
+        }, 100);
       }
     };
 
@@ -478,9 +491,17 @@
     
     // backup timeout
     setTimeout(() => { 
-      clearInterval(interval); 
-      // תמיד הפנה לתוצאות הטיסות
-      location.href = finalUrl;
+      clearInterval(interval);
+      
+      // 🔥 מעקב Analytics - השלמה בזמן קצוב
+      gtag('event', 'process_completed', {
+        event_category: 'passenger_selection', 
+        event_label: 'redirected_to_booking_timeout'
+      });
+      
+      setTimeout(() => {
+        location.href = finalUrl;
+      }, 100);
     }, total);
   }
 
