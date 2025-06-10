@@ -5,8 +5,6 @@
 
     <!-- Google tag (gtag.js) -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script defer data-domain="yossidisk.github.io/shamze/sidesite.html"
-        src="https://plausible.io/js/script.js"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -392,10 +390,6 @@
                     // Hover effect
                     addButton.addEventListener('mouseenter', function () {
                         this.style.backgroundColor = 'rgba(26, 115, 232, 0.1)';
-
-                        sendPlausibleEvent('AddToListButtonHover', {
-                            productName: query || 'unknown'
-                        });
                     });
 
                     addButton.addEventListener('mouseleave', function () {
@@ -415,17 +409,6 @@
 
                             message.style.visibility = 'visible';
                             message.style.opacity = '1';
-
-                            // // רינדור כפתור גוגל בתוך ההודעה
-                            // google.accounts.id.renderButton(
-                            //     messageGoogleSignIn,
-                            //     {
-                            //         type: 'icon',
-                            //         shape: 'circular',
-                            //         theme: 'outline',
-                            //         size: 'medium'
-                            //     }
-                            // );
 
                             // טיפול בסגירת ההודעה
                             closeButton.onclick = () => {
@@ -473,11 +456,6 @@
 
                             if (response.ok) {
                                 message.textContent = 'המוצר נוסף לרשימה בהצלחה';
-                                sendPlausibleEvent('ProductAddedToList', {
-                                    productName: query || 'unknown',
-                                    price: cleanPrice || 'unknown',
-                                    site: url ? extractDomainFromUrl(url) : 'unknown'
-                                });
                             } else {
                                 throw new Error('Server responded with error');
                             }
@@ -565,23 +543,6 @@
         transition: all 0.3s ease;
     `;
 
-            // // אתחול הגדרות גוגל
-            // google.accounts.id.initialize({
-            //     client_id: "33228757731-fjpimc9l48l3qa8cbt9srtao49ln46ev.apps.googleusercontent.com",
-            //     callback: handleCredentialResponse
-            // });
-
-            // // רינדור כפתור גוגל בתוך הכפתור
-            // google.accounts.id.renderButton(
-            //     button,
-            //     {
-            //         type: 'icon',
-            //         shape: 'circular',
-            //         theme: 'outline',
-            //         size: 'large'
-            //     }
-            // );
-
             // הוספת טקסט וטיפול באפקטים
             const text = document.createElement('span');
             text.textContent = 'התחבר עם Google';
@@ -613,11 +574,6 @@
                     addListText.style.display = 'block';
                 }
             });
-
-            // // לחצן התחברות עם גוגל
-            // button.onclick = () => {
-            //     google.accounts.id.prompt();
-            // };
 
             buttonContainer.appendChild(button);
             container.appendChild(buttonContainer);
@@ -758,27 +714,16 @@
             });
 
             button.onclick = () => {
-                sendPlausibleEvent('ShoppingListOpened', {
-                    userId: currentUser.userId
-                });
                 window.open(getShoppingListPath(), '_blank');
             };
 
             container.appendChild(buttonContainer);
         }
-        // מוודאים שה-script של Google נטען
-        // function waitForGoogleScript() {
-        //     if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-        //         checkLoginStatus();
-        //     } else {
-        //         setTimeout(waitForGoogleScript, 100);
-        //     }
-        // }
 
-        // // קוראים לפונקציה כשהדף נטען
-        // document.addEventListener('DOMContentLoaded', () => {
-        //     waitForGoogleScript();
-        // });
+        // קוראים לפונקציה כשהדף נטען
+        document.addEventListener('DOMContentLoaded', () => {
+            checkLoginStatus();
+        });
 
         // פונקציה להצגת כפתור ההתחברות של גוגל
         function showGoogleSignIn() {
@@ -1094,43 +1039,6 @@
             console.log("Page loaded");
         });
 
-        document.addEventListener('DOMContentLoaded', (event) => {
-            if (typeof window.plausible === 'undefined') {
-                console.warn('Plausible script not loaded. Attempting to load it manually.');
-                loadPlausibleScript();
-            } else {
-                console.log('Plausible script already loaded.');
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const feedbackLink = document.querySelector('.feedback-link');
-            if (feedbackLink) {
-                feedbackLink.addEventListener('click', () => {
-                    sendPlausibleEvent('FeedbackLinkClicked');
-                });
-            }
-        });
-
-        let eventQueue = [];
-
-        // פונקציה להוספת אירועים לתור
-        function queueEvent(eventName, props) {
-            eventQueue.push({ eventName, props });
-        }
-
-        function sendQueuedEvents() {
-            if (typeof window.plausible === 'function' && eventQueue.length > 0) {
-                console.log('Sending queued events to Plausible.');
-                eventQueue.forEach(event => {
-                    sendPlausibleEvent(event.eventName, event.props);
-                });
-                eventQueue = []; // ניקוי התור לאחר שליחת האירועים
-            }
-        }
-
-        setInterval(sendQueuedEvents, 5000); // בדיקה כל 5 שניות
-
         function getUrlParameter(name) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(name);
@@ -1145,13 +1053,6 @@
             // קריאת הפרמטרים הנוספים מה-URL
             const price = getUrlParameter('price');
             const referrerUrl = getUrlParameter('url');
-
-            // שליחת אירוע Search עם הפרמטרים הנוספים
-            sendPlausibleEvent('Search', {
-                query: query || 'Not provided',
-                price: price || 'Not provided',
-                referrerUrl: referrerUrl || 'Not provided'
-            });
 
             return new Promise((resolve, reject) => {
                 fetchSearchResults(query)
@@ -1240,21 +1141,6 @@
                     currentResults = data;
                     displaySearchResults(data);
                     hideLoading();
-
-                    const searchStats = getSearchStats(data);
-                    const eventProps = {
-                        query: query,
-                        resultCount: data.length,
-                        cheapestProduct: searchStats.cheapest?.name || 'N/A',
-                        cheapestSite: searchStats.cheapest?.site || 'N/A',
-                        cheapestPrice: searchStats.cheapest?.price || 'N/A',
-                        mostExpensiveProduct: searchStats.mostExpensive?.name || 'N/A',
-                        mostExpensiveSite: searchStats.mostExpensive?.site || 'N/A',
-                        mostExpensivePrice: searchStats.mostExpensive?.price || 'N/A',
-                        averagePrice: searchStats.averagePrice || 'N/A'
-                    };
-
-                    sendPlausibleEvent('ResultsDisplayed', eventProps);
                 })
                 .catch(error => {
                     // Enhanced error logging
@@ -1292,44 +1178,9 @@
                             const currentQuery = currentSearchQuery || '';
                             const retryUrl = `https://yossidisk.github.io/Shamze/cupons.html?source=side&search=true&query=${encodeURIComponent(currentQuery)}`;
                             window.open(retryUrl, '_blank');
-
-                            sendPlausibleEvent('RetryButtonClicked', {
-                                query: currentQuery,
-                                error: error.message
-                            });
                         });
                     }
-
-                    sendPlausibleEvent('ResultsNotDisplayed', {
-                        query: query,
-                        error: error.message
-                    });
                 });
-        }
-
-        function getSearchStats(results) {
-            let cheapest = results[0];
-            let mostExpensive = results[0];
-            let totalPrice = 0;
-
-            results.forEach(product => {
-                const price = parseFloat(product.price.replace(/[^\d.]/g, ''));
-
-                if (price < parseFloat(cheapest.price.replace(/[^\d.]/g, ''))) {
-                    cheapest = product;
-                }
-                if (price > parseFloat(mostExpensive.price.replace(/[^\d.]/g, ''))) {
-                    mostExpensive = product;
-                }
-
-                totalPrice += price;
-            });
-
-            return {
-                cheapest: cheapest,
-                mostExpensive: mostExpensive,
-                averagePrice: (totalPrice / results.length).toFixed(2)
-            };
         }
 
         function sortResultsByClosestToPrice(results, referencePrice) {
@@ -1395,16 +1246,8 @@
                         event.preventDefault();
                         const retryUrl = `https://yossidisk.github.io/Shamze/cupons.html?source=side&search=true&query=${encodeURIComponent(currentSearchQuery)}`;
                         window.open(retryUrl, '_blank');
-
-                        sendPlausibleEvent('NoResultsRetryClicked', {
-                            query: currentSearchQuery
-                        });
                     });
                 }
-
-                sendPlausibleEvent('NoResultsFound', {
-                    query: currentSearchQuery
-                });
 
                 return;
             }
@@ -1431,9 +1274,6 @@
                 showMoreButton.className = 'show-more-button';
                 showMoreButton.onclick = () => {
                     showMoreResults(remainingResults);
-                    sendPlausibleEvent('ShowMoreResults', {
-                        additionalResults: remainingResults.length
-                    });
                 };
                 container.appendChild(showMoreButton);
             }
@@ -1483,30 +1323,6 @@
             });
 
             showMoreButton.remove();
-        }
-
-        function loadPlausibleScript() {
-            const script = document.createElement('script');
-            script.defer = true;
-            script.setAttribute('data-domain', 'yossidisk.github.io/shamze/sidesite.html');
-            script.src = 'https://plausible.io/js/script.js';
-            script.onload = () => console.log('Plausible script loaded successfully.');
-            script.onerror = () => console.error('Failed to load Plausible script.');
-            document.head.appendChild(script);
-        }
-
-        function sendPlausibleEvent(eventName, props = {}) {
-            if (typeof window.plausible === 'function') {
-                try {
-                    window.plausible(eventName, { props });
-                    console.log(`Event sent to Plausible: ${eventName}`, props);
-                } catch (error) {
-                    console.error(`Error sending ${eventName} event to Plausible:`, error);
-                }
-            } else {
-                console.warn(`Plausible not available for logging ${eventName} event. Queuing event.`);
-                queueEvent(eventName, props);
-            }
         }
 
         function logClick(product) {
@@ -1564,22 +1380,6 @@
                 console.error('Error saving click locally:', error);
             }
 
-            // שליחת אירוע אנליטיקס אם זמין
-            if (window.plausible) {
-                try {
-                    window.plausible('ProductClick', {
-                        props: {
-                            productName: clickData.productName,
-                            targetSite: clickData.targetSite,
-                            productPrice: clickData.productPrice,
-                            searchQuery: clickData.searchParams.query
-                        }
-                    });
-                } catch (error) {
-                    console.error('Error sending analytics event:', error);
-                }
-            }
-
             // שליחת המידע לדף המארח (האתר שבו מוצג ה-iframe)
             try {
                 window.parent.postMessage({
@@ -1617,7 +1417,6 @@
                 });
             }
 
-            sendPlausibleEvent('SortResults', { sortType });
             displaySearchResults(sortedResults);
         }
 
@@ -1800,91 +1599,6 @@
                     console.error('URL normalization error:', error);
                     return null;
                 }
-            }
-        }
-
-
-
-        function buildDirectImageUrl(productUrl) {
-            if (productUrl.includes('zap.co.il')) {
-                const sku = productUrl.match(/(\d+)$/)?.[1];
-                if (sku) return `https://img.zap.co.il/pics/new/${sku}.gif`;
-            }
-            if (productUrl.includes('ksp.co.il')) {
-                const sku = productUrl.match(/item\/(\d+)/)?.[1];
-                if (sku) return `https://img.ksp.co.il/item/${sku}/b_1.jpg`;
-            }
-            return null;
-        }
-
-        function tryLoadingDirectImage(imageUrl, productUrl, imageContainer) {
-            const img = new Image();
-            img.onload = () => {
-                log(`Direct image successfully loaded: ${imageUrl}`);
-                imageCache.set(productUrl, imageUrl);
-                displayImage(imageUrl, imageContainer);
-            };
-            img.onerror = () => {
-                log(`Failed to load direct image: ${imageUrl}. Falling back to HTML parsing.`);
-                fetch(productUrl)
-                    .then(response => response.text())
-                    .then(html => {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
-                        findAndLoadImage(doc, productUrl, imageContainer);
-                    })
-                    .catch(error => {
-                        log(`Error fetching product page ${productUrl}: ${error}`);
-                        imageContainer.style.display = 'none';
-                    });
-            };
-            img.src = imageUrl;
-        }
-
-        function findAndLoadImage(doc, baseUrl, imageContainer) {
-            log(`Searching for image in document from ${baseUrl}`);
-            const imageFinders = [
-                // ... (כל שיטות החיפוש הקודמות נשארות ללא שינוי)
-            ];
-
-            tryNextImage(imageFinders, 0, baseUrl, imageContainer);
-        }
-
-        function tryNextImage(finders, index, baseUrl, imageContainer) {
-            if (index >= finders.length) {
-                log(`All image finding methods exhausted for ${baseUrl}. No image found.`);
-                imageContainer.style.display = 'none';
-                return;
-            }
-
-            log(`Trying image finder method ${index + 1} for ${baseUrl}`);
-            let imageUrl = finders[index]();
-
-            if (imageUrl) {
-                log(`Image URL found: ${imageUrl}`);
-                if (imageUrl.startsWith('/')) {
-                    const urlObj = new URL(baseUrl);
-                    imageUrl = `${urlObj.protocol}//${urlObj.hostname}${imageUrl}`;
-                    log(`Relative URL converted to absolute: ${imageUrl}`);
-                } else if (!imageUrl.startsWith('http')) {
-                    imageUrl = new URL(imageUrl, baseUrl).href;
-                    log(`Relative URL converted to absolute: ${imageUrl}`);
-                }
-
-                const img = new Image();
-                img.onload = () => {
-                    log(`Image successfully loaded: ${imageUrl}`);
-                    imageCache.set(baseUrl, imageUrl);
-                    displayImage(imageUrl, imageContainer);
-                };
-                img.onerror = () => {
-                    log(`Failed to load image: ${imageUrl}`);
-                    tryNextImage(finders, index + 1, baseUrl, imageContainer);
-                };
-                img.src = imageUrl;
-            } else {
-                log(`No image URL found with method ${index + 1}. Trying next method.`);
-                tryNextImage(finders, index + 1, baseUrl, imageContainer);
             }
         }
 
