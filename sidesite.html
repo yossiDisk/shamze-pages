@@ -4,6 +4,14 @@
 <head>
 
     <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <meta charset="UTF-8">
@@ -200,6 +208,250 @@
         .sort-container {
             margin-bottom: 20px;
         }
+
+        /* Sort Section Styles */
+        .sort-section select {
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: white;
+            font-size: 13px;
+            color: #333;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            min-width: 120px;
+            flex-shrink: 0;
+        }
+
+        .sort-section select:hover {
+            border-color: #1a73e8;
+        }
+
+        .sort-section select:focus {
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.1);
+        }
+
+        /* Toggle Switch Styles */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.3s;
+            border-radius: 22px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #1a73e8;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        .toggle-label {
+            font-size: 13px;
+            color: #333;
+            user-select: none;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .help-icon {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            padding: 2px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .help-icon svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .help-icon:hover {
+            color: #1a73e8;
+            background-color: rgba(26, 115, 232, 0.1);
+        }
+
+        .info-message {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            left: 0;
+            background-color: #333;
+            color: white;
+            border-radius: 6px;
+            margin-top: 10px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            animation: slideDown 0.3s ease;
+        }
+
+        .info-content {
+            padding: 12px;
+            position: relative;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .close-info {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+
+        .close-info:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sort-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .sort-container > div {
+            align-items: center;
+        }
+
+        .advanced-search-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive design for narrow screens and iframes */
+        @media (max-width: 500px) {
+            .sort-container > div {
+                gap: 8px;
+                flex-wrap: nowrap;
+            }
+            
+            .sort-section select {
+                min-width: 100px;
+                font-size: 12px;
+                padding: 5px 6px;
+            }
+            
+            .toggle-label {
+                font-size: 12px;
+            }
+            
+            .advanced-search-container {
+                gap: 4px;
+            }
+            
+            .help-icon {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .help-icon svg {
+                width: 12px;
+                height: 12px;
+            }
+        }
+
+        /* Extra narrow screens (very small iframes) */
+        @media (max-width: 350px) {
+            .sort-container > div {
+                gap: 6px;
+            }
+            
+            .sort-section select {
+                min-width: 80px;
+                font-size: 11px;
+                padding: 4px 5px;
+            }
+            
+            .toggle-label {
+                font-size: 11px;
+            }
+            
+            .toggle-switch {
+                width: 38px;
+                height: 20px;
+            }
+            
+            .slider:before {
+                height: 14px;
+                width: 14px;
+                left: 3px;
+                bottom: 3px;
+            }
+            
+            input:checked + .slider:before {
+                transform: translateX(18px);
+            }
+            
+            .advanced-search-container {
+                gap: 3px;
+            }
+        }
     </style>
 </head>
 
@@ -209,12 +461,38 @@
     </div>
 
     <div class="sort-container">
-        <label for="sort-select">מיין לפי:</label>
-        <select id="sort-select" onchange="sortResults()">
-            <option value="default">ברירת מחדל</option>
-            <option value="price-asc">מחיר - מהנמוך לגבוה</option>
-            <option value="price-desc">מחיר - מהגבוה לנמוך</option>
-        </select>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: nowrap; gap: 10px; min-height: 32px;">
+            <div class="sort-section">
+                <select id="sort-select" onchange="sortResults()">
+                    <option value="default">מיון לפי</option>
+                    <option value="price-asc">מחיר - מהנמוך לגבוה</option>
+                    <option value="price-desc">מחיר - מהגבוה לנמוך</option>
+                </select>
+            </div>
+            
+            <div class="advanced-search-container">
+                <label class="toggle-switch" for="advanced-search-toggle">
+                    <input type="checkbox" id="advanced-search-toggle" onchange="toggleAdvancedSearch()">
+                    <span class="slider"></span>
+                </label>
+                <span class="toggle-label">חיפוש מתקדם</span>
+                <button class="help-icon" onclick="showAdvancedSearchInfo()" aria-label="מידע על חיפוש מתקדם">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                        <point x="12" y="17"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- הודעת מידע על חיפוש מתקדם -->
+        <div id="advanced-search-info" class="info-message" style="display: none;">
+            <div class="info-content">
+                <button class="close-info" onclick="hideAdvancedSearchInfo()">×</button>
+                <p>מבצע חיפוש מתקדם הכולל תמונות והפניות ישירות לתוצאות<br>פיצ״ר בהרצה</p>
+            </div>
+        </div>
     </div>
 
     <div id="loadingContainer" class="loading-container" style="display: none;">
@@ -497,6 +775,7 @@
         // Call this when the page loads
         document.addEventListener('DOMContentLoaded', () => {
             displayProductHeader();
+            initializeAdvancedSearch();
 
             const queryParam = urlParams.get('query');
             if (queryParam) {
@@ -1090,8 +1369,16 @@
             console.log('Original price:', priceParam);
             console.log('Cleaned price:', cleanedPrice);
 
+            // Check if advanced search is enabled
+            const isAdvancedSearchEnabled = getAdvancedSearchStatus();
+
             // Construct the base URL with encoded query
-            let apiUrl = `https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=10&wideSearch=true`;
+            let apiUrl = `https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=10`;
+            
+            // Add wideSearch parameter only if advanced search is enabled
+            if (isAdvancedSearchEnabled) {
+                apiUrl += '&wideSearch=true';
+            }
 
             // Add price range parameters if we have a valid price
             if (cleanedPrice && cleanedPrice > 0) {
@@ -1110,6 +1397,7 @@
 
             // Log the final API URL
             console.log('API URL:', apiUrl);
+            console.log('Advanced search enabled:', isAdvancedSearchEnabled);
 
             return fetch(apiUrl, {
                 method: 'GET',
@@ -1618,6 +1906,110 @@
         const queryParam = urlParams.get('query');
         const priceParam = urlParams.get('price');
         const urlParam = urlParams.get('url');
+
+        // Advanced Search Management Functions
+        const ADVANCED_SEARCH_KEY = 'advancedSearchEnabled';
+        const ADVANCED_SEARCH_TIMESTAMP_KEY = 'advancedSearchTimestamp';
+        const ADVANCED_SEARCH_DURATION = 20 * 60 * 1000; // 20 minutes in milliseconds
+
+        function initializeAdvancedSearch() {
+            const checkbox = document.getElementById('advanced-search-toggle');
+            if (checkbox) {
+                checkbox.checked = getAdvancedSearchStatus();
+            }
+        }
+
+        function getAdvancedSearchStatus() {
+            try {
+                const enabled = localStorage.getItem(ADVANCED_SEARCH_KEY) === 'true';
+                const timestamp = parseInt(localStorage.getItem(ADVANCED_SEARCH_TIMESTAMP_KEY) || '0');
+                const now = Date.now();
+                
+                // Check if 20 minutes have passed
+                if (enabled && (now - timestamp > ADVANCED_SEARCH_DURATION)) {
+                    // Clear expired setting
+                    localStorage.removeItem(ADVANCED_SEARCH_KEY);
+                    localStorage.removeItem(ADVANCED_SEARCH_TIMESTAMP_KEY);
+                    
+                    // Update UI
+                    const checkbox = document.getElementById('advanced-search-toggle');
+                    if (checkbox) {
+                        checkbox.checked = false;
+                    }
+                    
+                    return false;
+                }
+                
+                return enabled;
+            } catch (error) {
+                console.error('Error reading advanced search status:', error);
+                return false;
+            }
+        }
+
+        function setAdvancedSearchStatus(enabled) {
+            try {
+                if (enabled) {
+                    localStorage.setItem(ADVANCED_SEARCH_KEY, 'true');
+                    localStorage.setItem(ADVANCED_SEARCH_TIMESTAMP_KEY, Date.now().toString());
+                } else {
+                    localStorage.removeItem(ADVANCED_SEARCH_KEY);
+                    localStorage.removeItem(ADVANCED_SEARCH_TIMESTAMP_KEY);
+                }
+            } catch (error) {
+                console.error('Error saving advanced search status:', error);
+            }
+        }
+
+        function toggleAdvancedSearch() {
+            const checkbox = document.getElementById('advanced-search-toggle');
+            const isEnabled = checkbox.checked;
+            
+            // Save status
+            setAdvancedSearchStatus(isEnabled);
+            
+            // Send Google Analytics event
+            if (typeof gtag === 'function') {
+                gtag('event', 'toggle_advanced_search', {
+                    'enabled': isEnabled,
+                    'search_query': currentSearchQuery || 'unknown'
+                });
+            }
+            
+            console.log('Advanced search toggled:', isEnabled);
+            
+            // If we have a current search query, reload the search with new settings
+            if (currentSearchQuery) {
+                console.log('Reloading search with advanced search:', isEnabled);
+                search(currentSearchQuery);
+            }
+        }
+
+        function showAdvancedSearchInfo() {
+            const infoDiv = document.getElementById('advanced-search-info');
+            if (infoDiv) {
+                infoDiv.style.display = 'block';
+                
+                // Send Google Analytics event
+                if (typeof gtag === 'function') {
+                    gtag('event', 'click_advanced_search_help', {
+                        'search_query': currentSearchQuery || 'unknown'
+                    });
+                }
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    hideAdvancedSearchInfo();
+                }, 5000);
+            }
+        }
+
+        function hideAdvancedSearchInfo() {
+            const infoDiv = document.getElementById('advanced-search-info');
+            if (infoDiv) {
+                infoDiv.style.display = 'none';
+            }
+        }
 
         // if (queryParam) {
         //     search(queryParam).then(() => {
