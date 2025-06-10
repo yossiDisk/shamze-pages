@@ -1567,6 +1567,26 @@
             }
         }
 
+        // Helper function to format price with currency symbol
+        function formatPrice(price) {
+            if (!price) return '';
+            
+            const priceStr = String(price).trim();
+            
+            // Check if price already contains shekel symbol or "ש\"ח"
+            if (priceStr.includes('₪') || priceStr.includes('ש"ח') || priceStr.includes('שח')) {
+                return priceStr;
+            }
+            
+            // If price is just numbers (with possible commas/dots), add shekel symbol
+            if (/^[\d,.\s]+$/.test(priceStr)) {
+                return `₪${priceStr}`;
+            }
+            
+            // If price contains other text but no currency, add shekel at the beginning
+            return `₪${priceStr}`;
+        }
+
         function createProductElement(product) {
             const productDiv = document.createElement('div');
             productDiv.className = 'product';
@@ -1575,13 +1595,16 @@
                 ? `<img src="${product.image}" alt="תמונת מוצר" style="max-width: 100%; max-height: 100%; object-fit: contain;" />`
                 : '';
 
+            // Format the price with currency symbol
+            const formattedPrice = formatPrice(product.price);
+
             productDiv.innerHTML = `
         <div class="product-image">
             ${imageHtml}
         </div>
         <div class="product-info">
             <h3>${product.name}</h3>
-            <p>מחיר: ${product.price}</p>
+            <p>מחיר: ${formattedPrice}</p>
             <p>אתר: ${product.site}</p>
         </div>
     `;
