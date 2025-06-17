@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מפנה לקישור AliExpress</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        #message {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <script defer data-domain="yossidisk.github.io/shamze/AliLinksGen.html"
+        src="https://plausible.io/js/script.js"></script>
+</head>
+
+<body>
+    <div id="message">טוען...</div>
+    <script>
+        function removeParametersFromUrl(url) {
+            try {
+                const parsedUrl = new URL(url);
+                parsedUrl.search = '';
+                return parsedUrl.toString();
+            } catch (error) {
+                console.error("Error parsing URL:", error);
+                return null;
+            }
+        }
+
+        async function generateAliExpressLink(url) {
+            try {
+                const response = await fetch('https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/generateAliExpressLink', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        url: url
+                    })
+                });
+                if (!response.ok) {
+                    onsole.error('Error:', error);
+                    return url;
+                }
+                return await response.text();
+            } catch (error) {
+                console.error('Error:', error);
+                return url;
+            }
+        }
+
+        function trackEvent(eventName, props) {
+            if (typeof plausible !== 'undefined') {
+                plausible(eventName, { props: props });
+            } else {
+                console.log('Plausible event:', eventName, props);
+            }
+        }
+
+        async function processAndRedirect() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const link = urlParams.get('link');
+            const source = urlParams.get('source') || 'unknown';
+
+            trackEvent('PageView', { source: source });
+
+            if (!link) {
+                document.getElementById('message').textContent = 'לא סופק קישור.';
+                trackEvent('Error', { error: 'No link provided', source: source });
+                return;
+            }
+
+            const cleanLink = removeParametersFromUrl(link);
+            if (!cleanLink) {
+                document.getElementById('message').textContent = 'הקישור שסופק אינו תקין.';
+                trackEvent('Error', { error: 'Invalid link', source: source, link: link });
+                return;
+            }
+
+            document.getElementById('message').textContent = 'מעבד את הקישור...';
+
+            const generatedLink = await generateAliExpressLink(cleanLink);
+            if (generatedLink) {
+                const cleanGeneratedLink = generatedLink.replace(/^"|"$/g, '');
+
+                trackEvent('LinkGenerated', {
+                    source: source,
+                    originalLink: cleanLink,
+                    generatedLink: cleanGeneratedLink
+                });
+
+                setTimeout(() => {
+                    window.location.href = cleanGeneratedLink;
+                }, 100);
+            } else {
+                document.getElementById('message').textContent = 'אירעה שגיאה בעת יצירת הקישור.';
+                trackEvent('Error', { error: 'Link generation failed', source: source, link: cleanLink });
+            }
+        }
+
+        // Run processAndRedirect after the page has fully loaded
+        window.addEventListener('load', processAndRedirect);
+    </script>
+</body>
+
+</html>
