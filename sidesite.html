@@ -3,42 +3,69 @@
 
 <head>
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PK1VZL0FDV"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-PK1VZL0FDV');
-    </script>
-    
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+  (async () => {
+    const GA_MEASUREMENT_ID = 'G-PK1VZL0FDV';
+    const GA_API_SECRET = '18bejCGgSeqXmtcUnvPoIQ';
+    const DEBUG = false;
 
-    <script>
-function sendGAEvent(name, params = {}) {
-  window.parent.postMessage({
-    source: 'sidesite',
-    action: 'fireGAEvent',
-    eventName: name,
-    eventParams: params
-  }, '*');
-}
+    const getClientId = () => {
+      const existing = localStorage.getItem("client_id");
+      if (existing) return existing;
+      const newId = self.crypto.randomUUID();
+      localStorage.setItem("client_id", newId);
+      return newId;
+    };
 
-// נשלח אוטומטית page_view בטעינה
-sendGAEvent('page_view', {
-  page_title: document.title,
-  page_location: location.href
-});
+    const sendGAEvent = async (eventName, params = {}) => {
+      const endpoint = DEBUG
+        ? 'https://www.google-analytics.com/debug/mp/collect'
+        : 'https://www.google-analytics.com/mp/collect';
 
-// דוגמה לאירוע נוסף בעת לחיצה
-document.addEventListener('click', function(e) {
-  if (e.target.matches('.compare-button')) {
-    sendGAEvent('compare_clicked', {
-      button_text: e.target.innerText
-    });
-  }
-});
+      const body = {
+        client_id: getClientId(),
+        events: [
+          {
+            name: eventName,
+            params: {
+              engagement_time_msec: 100,
+              page_title: document.title,
+              page_location: location.href,
+              ...params
+            }
+          }
+        ]
+      };
+
+      try {
+        const res = await fetch(`${endpoint}?measurement_id=${GA_MEASUREMENT_ID}&api_secret=${GA_API_SECRET}`, {
+          method: 'POST',
+          body: JSON.stringify(body)
+        });
+
+        const result = DEBUG ? await res.json() : await res.text();
+        console.log("📤 GA Event sent:", result);
+      } catch (err) {
+        console.error("❌ Failed to send GA event:", err);
+      }
+    };
+
+    // 🔍 קריאת פרמטרים מה-URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const eventName = urlParams.get('event') || 'page_view';
+    const eventParams = {};
+
+    for (const [key, value] of urlParams.entries()) {
+      if (key !== 'event') {
+        eventParams[key] = isNaN(value) ? value : Number(value);
+      }
+    }
+
+    // שליחת האירוע
+    sendGAEvent(eventName, eventParams);
+  })();
 </script>
+
 
 
     <meta charset="UTF-8">
