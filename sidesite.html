@@ -14,6 +14,33 @@
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
+    <script>
+function sendGAEvent(name, params = {}) {
+  window.parent.postMessage({
+    source: 'sidesite',
+    action: 'fireGAEvent',
+    eventName: name,
+    eventParams: params
+  }, '*');
+}
+
+// נשלח אוטומטית page_view בטעינה
+sendGAEvent('page_view', {
+  page_title: document.title,
+  page_location: location.href
+});
+
+// דוגמה לאירוע נוסף בעת לחיצה
+document.addEventListener('click', function(e) {
+  if (e.target.matches('.compare-button')) {
+    sendGAEvent('compare_clicked', {
+      button_text: e.target.innerText
+    });
+  }
+});
+</script>
+
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>תוצאות חיפוש</title>
