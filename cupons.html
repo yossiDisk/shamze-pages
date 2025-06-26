@@ -29,15 +29,406 @@
     main {
       flex: 1 0 auto;
       padding-bottom: 60px;
-      /* מרווח עבור הסרגל התחתון */
     }
 
+    /* סגנון טאבים */
+    .tabs-container {
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 10px;
+    }
+
+    .tab-button {
+      background: none;
+      border: none;
+      padding: 12px 24px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      color: #666;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .tab-button:hover {
+      color: #333;
+    }
+
+    .tab-button.active {
+      color: var(--primary-green);
+      border-bottom-color: var(--primary-green);
+      font-weight: 700;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* סגנון חיפוש טיסות */
+    .flight-search-container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .flight-inputs-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    .flight-input-group {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+      max-width: 250px;
+    }
+
+    .flight-input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #333;
+      text-align: right;
+    }
+
+    .flight-input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+    }
+
+    .flight-input:focus {
+      outline: none;
+      border-color: var(--primary-green);
+    }
+
+    .suggestions-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      max-height: 250px;
+      overflow-y: auto;
+      z-index: 100;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .suggestions-dropdown.show {
+      display: block;
+    }
+
+    .suggestion-item {
+      padding: 12px;
+      cursor: pointer;
+      border-bottom: 1px solid #f0f0f0;
+      text-align: right;
+      transition: background-color 0.2s ease;
+    }
+
+    .suggestion-item:hover {
+      background-color: #f5f5f5;
+    }
+
+    .suggestion-item strong {
+      color: var(--primary-green);
+    }
+
+    .suggestion-item small {
+      color: #666;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .date-inputs-group {
+      display: flex;
+      gap: 10px;
+      flex: 1;
+      min-width: 200px;
+      max-width: 250px;
+    }
+
+    .date-input-wrapper {
+      flex: 1;
+    }
+
+    /* סגנון תוצאות טיסות */
+    .flight-results-container {
+      margin-top: 30px;
+    }
+
+    .flight-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .flight-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .flight-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .flight-price {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary-green);
+    }
+
+    .flight-airline {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .airline-name {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .direct-badge {
+      background: #28a745;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .connecting-badge {
+      background: #ffc107;
+      color: #333;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .flight-body {
+      padding: 20px;
+    }
+
+    .flight-route {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .flight-endpoint {
+      text-align: center;
+      flex: 1;
+    }
+
+    .flight-time {
+      font-size: 24px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .flight-location {
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .flight-arrow {
+      flex: 0 0 auto;
+      margin: 0 20px;
+      color: #999;
+    }
+
+    .flight-dates {
+      background: #f8f9fa;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      text-align: center;
+      color: #666;
+    }
+
+    .flight-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .flight-book-btn {
+      flex: 1;
+      background: var(--primary-green);
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .flight-book-btn:hover {
+      background-color: #124a2c;
+    }
+
+    .flight-details-toggle {
+      background: #f0f0f0;
+      color: #333;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+
+    .flight-details-toggle:hover {
+      background-color: #e0e0e0;
+    }
+
+    .flight-details {
+      background: #f8f9fa;
+      padding: 20px;
+      border-top: 1px solid #e0e0e0;
+      display: none;
+    }
+
+    .flight-details.show {
+      display: block;
+    }
+
+    .flight-segment {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .flight-segment:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .segment-title {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .flight-leg {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 10px;
+      background: white;
+      border-radius: 8px;
+    }
+
+    .connection-info {
+      text-align: center;
+      padding: 10px;
+      color: #666;
+      font-size: 14px;
+      background: #fff3cd;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    /* פילטרים ומיון */
+    .filters-sort-container {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .filter-checkbox {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .sort-select {
+      padding: 8px 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* הודעת טעינה */
+    .loading-flights {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .loading-flights .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary-green);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* סגנונות נוספים קיימים */
     header a.install-button {
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
       max-width: 150px;
-      /* התאם לפי הצורך */
       text-align: center;
     }
 
@@ -51,7 +442,6 @@
       display: flex;
       align-items: center;
       min-width: 0;
-      /* מאפשר לתוכן להתכווץ אם נדרש */
     }
 
     header h1 {
@@ -66,480 +456,499 @@
     @media (max-width: 768px) {
       footer {
         display: none;
-        /* מסתיר את הסרגל התחתון במובייל */
       }
 
       main {
         padding-bottom: 20px;
-        /* מקטין את הפדינג התחתון במובייל */
+      }
+
+      .flight-inputs-row {
+        flex-direction: column;
+      }
+
+      .flight-input-group,
+      .date-inputs-group {
+        max-width: 100%;
+      }
+
+      .flight-route {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .flight-arrow {
+        transform: rotate(90deg);
+        margin: 10px 0;
+      }
+
+      .filters-sort-container {
+        flex-direction: column;
+        align-items: stretch;
       }
     }
 
-    @media (max-width: 10000px) {
-      header h1 {
-        font-size: 0.8rem;
-        max-width: 140px;
-      }
+    /* המשך סגנונות קיימות מהקוד המקורי */
+    .search-container {
+      position: relative;
+      max-width: 300px;
+      margin: 0 auto;
+      width: 100%;
+    }
 
-      header a.install-button {
-        font-size: 0.6rem;
-        padding: 0.2rem 0.4rem;
-        max-width: 80px;
-        /* התאם לפי הצורך */
-      }
+    .search-input {
+      width: 100%;
+      padding: 12px 30px 12px 12px;
+      border: 1px solid #999;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
 
-      @media (max-width: 640px) {
-        header .container {
-          padding: 0.5rem;
-        }
+    .search-input:focus {
+      outline: none;
+      border-color: #555;
+    }
 
-        header a.install-button {
-          font-size: 0.7rem;
-          padding: 0.25rem 0.5rem;
-          max-width: 100px;
-          /* התאם לפי הצורך */
-        }
+    .clear-search {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #999;
+      font-size: 18px;
+    }
 
-        header img {
-          width: 24px;
-          height: 24px;
-        }
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
 
-        header h1 {
-          font-size: 0.9rem;
-          max-width: 140px;
-          /* הגבל את רוחב הכותרת במסכים קטנים */
-        }
+    .coupon-button,
+    .compare-button {
+      background-color: var(--primary-green);
+      color: white;
+      padding: 15px;
+      border: none;
+      cursor: pointer;
+      border-radius: 25px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 300px;
+    }
 
-        header a {
-          font-size: 0.7rem;
-          padding: 0.25rem 0.5rem;
-        }
-      }
+    .coupon-button:hover,
+    .coupon-button:active,
+    .compare-button:hover,
+    .compare-button:active {
+      background-color: #124a2c;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
 
-      header .container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: nowrap;
-      }
+    .loading-container {
+      text-align: center;
+      margin: 20px 0;
+    }
 
-      footer {
-        background-color: var(--primary-green);
-        color: white;
-        padding: 10px 0;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-      }
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 10px auto;
+    }
 
-      h1 {
-        margin-bottom: 10px;
-        color: #2c3e50;
-        font-size: 24px;
-      }
+    .request-coupon-button {
+      background-color: #3498db;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
 
-      h4 {
-        margin-bottom: 20px;
-        color: #7f8c8d;
-        font-size: 14px;
-        font-weight: normal;
-      }
+    .email-input {
+      padding: 10px;
+      margin-top: 10px;
+      width: 100%;
+      max-width: 300px;
+    }
 
-      .search-container {
-        position: relative;
-        max-width: 300px;
-        margin: 0 auto;
-        width: 100%;
-      }
+    .product {
+      background-color: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
+      text-align: right;
+      width: 100%;
+      max-width: 300px;
+    }
 
-      .search-input {
-        width: 100%;
-        padding: 12px 30px 12px 12px;
-        border: 1px solid #999;
-        border-radius: 8px;
-        font-size: 16px;
-        box-sizing: border-box;
-        transition: all 0.3s ease;
-      }
+    .product h3 {
+      margin-top: 0;
+      color: #333;
+      font-size: 18px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
 
-      .search-input:focus {
-        outline: none;
-        border-color: #555;
-      }
+    .product h3:hover {
+      text-decoration: underline;
+    }
 
-      .clear-search {
-        position: absolute;
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #999;
-        font-size: 18px;
-      }
+    .product p {
+      margin: 5px 0;
+      color: #666;
+      font-size: 14px;
+    }
 
-      .button-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-        margin-top: 20px;
-      }
+    .comparison-result {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
 
-      .coupon-button,
-      .compare-button {
-        background-color: var(--primary-green);
-        color: white;
-        padding: 15px;
-        border: none;
-        cursor: pointer;
-        border-radius: 25px;
-        font-size: 16px;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 300px;
-      }
+    .comparison-item {
+      background-color: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
+      text-align: right;
+      width: calc(50% - 10px);
+    }
 
-      .coupon-button:hover,
-      .coupon-button:active,
-      .compare-button:hover,
-      .compare-button:active {
-        background-color: #124a2c;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-      }
+    .comparison-item h3 {
+      margin-top: 0;
+      font-size: 16px;
+      color: #333;
+    }
 
-      .loading-container {
-        text-align: center;
-        margin: 20px 0;
-      }
+    .comparison-item p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #666;
+    }
 
-      .loading-spinner {
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid #3498db;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        animation: spin 1s linear infinite;
-        margin: 10px auto;
-      }
+    .coupon-details {
+      margin-top: 10px;
+    }
 
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
+    .coupon-toggle {
+      background-color: #f0f0f0;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
 
-        100% {
-          transform: rotate(360deg);
-        }
-      }
+    .coupon-toggle:after {
+      content: '▼';
+      font-size: 12px;
+      margin-right: 5px;
+      transition: transform 0.3s ease;
+    }
 
-      .request-coupon-button {
-        background-color: #3498db;
-        color: white;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 10px;
-      }
+    .coupon-toggle.active:after {
+      transform: rotate(180deg);
+    }
 
-      .email-input {
-        padding: 10px;
-        margin-top: 10px;
-        width: 100%;
-        max-width: 300px;
-      }
+    .coupon-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
 
-      .product {
-        background-color: white;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 15px;
-        text-align: right;
-        width: 100%;
-        max-width: 300px;
-      }
+    .coupon-content.active {
+      max-height: 500px;
+    }
 
-      .product h3 {
-        margin-top: 0;
-        color: #333;
-        font-size: 18px;
-        margin-bottom: 10px;
-        cursor: pointer;
-      }
+    .copy-icon {
+      cursor: pointer;
+      margin-right: 10px;
+    }
 
-      .product h3:hover {
-        text-decoration: underline;
-      }
+    .site-link {
+      color: #3498db;
+      text-decoration: none;
+      cursor: pointer;
+      margin-top: 10px;
+      display: inline-block;
+    }
 
-      .product p {
-        margin: 5px 0;
-        color: #666;
-        font-size: 14px;
-      }
+    .site-link:hover {
+      text-decoration: underline;
+    }
 
-      .comparison-result {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-      }
+    .coupon-info {
+      font-size: 12px;
+      color: #777;
+      margin-top: 5px;
+    }
 
+    .popular-searches-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .popular-search-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .popular-search-button {
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      padding: 10px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 14px;
+    }
+
+    .popular-search-button:hover {
+      background-color: #e0e0e0;
+    }
+
+    .bg-green-600 {
+      background-color: var(--primary-green);
+    }
+
+    .text-green-600 {
+      color: var(--primary-green);
+    }
+
+    .hover\:bg-green-600:hover {
+      background-color: var(--primary-green);
+    }
+
+    @media (max-width: 600px) {
       .comparison-item {
-        background-color: white;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 15px;
-        text-align: right;
-        width: calc(50% - 10px);
-      }
-
-      .comparison-item h3 {
-        margin-top: 0;
-        font-size: 16px;
-        color: #333;
-      }
-
-      .comparison-item p {
-        margin: 5px 0;
-        font-size: 14px;
-        color: #666;
-      }
-
-      .coupon-details {
-        margin-top: 10px;
-      }
-
-      .coupon-toggle {
-        background-color: #f0f0f0;
-        border: none;
-        padding: 5px 10px;
-        cursor: pointer;
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
         width: 100%;
       }
-
-      .coupon-toggle:after {
-        content: '▼';
-        font-size: 12px;
-        margin-right: 5px;
-        transition: transform 0.3s ease;
-      }
-
-      .coupon-toggle.active:after {
-        transform: rotate(180deg);
-      }
-
-      .coupon-content {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-      }
-
-      .coupon-content.active {
-        max-height: 500px;
-      }
-
-      .copy-icon {
-        cursor: pointer;
-        margin-right: 10px;
-      }
-
-      .site-link {
-        color: #3498db;
-        text-decoration: none;
-        cursor: pointer;
-        margin-top: 10px;
-        display: inline-block;
-      }
-
-      .site-link:hover {
-        text-decoration: underline;
-      }
-
-      .coupon-info {
-        font-size: 12px;
-        color: #777;
-        margin-top: 5px;
-      }
-
-      .popular-searches-container {
-        margin-top: 20px;
-        text-align: center;
-      }
-
-      .popular-search-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 10px;
-      }
-
-      .popular-search-button {
-        background-color: #f0f0f0;
-        border: 1px solid #ddd;
-        padding: 10px 15px;
-        border-radius: 20px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        font-size: 14px;
-      }
-
-      .popular-search-button:hover {
-        background-color: #e0e0e0;
-      }
-
-      .bg-green-600 {
-        background-color: var(--primary-green);
-      }
-
-      .text-green-600 {
-        color: var(--primary-green);
-      }
-
-      .hover\:bg-green-600:hover {
-        background-color: var(--primary-green);
-      }
-
-      @media (max-width: 600px) {
-        .comparison-item {
-          width: 100%;
-        }
-      }
-
     }
   </style>
 </head>
 
-<header class="bg-green-600 text-white py-2 px-4 sticky top-0 z-50">
-  <div class="container mx-auto flex justify-between items-center">
-    <div class="flex items-center">
-      <img
-        src="https://lh3.googleusercontent.com/Sp3b24fVCvCVewv5udOP_e-qNVWGuxcZX9DEgYmKncXjeO9kp6KKCJ8NFcVs0VQNFeWo1P9p8-aYV1fDyq1Ct0ZCXec=s60"
-        alt="לוגו שם זה זול יותר" class="w-10 h-10 mr-2">
-      <h1 class="text-xl font-bold">שם זה זול יותר</h1>
-    </div>
-    <a href="https://chromewebstore.google.com/detail/%D7%A9%D7%9D-%D7%96%D7%94-%D7%96%D7%95%D7%9C-%D7%99%D7%95%D7%AA%D7%A8/neigoggljhfnodeneidndcflnclldnpm?hl=iw"
-      class="bg-yellow-400 text-green-600 px-4 py-2 rounded-full font-bold hover:bg-yellow-300 transition duration-300 text-center install-button">
-      התקן את התוסף
-    </a>
-  </div>
-</header>
-
-<script>
-  document.getElementById('mobileMenu').addEventListener('click', function (e) {
-    e.preventDefault();
-    var content = document.getElementById('mobileMenuContent');
-    content.classList.toggle('hidden');
-  });
-</script>
-
 <body class="flex flex-col min-h-screen">
+  <header class="bg-green-600 text-white py-2 px-4 sticky top-0 z-50">
+    <div class="container mx-auto flex justify-between items-center">
+      <div class="flex items-center">
+        <img
+          src="https://lh3.googleusercontent.com/Sp3b24fVCvCVewv5udOP_e-qNVWGuxcZX9DEgYmKncXjeO9kp6KKCJ8NFcVs0VQNFeWo1P9p8-aYV1fDyq1Ct0ZCXec=s60"
+          alt="לוגו שם זה זול יותר" class="w-10 h-10 mr-2">
+        <h1 class="text-xl font-bold">שם זה זול יותר</h1>
+      </div>
+      <a href="https://chromewebstore.google.com/detail/%D7%A9%D7%9D-%D7%96%D7%94-%D7%96%D7%95%D7%9C-%D7%99%D7%95%D7%AA%D7%A8/neigoggljhfnodeneidndcflnclldnpm?hl=iw"
+        class="bg-yellow-400 text-green-600 px-4 py-2 rounded-full font-bold hover:bg-yellow-300 transition duration-300 text-center install-button">
+        התקן את התוסף
+      </a>
+    </div>
+  </header>
+
   <div class="flex-grow">
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h2 class="text-3xl font-bold text-center mb-8">חיפוש קופונים והשוואת מחירים</h2>
+      <!-- טאבים -->
+      <div class="tabs-container">
+        <button class="tab-button active" data-tab="products">השוואת מחירים</button>
+        <button class="tab-button" data-tab="flights">השוואת טיסות</button>
+      </div>
 
-      <div class="bg-white p-6 rounded-lg shadow-md">
-        <div class="max-w-md mx-auto">
-          <div class="relative">
-            <input type="text" id="searchInput"
-              class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder='לדוגמא "המשביר" או "אוזניות גיימינג"'>
-            <span id="clearSearch"
-              class="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600">✕</span>
-            <svg class="w-6 h-6 text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2" fill="none"
-              stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <!-- תוכן טאב מוצרים -->
+      <div id="products-tab" class="tab-content active">
+        <h2 class="text-3xl font-bold text-center mb-8">חיפוש קופונים והשוואת מחירים</h2>
+
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <div class="max-w-md mx-auto">
+            <div class="relative">
+              <input type="text" id="searchInput"
+                class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                placeholder='לדוגמא "המשביר" או "אוזניות גיימינג"'>
+              <span id="clearSearch"
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600">✕</span>
+              <svg class="w-6 h-6 text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div id="loadingContainer" class="loading-container" style="display: none;">
+          <div class="loading-spinner"></div>
+          <p>מחפש מוצרים...</p>
+        </div>
+
+        <div id="sortContainer" class="sort-container" style="display: none;">
+          <select id="sortSelect" class="sort-select">
+            <option value="default">מיון לפי</option>
+            <option value="price-asc">מחיר: מהנמוך לגבוה</option>
+            <option value="price-desc">מחיר: מהגבוה לנמוך</option>
+          </select>
+        </div>
+
+        <div id="resultsContainer" class="button-container"></div>
+        <div id="socialLinksContainer" class="mt-4 mb-4 text-center" style="display: none;">
+          <p class="text-gray-700 mb-2 font-bold">הצטרפו לעדכוני קופונים:</p>
+          <div class="flex justify-center gap-4">
+            <a href="https://t.me/shamzezolyoter" target="_blank"
+              class="inline-flex items-center mx-2 bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition duration-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M9.028 20.837c-.714 0-.593-.271-.839-.949l-2.103-6.92L22.263 3.37" />
+                <path d="M9.028 20.837c.552 0 .795-.252 1.105-.553l2.941-2.857-3.671-2.214" />
+                <path
+                  d="M9.403 15.213l8.89 6.568c1.015.56 1.748.271 2-.942l3.62-17.053c.372-1.487-.564-2.159-1.534-1.72L1.125 10.263c-1.45.582-1.443 1.392-.264 1.753l5.455 1.7L18.94 5.753c.476-.29.911-.135.553.186" />
+              </svg>
+              טלגרם
+            </a>
+            <a href="https://chat.whatsapp.com/HVpVlib1K1UFAt9KuXNgfo" target="_blank"
+              class="inline-flex items-center mx-2 bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition duration-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.748-2.874-2.494-2.961-2.61-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.677.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.72.045.419-.1.824z" />
+              </svg>
+              וואטסאפ
+            </a>
+          </div>
+        </div>
+        <div id="compareButtonContainer" class="mt-6 text-center" style="display: none;">
+          <div id="estimatedPriceContainer" class="mb-4" style="display: none;">
+            <input type="number" id="estimatedPrice"
+              class="w-48 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
+              placeholder="הכנס מחיר משוער">
+          </div>
+          <button id="compareButton"
+            class="bg-green-500 text-white px-6 py-3 rounded-full font-bold hover:bg-green-600 transition duration-300 inline-flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+              </path>
             </svg>
+            השווה מחירים
+          </button>
+        </div>
+        <div id="socialLinksContainer2" class="mt-4 mb-4 text-center" style="display: none;">
+          <p class="text-gray-700 mb-2 font-bold">הצטרפו לקהילה שלנו:</p>
+          <div class="flex justify-center gap-4">
+            <a href="https://t.me/shamzezolyoter" target="_blank"
+              class="inline-flex items-center mx-2 bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition duration-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M9.028 20.837c-.714 0-.593-.271-.839-.949l-2.103-6.92L22.263 3.37" />
+                <path d="M9.028 20.837c.552 0 .795-.252 1.105-.553l2.941-2.857-3.671-2.214" />
+                <path
+                  d="M9.403 15.213l8.89 6.568c1.015.56 1.748.271 2-.942l3.62-17.053c.372-1.487-.564-2.159-1.534-1.72L1.125 10.263c-1.45.582-1.443 1.392-.264 1.753l5.455 1.7L18.94 5.753c.476-.29.911-.135.553.186" />
+              </svg>
+              טלגרם
+            </a>
+            <a href="https://chat.whatsapp.com/HVpVlib1K1UFAt9KuXNgfo" target="_blank"
+              class="inline-flex items-center mx-2 bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition duration-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.748-2.874-2.494-2.961-2.61-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.677.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.72.045.419-.1.824z" />
+              </svg>
+              וואטסאפ
+            </a>
           </div>
         </div>
       </div>
 
-      <div id="loadingContainer" class="loading-container" style="display: none;">
-        <div class="loading-spinner"></div>
-        <p>מחפש מוצרים...</p>
-      </div>
+      <!-- תוכן טאב טיסות -->
+      <div id="flights-tab" class="tab-content">
+        <h2 class="text-3xl font-bold text-center mb-8">השוואת מחירי טיסות</h2>
 
-      <div id="sortContainer" class="sort-container" style="display: none;">
-        <select id="sortSelect" class="sort-select">
-          <option value="default">מיון לפי</option>
-          <option value="price-asc">מחיר: מהנמוך לגבוה</option>
-          <option value="price-desc">מחיר: מהגבוה לנמוך</option>
-        </select>
-      </div>
+        <div class="flight-search-container">
+          <div class="flight-inputs-row">
+            <div class="flight-input-group">
+              <label for="originInput">מוצא</label>
+              <input type="text" id="originInput" class="flight-input" placeholder="הקלד עיר או קוד שדה תעופה">
+              <div id="originSuggestions" class="suggestions-dropdown"></div>
+            </div>
 
-      <div id="resultsContainer" class="button-container"></div>
-      <div id="socialLinksContainer" class="mt-4 mb-4 text-center" style="display: none;">
-        <p class="text-gray-700 mb-2 font-bold">הצטרפו לעדכוני קופונים:</p>
-        <div class="flex justify-center gap-4">
-          <a href="https://t.me/shamzezolyoter" target="_blank"
-            class="inline-flex items-center mx-2 bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M9.028 20.837c-.714 0-.593-.271-.839-.949l-2.103-6.92L22.263 3.37" />
-              <path d="M9.028 20.837c.552 0 .795-.252 1.105-.553l2.941-2.857-3.671-2.214" />
-              <path
-                d="M9.403 15.213l8.89 6.568c1.015.56 1.748.271 2-.942l3.62-17.053c.372-1.487-.564-2.159-1.534-1.72L1.125 10.263c-1.45.582-1.443 1.392-.264 1.753l5.455 1.7L18.94 5.753c.476-.29.911-.135.553.186" />
+            <div class="flight-input-group">
+              <label for="destinationInput">יעד</label>
+              <input type="text" id="destinationInput" class="flight-input" placeholder="הקלד עיר או קוד שדה תעופה">
+              <div id="destinationSuggestions" class="suggestions-dropdown"></div>
+            </div>
+
+            <div class="date-inputs-group">
+              <div class="date-input-wrapper">
+                <label for="dateFrom">יציאה</label>
+                <input type="date" id="dateFrom" class="flight-input">
+              </div>
+              <div class="date-input-wrapper">
+                <label for="dateTo">חזרה</label>
+                <input type="date" id="dateTo" class="flight-input">
+              </div>
+            </div>
+          </div>
+
+          <button id="searchFlightsBtn"
+            class="bg-green-500 text-white px-6 py-3 rounded-full font-bold hover:bg-green-600 transition duration-300 inline-flex items-center mx-auto mt-4">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
-            טלגרם
-          </a>
-          <a href="https://chat.whatsapp.com/HVpVlib1K1UFAt9KuXNgfo" target="_blank"
-            class="inline-flex items-center mx-2 bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" fill="currentColor" viewBox="0 0 24 24">
-              <path
-                d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.748-2.874-2.494-2.961-2.61-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.677.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.72.045.419-.1.824z" />
-            </svg>
-            וואטסאפ
-          </a>
+            חפש טיסות
+          </button>
         </div>
-      </div>
-      <div id="compareButtonContainer" class="mt-6 text-center" style="display: none;">
-        <div id="estimatedPriceContainer" class="mb-4" style="display: none;">
-          <input type="number" id="estimatedPrice"
-            class="w-48 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
-            placeholder="הכנס מחיר משוער">
+
+        <div id="flightLoadingContainer" class="loading-flights" style="display: none;">
+          <div class="spinner"></div>
+          <p>מחפש טיסות...</p>
+          <p id="loadingStatus" class="text-sm text-gray-600 mt-2"></p>
         </div>
-        <button id="compareButton"
-          class="bg-green-500 text-white px-6 py-3 rounded-full font-bold hover:bg-green-600 transition duration-300 inline-flex items-center">
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
-            </path>
-          </svg>
-          השווה מחירים
-        </button>
-      </div>
-      <div id="socialLinksContainer" class="mt-4 mb-4 text-center" style="display: none;">
-        <p class="text-gray-700 mb-2 font-bold">הצטרפו לקהילה שלנו:</p>
-        <div class="flex justify-center gap-4">
-          <a href="https://t.me/shamzezolyoter" target="_blank"
-            class="inline-flex items-center mx-2 bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M9.028 20.837c-.714 0-.593-.271-.839-.949l-2.103-6.92L22.263 3.37" />
-              <path d="M9.028 20.837c.552 0 .795-.252 1.105-.553l2.941-2.857-3.671-2.214" />
-              <path
-                d="M9.403 15.213l8.89 6.568c1.015.56 1.748.271 2-.942l3.62-17.053c.372-1.487-.564-2.159-1.534-1.72L1.125 10.263c-1.45.582-1.443 1.392-.264 1.753l5.455 1.7L18.94 5.753c.476-.29.911-.135.553.186" />
-            </svg>
-            טלגרם
-          </a>
-          <a href="https://chat.whatsapp.com/HVpVlib1K1UFAt9KuXNgfo" target="_blank"
-            class="inline-flex items-center mx-2 bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" fill="currentColor" viewBox="0 0 24 24">
-              <path
-                d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.748-2.874-2.494-2.961-2.61-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.677.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.72.045.419-.1.824z" />
-            </svg>
-            וואטסאפ
-          </a>
+
+        <div id="filtersContainer" class="filters-sort-container" style="display: none;">
+          <div class="filter-group">
+            <input type="checkbox" id="directFlightsOnly" class="filter-checkbox">
+            <label for="directFlightsOnly">טיסות ישירות בלבד</label>
+          </div>
+
+          <div class="filter-group">
+            <label for="maxPriceFilter">מחיר מקסימלי:</label>
+            <input type="number" id="maxPriceFilter" placeholder="$" style="width: 100px;" class="flight-input">
+          </div>
+
+          <div class="filter-group">
+            <label for="airlineFilter">חברת תעופה:</label>
+            <select id="airlineFilter" class="sort-select">
+              <option value="">כל החברות</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="sortFlights">מיון לפי:</label>
+            <select id="sortFlights" class="sort-select">
+              <option value="price-asc">מחיר - מהזול ליקר</option>
+              <option value="price-desc">מחיר - מהיקר לזול</option>
+              <option value="duration-asc">משך טיסה - מהקצר לארוך</option>
+              <option value="nights">מספר לילות</option>
+            </select>
+          </div>
         </div>
+
+        <div id="flightResultsContainer" class="flight-results-container"></div>
       </div>
     </main>
 
@@ -553,504 +962,1018 @@
         <p>© 2024 שם זה זול יותר - כל הזכויות שמורות</p>
       </div>
     </footer>
+  </div>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        const searchInput = document.getElementById('searchInput');
-        const clearSearch = document.getElementById('clearSearch');
-        const loadingContainer = document.getElementById('loadingContainer');
-        const compareButtonContainer = document.getElementById('compareButtonContainer');
-        const compareButton = document.getElementById('compareButton');
-        const resultsContainer = document.getElementById('resultsContainer');
-        const sortContainer = document.getElementById('sortContainer');
-        const sortSelect = document.getElementById('sortSelect');
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // משתנים גלובליים לטאב המוצרים הקיים
+      const searchInput = document.getElementById('searchInput');
+      const clearSearch = document.getElementById('clearSearch');
+      const loadingContainer = document.getElementById('loadingContainer');
+      const compareButtonContainer = document.getElementById('compareButtonContainer');
+      const compareButton = document.getElementById('compareButton');
+      const resultsContainer = document.getElementById('resultsContainer');
+      const sortContainer = document.getElementById('sortContainer');
+      const sortSelect = document.getElementById('sortSelect');
 
-        let currentSearchQuery = '';
-        let allSites = [];
-        let searchedUrl = '';
-        let currentResults = [];
+      let currentSearchQuery = '';
+      let allSites = [];
+      let searchedUrl = '';
+      let currentResults = [];
 
-        function getUrlParameter(name) {
-          name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-          var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-          var results = regex.exec(location.search);
-          return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-        }
+      // משתנים גלובליים לטאב הטיסות החדש
+      let citiesData = [];
+      let flightResults = [];
+      let filteredFlightResults = [];
+      let selectedOrigin = null;
+      let selectedDestination = null;
+      let pollingInterval = null;
 
-        function checkAndLogSource() {
-          const source = getUrlParameter('source');
-          if (source && typeof plausible === 'function') {
-            plausible('TrafficSource', { props: { source: source } });
+      // לוגיקת טאבים
+      document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', () => {
+          const tabName = button.dataset.tab;
+
+          // עדכון כפתורי הטאבים
+          document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+
+          // עדכון תוכן הטאבים
+          document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+          document.getElementById(`${tabName}-tab`).classList.add('active');
+
+          // טעינת נתוני ערים כשעוברים לטאב טיסות
+          if (tabName === 'flights' && citiesData.length === 0) {
+            loadCitiesData();
           }
+        });
+      });
+
+      // פונקציות לטאב הטיסות החדש
+      async function loadCitiesData() {
+        try {
+          const response = await fetch('https://tiv7rvgnp4.execute-api.il-central-1.amazonaws.com/cityToIATA?city=all_results');
+          citiesData = await response.json();
+          console.log('Cities data loaded:', citiesData.length);
+        } catch (error) {
+          console.error('Error loading cities:', error);
+        }
+      }
+
+      function normalize(str) {
+        return str.toLowerCase().replace(/[^a-zA-Z\u0590-\u05FF0-9]/g, '');
+      }
+
+      function searchCities(query) {
+        if (!query || query.length < 2) return [];
+
+        const normalizedQuery = normalize(query);
+
+        return citiesData.filter(city => {
+          const cityHeb = normalize(city.city_name_heb || '');
+          const cityEng = normalize(city.city_name_eng || '');
+          const iata = (city.airport_iata || '').toLowerCase();
+          const synonyms = Array.isArray(city.city_synonyms) ? city.city_synonyms.map(normalize) : [];
+
+          return (
+            cityHeb.includes(normalizedQuery) ||
+            cityEng.includes(normalizedQuery) ||
+            iata.includes(normalizedQuery) ||
+            synonyms.some(s => s.includes(normalizedQuery))
+          );
+        }).slice(0, 10);
+      }
+
+
+      // הצגת הצעות לאוטוקומפליט
+      function showSuggestions(inputId, suggestions) {
+        const suggestionsDiv = document.getElementById(`${inputId}Suggestions`);
+        if (!suggestionsDiv) return; // הגנה מטעויות
+
+        if (suggestions.length === 0) {
+          suggestionsDiv.classList.remove('show');
+          return;
         }
 
+        suggestionsDiv.innerHTML = suggestions.map(city => `
+    <div class="suggestion-item" data-iata="${city.airport_iata}" data-city-name-heb="${city.city_name_heb}" data-city-name-eng="${city.city_name_eng}">
+      <strong>${city.city_name_heb}</strong> (${city.airport_iata})
+      <small>${city.airport_name}, ${city.country_name_heb}</small>
+    </div>
+  `).join('');
 
-        function updateUrlWithSearchQuery(query) {
-          if (history.pushState) {
-            var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?query=' + encodeURIComponent(query);
-            window.history.pushState({ path: newurl }, '', newurl);
+        suggestionsDiv.classList.add('show');
+
+        // הוספת אירועי לחיצה להצעות
+        suggestionsDiv.querySelectorAll('.suggestion-item').forEach(item => {
+          item.addEventListener('click', () => {
+            const iata = item.dataset.iata;
+            const cityNameHeb = item.dataset.cityNameHeb;
+            const cityNameEng = item.dataset.cityNameEng;
+            const input = document.getElementById(`${inputId}Input`);
+
+            input.value = `${cityNameHeb} (${iata})`;
+            suggestionsDiv.classList.remove('show');
+
+            // שמירת הבחירה
+            if (inputId === 'origin') {
+
+              selectedOrigin = { code: iata, nameHeb: cityNameHeb, nameEng: cityNameEng };
+            } else {
+              selectedDestination = { code: iata, nameHeb: cityNameHeb, nameEng: cityNameEng };
+            }
+          });
+        });
+      }
+
+
+      ['origin', 'destination'].forEach(id => {
+        const input = document.getElementById(`${id}Input`);
+        const suggestionsDiv = document.getElementById(`${id}Suggestions`);
+
+        if (!input || !suggestionsDiv) return;
+
+        input.addEventListener('input', (e) => {
+          const query = e.target.value;
+          const suggestions = searchCities(query);
+          showSuggestions(id, suggestions);
+        });
+
+        input.addEventListener('blur', () => {
+          setTimeout(() => {
+            suggestionsDiv.classList.remove('show');
+          }, 200);
+        });
+
+        input.addEventListener('focus', () => {
+          if (input.value) {
+            const suggestions = searchCities(input.value);
+            showSuggestions(id, suggestions);
           }
+        });
+      });
+
+
+      // הגדרת תאריכים מינימליים
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      document.getElementById('dateFrom').min = tomorrow.toISOString().split('T')[0];
+      document.getElementById('dateTo').min = tomorrow.toISOString().split('T')[0];
+
+      // חיפוש טיסות
+      document.getElementById('searchFlightsBtn').addEventListener('click', () => {
+        if (!selectedOrigin || !selectedDestination) {
+          alert('אנא בחר מוצא ויעד');
+          return;
         }
 
-        function animateTyping(text, callback, index = 0) {
-          if (index < text.length) {
-            searchInput.value += text[index];
-            setTimeout(() => animateTyping(text, callback, index + 1), 100);
-          } else {
-            search(text);
-            if (callback) callback();
-          }
+        const dateFrom = document.getElementById('dateFrom').value;
+        const dateTo = document.getElementById('dateTo').value;
+
+        if (!dateFrom || !dateTo) {
+          alert('אנא בחר תאריכי יציאה וחזרה');
+          return;
         }
 
-        function showLoading() {
-          loadingContainer.style.display = 'block';
+        if (new Date(dateFrom) >= new Date(dateTo)) {
+          alert('תאריך החזרה חייב להיות אחרי תאריך היציאה');
+          return;
         }
 
-        function hideLoading() {
-          loadingContainer.style.display = 'none';
-        }
+        fetchFlights(selectedOrigin.code, selectedDestination.code, dateFrom, dateTo);
+      });
 
-        function updateCompareButton(query) {
-          if (query.trim()) {
-            compareButton.textContent = `השוואת מחירים עבור "${query}"`;
-            compareButtonContainer.style.display = 'block';
-          } else {
-            compareButtonContainer.style.display = 'none';
-          }
-        }
+      // פונקציות חיפוש טיסות
+      async function fetchFlights(originCode, destinationCode, dateFrom, dateTo) {
+        try {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
 
-        function search(query) {
-          currentSearchQuery = query;
-          showLoading();
-          resultsContainer.innerHTML = '';
-          updateUrlWithSearchQuery(query);
+          const departureDate = new Date(dateFrom);
+          departureDate.setHours(0, 0, 0, 0);
 
-          if (query.trim() === '') {
-            hideLoading();
-            displayPopularSearches();
-            sortContainer.style.display = 'none';
+          if (departureDate.getTime() === today.getTime()) {
+            document.getElementById('flightResultsContainer').innerHTML = `
+              <div style="padding: 40px 20px; text-align: center; color: #e74c3c;">
+                <div style="font-size: 60px; margin-bottom: 20px;">🛑</div>
+                <h3 style="margin-bottom: 15px; font-size: 18px;">לא ניתן לחפש טיסות שיוצאות היום</h3>
+                <p>אנא בחר תאריך יציאה עתידי.</p>
+              </div>
+            `;
             return;
           }
 
-          sortContainer.style.display = 'none';
+          const url = `https://2gxkd3dzwd.execute-api.il-central-1.amazonaws.com/stag1/api/flights?origin=${originCode}&destination=${destinationCode}&date_from=${dateFrom}&date_to=${dateTo}`;
 
-          if (query.toLowerCase().startsWith('https://')) {
-            searchedUrl = query;
-            searchByUrl(query);
-          } else {
-            searchedUrl = '';
-            const filteredSites = allSites.filter(site =>
-              site.siteName.toLowerCase().includes(query.toLowerCase()) ||
-              (site.cuponDetails && site.cuponDetails.toLowerCase().includes(query.toLowerCase()))
-            );
+          document.getElementById('flightResultsContainer').innerHTML = '';
+          document.getElementById('flightLoadingContainer').style.display = 'block';
+          document.getElementById('filtersContainer').style.display = 'none';
 
-            hideLoading();
-            displaySearchResults(filteredSites);
-            updateCompareButton(query);
+          await performFlightsRequest(url);
 
-            // Show/hide estimated price input based on search results
-            const estimatedPriceContainer = document.getElementById('estimatedPriceContainer');
-            if (filteredSites.length === 0) {
-              estimatedPriceContainer.style.display = 'block';
+        } catch (error) {
+          console.error('Error fetching flights:', error);
+          displayError(error.message);
+        }
+      }
+
+      async function performFlightsRequest(url, retryCount = 0) {
+        try {
+          const response = await fetch(url);
+          const statusCode = response.status;
+
+          if (statusCode >= 500 && statusCode < 600) {
+            console.warn(`Server error ${statusCode}, attempt ${retryCount + 1}`);
+
+            if (retryCount < 2) {
+              console.log(`Retrying in 3 seconds... (attempt ${retryCount + 2}/3)`);
+              setTimeout(() => {
+                performFlightsRequest(url, retryCount + 1);
+              }, 3000);
+              return;
             } else {
-              estimatedPriceContainer.style.display = 'none';
+              throw new Error(`Server error ${statusCode} - failed after 3 attempts`);
             }
           }
 
-          if (typeof plausible === 'function') {
-            plausible('Search', { props: { query: query } });
+          const rawResults = await response.json();
+
+          if (!Array.isArray(rawResults)) {
+            console.error('Invalid response format - not an array:', rawResults);
+
+            if (retryCount < 2) {
+              console.log(`Invalid response format, retrying in 3 seconds... (attempt ${retryCount + 2}/3)`);
+              setTimeout(() => {
+                performFlightsRequest(url, retryCount + 1);
+              }, 3000);
+              return;
+            } else {
+              throw new Error('Invalid response format after 3 attempts');
+            }
           }
+
+          if (statusCode === 206) {
+            startPolling(url);
+          } else {
+            stopPolling();
+          }
+
+          processFlightResults(rawResults, statusCode);
+        } catch (error) {
+          console.error('Error in flight request:', error);
+
+          if (retryCount < 2 && (error.name === 'TypeError' || error.message.includes('fetch'))) {
+            console.log(`Network error, retrying in 3 seconds... (attempt ${retryCount + 2}/3)`);
+            setTimeout(() => {
+              performFlightsRequest(url, retryCount + 1);
+            }, 3000);
+            return;
+          }
+
+          displayError(error.message);
+          stopPolling();
+        }
+      }
+
+      function startPolling(url) {
+        if (pollingInterval) return;
+
+        document.getElementById('loadingStatus').textContent = 'מחפש עוד טיסות...';
+
+        pollingInterval = setInterval(async () => {
+          try {
+            const response = await fetch(url);
+            const results = await response.json();
+
+            if (response.status === 200) {
+              stopPolling();
+              processFlightResults(results, 200);
+            } else if (response.status === 206) {
+              processFlightResults(results, 206);
+            }
+          } catch (error) {
+            console.error('Polling error:', error);
+          }
+        }, 5000);
+      }
+
+      function stopPolling() {
+        if (pollingInterval) {
+          clearInterval(pollingInterval);
+          pollingInterval = null;
+        }
+        document.getElementById('loadingStatus').textContent = '';
+      }
+
+      function processFlightResults(results, statusCode) {
+        document.getElementById('flightLoadingContainer').style.display = 'none';
+
+        if (results.length === 0) {
+          document.getElementById('flightResultsContainer').innerHTML = '<p class="text-center text-gray-600">לא נמצאו טיסות התואמות לחיפוש שלך</p>';
+          return;
         }
 
-        function searchByUrl(url) {
-          const matchingSite = allSites.find(site => url.toLowerCase().startsWith(site.URL.toLowerCase()));
+        flightResults = results;
+        filteredFlightResults = [...results];
 
-          if (matchingSite) {
-            displaySearchResults([matchingSite], true);
-            updateCompareButton(matchingSite.siteName);
-          } else {
-            displayNoCouponMessage(url);
+        // עדכון פילטר חברות תעופה
+        updateAirlineFilter(results);
+
+        document.getElementById('filtersContainer').style.display = 'flex';
+        displayFlightResults(filteredFlightResults);
+
+        if (statusCode === 206) {
+          document.getElementById('loadingStatus').textContent = 'ממשיך לחפש עוד טיסות...';
+        }
+      }
+
+      function updateAirlineFilter(results) {
+        const airlines = new Set();
+        results.forEach(flight => {
+          if (flight.airline_name) {
+            airlines.add(flight.airline_name);
           }
+        });
+
+        const airlineFilter = document.getElementById('airlineFilter');
+        airlineFilter.innerHTML = '<option value="">כל החברות</option>';
+
+        Array.from(airlines).sort().forEach(airline => {
+          const option = document.createElement('option');
+          option.value = airline;
+          option.textContent = airline;
+          airlineFilter.appendChild(option);
+        });
+      }
+
+      function displayFlightResults(results) {
+        const container = document.getElementById('flightResultsContainer');
+
+        if (results.length === 0) {
+          container.innerHTML = '<p class="text-center text-gray-600">אין טיסות התואמות לסינון שנבחר</p>';
+          return;
+        }
+
+        container.innerHTML = results.map((flight, index) => {
+          const isDirect = flight.direct;
+          const outboundDetails = flight.deal_details.outbound;
+          const inboundDetails = flight.deal_details.inbound;
+
+          return `
+            <div class="flight-card">
+              <div class="flight-header">
+                <div class="flight-airline">
+                  <span class="airline-name">${flight.airline_name}</span>
+                  ${isDirect ? '<span class="direct-badge">ישירה</span>' : '<span class="connecting-badge">עם עצירה</span>'}
+                </div>
+                <div class="flight-price">${flight.price_usd}</div>
+              </div>
+              
+              <div class="flight-body">
+                ${flight.image_url ? `<img src="${flight.image_url}" alt="${flight.destination_city}" class="w-full h-48 object-cover rounded-lg mb-4">` : ''}
+                
+                <div class="flight-route">
+                  <div class="flight-endpoint">
+                    <div class="flight-time">${formatTime(outboundDetails[0].departure_time)}</div>
+                    <div class="flight-location">${flight.origin_city}</div>
+                  </div>
+                  
+                  <div class="flight-arrow">→</div>
+                  
+                  <div class="flight-endpoint">
+                    <div class="flight-time">${formatTime(outboundDetails[outboundDetails.length - 1].arrival_time)}</div>
+                    <div class="flight-location">${flight.destination_city}</div>
+                  </div>
+                </div>
+                
+                <div class="flight-dates">
+                  ${flight.dates_subtitle} • ${flight.nights} לילות
+                </div>
+                
+                <div class="flight-actions">
+                  <button class="flight-book-btn" onclick="bookFlight('${flight.fly_url}')">
+                    הזמן טיסה
+                  </button>
+                  <button class="flight-details-toggle" onclick="toggleFlightDetails(${index})">
+                    פרטי טיסה
+                  </button>
+                </div>
+              </div>
+              
+              <div id="flight-details-${index}" class="flight-details">
+                <div class="flight-segment">
+                  <div class="segment-title">טיסת הלוך - ${formatDate(flight.date_from)}</div>
+                  ${renderFlightLegs(outboundDetails, flight.deal_details)}
+                </div>
+                
+                <div class="flight-segment">
+                  <div class="segment-title">טיסת חזור - ${formatDate(flight.date_to)}</div>
+                  ${renderFlightLegs(inboundDetails, flight.deal_details, true)}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function renderFlightLegs(legs, details, isInbound = false) {
+        return legs.map((leg, index) => {
+          let html = '';
+
+          if (index > 0) {
+            const connectionTime = leg.connection_length;
+            const connectionCity = isInbound ? details.connection_city_inbound : details.connection_city_outbound;
+            const connectionCountry = isInbound ? details.connection_country_inbound : details.connection_country_outbound;
+
+            if (connectionTime) {
+              html += `
+                <div class="connection-info">
+                  עצירה של ${formatDuration(connectionTime)} ב${connectionCity}, ${connectionCountry}
+                </div>
+              `;
+            }
+          }
+
+          html += `
+            <div class="flight-leg">
+              <div>
+                <div class="font-semibold">${formatTime(leg.departure_time)}</div>
+                <div class="text-sm text-gray-600">יציאה</div>
+              </div>
+              <div class="text-center">
+                <div class="text-sm text-gray-600">משך טיסה</div>
+                <div>${formatDuration(leg.flight_duration)}</div>
+              </div>
+              <div class="text-left">
+                <div class="font-semibold">${formatTime(leg.arrival_time)}</div>
+                <div class="text-sm text-gray-600">נחיתה</div>
+              </div>
+            </div>
+          `;
+
+          return html;
+        }).join('');
+      }
+
+      // פונקציות עזר
+      function formatTime(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+      }
+
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('he-IL');
+      }
+
+      function formatDuration(hours) {
+        const h = Math.floor(hours);
+        const m = Math.round((hours - h) * 60);
+        return `${h} שעות ${m > 0 ? `${m} דקות` : ''}`;
+      }
+
+      window.toggleFlightDetails = function (index) {
+        const details = document.getElementById(`flight-details-${index}`);
+        details.classList.toggle('show');
+      };
+
+      window.bookFlight = function (url) {
+        window.open(url, '_blank');
+
+        if (typeof plausible === 'function') {
+          plausible('FlightBooking', { props: { url: url } });
+        }
+      };
+
+      function displayError(message) {
+        document.getElementById('flightLoadingContainer').style.display = 'none';
+        document.getElementById('flightResultsContainer').innerHTML = `
+          <div class="text-center text-red-600 p-4">
+            <p>אירעה שגיאה: ${message}</p>
+          </div>
+        `;
+      }
+
+      // פילטרים ומיון
+      document.getElementById('directFlightsOnly').addEventListener('change', applyFilters);
+      document.getElementById('maxPriceFilter').addEventListener('input', applyFilters);
+      document.getElementById('airlineFilter').addEventListener('change', applyFilters);
+      document.getElementById('sortFlights').addEventListener('change', applySorting);
+
+      function applyFilters() {
+        const directOnly = document.getElementById('directFlightsOnly').checked;
+        const maxPrice = parseFloat(document.getElementById('maxPriceFilter').value) || Infinity;
+        const selectedAirline = document.getElementById('airlineFilter').value;
+
+        filteredFlightResults = flightResults.filter(flight => {
+          if (directOnly && !flight.direct) return false;
+          if (flight.price_usd > maxPrice) return false;
+          if (selectedAirline && flight.airline_name !== selectedAirline) return false;
+          return true;
+        });
+
+        applySorting();
+      }
+
+      function applySorting() {
+        const sortBy = document.getElementById('sortFlights').value;
+
+        filteredFlightResults.sort((a, b) => {
+          switch (sortBy) {
+            case 'price-asc':
+              return a.price_usd - b.price_usd;
+            case 'price-desc':
+              return b.price_usd - a.price_usd;
+            case 'duration-asc':
+              const durationA = a.deal_details.outbound_duration + a.deal_details.inbound_duration;
+              const durationB = b.deal_details.outbound_duration + b.deal_details.inbound_duration;
+              return durationA - durationB;
+            case 'nights':
+              return a.nights - b.nights;
+            default:
+              return 0;
+          }
+        });
+
+        displayFlightResults(filteredFlightResults);
+      }
+
+      // הקוד הקיים של טאב המוצרים (ללא שינוי)
+      function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+      }
+
+      function checkAndLogSource() {
+        const source = getUrlParameter('source');
+        if (source && typeof plausible === 'function') {
+          plausible('TrafficSource', { props: { source: source } });
+        }
+      }
+
+      function updateUrlWithSearchQuery(query) {
+        if (history.pushState) {
+          var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?query=' + encodeURIComponent(query);
+          window.history.pushState({ path: newurl }, '', newurl);
+        }
+      }
+
+      function animateTyping(text, callback, index = 0) {
+        if (index < text.length) {
+          searchInput.value += text[index];
+          setTimeout(() => animateTyping(text, callback, index + 1), 100);
+        } else {
+          search(text);
+          if (callback) callback();
+        }
+      }
+
+      function showLoading() {
+        loadingContainer.style.display = 'block';
+      }
+
+      function hideLoading() {
+        loadingContainer.style.display = 'none';
+      }
+
+      function updateCompareButton(query) {
+        if (query.trim()) {
+          compareButton.textContent = `השוואת מחירים עבור "${query}"`;
+          compareButtonContainer.style.display = 'block';
+        } else {
+          compareButtonContainer.style.display = 'none';
+        }
+      }
+
+      function search(query) {
+        currentSearchQuery = query;
+        showLoading();
+        resultsContainer.innerHTML = '';
+        updateUrlWithSearchQuery(query);
+
+        if (query.trim() === '') {
+          hideLoading();
+          displayPopularSearches();
+          sortContainer.style.display = 'none';
+          return;
+        }
+
+        sortContainer.style.display = 'none';
+
+        if (query.toLowerCase().startsWith('https://')) {
+          searchedUrl = query;
+          searchByUrl(query);
+        } else {
+          searchedUrl = '';
+          const filteredSites = allSites.filter(site =>
+            site.siteName.toLowerCase().includes(query.toLowerCase()) ||
+            (site.cuponDetails && site.cuponDetails.toLowerCase().includes(query.toLowerCase()))
+          );
 
           hideLoading();
+          displaySearchResults(filteredSites);
+          updateCompareButton(query);
+
+          const estimatedPriceContainer = document.getElementById('estimatedPriceContainer');
+          if (filteredSites.length === 0) {
+            estimatedPriceContainer.style.display = 'block';
+          } else {
+            estimatedPriceContainer.style.display = 'none';
+          }
         }
 
-        function displayNoCouponMessage(url) {
-          const siteName = new URL(url).hostname;
-          resultsContainer.innerHTML = `
-                <p>נראה שאין כאן קופון, אפשר ללחוץ כאן ולבקש להוסיף</p>
-                <button class="request-coupon-button" onclick="requestCoupon('${siteName}')">בקשת הטבה ל${siteName}</button>
-            `;
+        if (typeof plausible === 'function') {
+          plausible('Search', { props: { query: query } });
+        }
+      }
+
+      function searchByUrl(url) {
+        const matchingSite = allSites.find(site => url.toLowerCase().startsWith(site.URL.toLowerCase()));
+
+        if (matchingSite) {
+          displaySearchResults([matchingSite], true);
+          updateCompareButton(matchingSite.siteName);
+        } else {
+          displayNoCouponMessage(url);
         }
 
-        function requestCoupon(siteName) {
-          const emailInput = document.createElement('input');
-          emailInput.type = 'email';
-          emailInput.placeholder = 'הזן את כתובת המייל שלך';
-          emailInput.className = 'email-input';
+        hideLoading();
+      }
 
-          const submitButton = document.createElement('button');
-          submitButton.textContent = 'שליחה';
-          submitButton.className = 'request-coupon-button';
-          submitButton.onclick = function () {
-            const email = emailInput.value;
-            if (email) {
-              if (typeof plausible === 'function') {
-                plausible('CouponRequest', {
-                  props: {
-                    site: siteName,
-                    email: email
-                  }
-                });
-              }
-              alert('הבקשה נשלחה');
-              emailInput.remove();
-              submitButton.remove();
-            } else {
-              alert('אנא הזן כתובת מייל תקינה');
+      function displayNoCouponMessage(url) {
+        const siteName = new URL(url).hostname;
+        resultsContainer.innerHTML = `
+          <p>נראה שאין כאן קופון, אפשר ללחוץ כאן ולבקש להוסיף</p>
+          <button class="request-coupon-button" onclick="requestCoupon('${siteName}')">בקשת הטבה ל${siteName}</button>
+        `;
+      }
+
+      function requestCoupon(siteName) {
+        const emailInput = document.createElement('input');
+        emailInput.type = 'email';
+        emailInput.placeholder = 'הזן את כתובת המייל שלך';
+        emailInput.className = 'email-input';
+
+        const submitButton = document.createElement('button');
+        submitButton.textContent = 'שליחה';
+        submitButton.className = 'request-coupon-button';
+        submitButton.onclick = function () {
+          const email = emailInput.value;
+          if (email) {
+            if (typeof plausible === 'function') {
+              plausible('CouponRequest', {
+                props: {
+                  site: siteName,
+                  email: email
+                }
+              });
             }
-          };
+            alert('הבקשה נשלחה');
+            emailInput.remove();
+            submitButton.remove();
+          } else {
+            alert('אנא הזן כתובת מייל תקינה');
+          }
+        };
 
-          resultsContainer.appendChild(emailInput);
-          resultsContainer.appendChild(submitButton);
-        }
+        resultsContainer.appendChild(emailInput);
+        resultsContainer.appendChild(submitButton);
+      }
 
-        function displayPopularSearches() {
-          const popularSearches = [
-            "Ali express", "Golf", "המשביר", "ACE",
-            "איירפודס", "NAUTICA", "בושם לגבר", "Toys R us"
-          ];
+      function displayPopularSearches() {
+        const popularSearches = [
+          "Ali express", "Golf", "המשביר", "ACE",
+          "איירפודס", "NAUTICA", "בושם לגבר", "Toys R us"
+        ];
 
-          const container = document.createElement('div');
-          container.className = 'popular-searches-container';
+        const container = document.createElement('div');
+        container.className = 'popular-searches-container';
 
-          const title = document.createElement('h3');
-          title.textContent = 'חיפושים נפוצים';
-          container.appendChild(title);
+        const title = document.createElement('h3');
+        title.textContent = 'חיפושים נפוצים';
+        container.appendChild(title);
 
-          const buttonContainer = document.createElement('div');
-          buttonContainer.className = 'popular-search-buttons';
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'popular-search-buttons';
 
-          popularSearches.forEach(searchQuery => {
-            const button = document.createElement('button');
-            button.textContent = searchQuery;
-            button.className = 'popular-search-button';
-            button.addEventListener('click', () => {
-              searchInput.value = searchQuery;
-              if (typeof plausible === 'function') {
-                plausible('PopularSearch', { props: { query: searchQuery } });
-              }
-              handleSearchInput();
-            });
-            buttonContainer.appendChild(button);
-          });
-
-          container.appendChild(buttonContainer);
-          resultsContainer.appendChild(container);
-        }
-
-        function displaySearchResults(results, isUrlSearch = false) {
-          resultsContainer.innerHTML = '';
-          const uniqueResults = new Map();
-
-          results.forEach(site => {
-            if (!uniqueResults.has(site.siteName)) {
-              uniqueResults.set(site.siteName, site);
+        popularSearches.forEach(searchQuery => {
+          const button = document.createElement('button');
+          button.textContent = searchQuery;
+          button.className = 'popular-search-button';
+          button.addEventListener('click', () => {
+            searchInput.value = searchQuery;
+            if (typeof plausible === 'function') {
+              plausible('PopularSearch', { props: { query: searchQuery } });
             }
+            handleSearchInput();
           });
+          buttonContainer.appendChild(button);
+        });
 
-          uniqueResults.forEach(site => {
-            const siteDiv = document.createElement('div');
-            siteDiv.className = 'product';
+        container.appendChild(buttonContainer);
+        resultsContainer.appendChild(container);
+      }
 
-            let siteContent = `<h3>${site.siteName}</h3>`;
+      function displaySearchResults(results, isUrlSearch = false) {
+        resultsContainer.innerHTML = '';
+        const uniqueResults = new Map();
 
-            if (site.cupon && site.cupon !== "") {
-              siteContent += `
-                <div class="coupon-details">
-                    <button class="coupon-toggle">פרטי קופון</button>
-                    <div class="coupon-content">
-                        <span>${site.cupon}</span>
-                        <span class="copy-icon" onclick="copyCoupon('${site.cupon}', event)">📋</span>
-                        <a href="#" class="site-link" onclick="goToSite('${site.affLink || site.URL}', '${site.siteName}', '${isUrlSearch ? 'למוצר' : 'לאתר'}', event)">
-                            עבור ${isUrlSearch ? 'למוצר' : 'לאתר'}
-                        </a>
-                        <p class="coupon-info">${site.cuponDetails || ''}</p>
-                    </div>
+        results.forEach(site => {
+          if (!uniqueResults.has(site.siteName)) {
+            uniqueResults.set(site.siteName, site);
+          }
+        });
+
+        uniqueResults.forEach(site => {
+          const siteDiv = document.createElement('div');
+          siteDiv.className = 'product';
+
+          let siteContent = `<h3>${site.siteName}</h3>`;
+
+          if (site.cupon && site.cupon !== "") {
+            siteContent += `
+              <div class="coupon-details">
+                <button class="coupon-toggle">פרטי קופון</button>
+                <div class="coupon-content">
+                  <span>${site.cupon}</span>
+                  <span class="copy-icon" onclick="copyCoupon('${site.cupon}', event)">📋</span>
+                  <a href="#" class="site-link" onclick="goToSite('${site.affLink || site.URL}', '${site.siteName}', '${isUrlSearch ? 'למוצר' : 'לאתר'}', event)">
+                    עבור ${isUrlSearch ? 'למוצר' : 'לאתר'}
+                  </a>
+                  <p class="coupon-info">${site.cuponDetails || ''}</p>
                 </div>
+              </div>
             `;
-            } else {
-              siteContent += `<a href="#" class="site-link" onclick="goToSite('${site.affLink || site.URL}', '${site.siteName}', '${isUrlSearch ? 'למוצר' : 'לאתר'}', event)">
-                עבור ${isUrlSearch ? 'למוצר' : 'לאתר'}
+          } else {
+            siteContent += `<a href="#" class="site-link" onclick="goToSite('${site.affLink || site.URL}', '${site.siteName}', '${isUrlSearch ? 'למוצר' : 'לאתר'}', event)">
+              עבור ${isUrlSearch ? 'למוצר' : 'לאתר'}
             </a>`;
-            }
+          }
 
-            siteDiv.innerHTML = siteContent;
+          siteDiv.innerHTML = siteContent;
 
-            siteDiv.querySelector('h3').addEventListener('click', (event) => {
-              goToSite(site.affLink || site.URL, site.siteName, isUrlSearch ? 'למוצר' : 'לאתר', event);
-            });
-
-            siteDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
-            resultsContainer.appendChild(siteDiv);
+          siteDiv.querySelector('h3').addEventListener('click', (event) => {
+            goToSite(site.affLink || site.URL, site.siteName, isUrlSearch ? 'למוצר' : 'לאתר', event);
           });
 
-          // הצג את הלינקים החברתיים רק אם יש תוצאות חיפוש
-          const socialLinksContainer = document.getElementById('socialLinksContainer');
-          if (uniqueResults.size > 0) {
-            socialLinksContainer.style.display = 'block';
-          } else {
-            socialLinksContainer.style.display = 'none';
-          }
+          siteDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
+          resultsContainer.appendChild(siteDiv);
+        });
+
+        const socialLinksContainer = document.getElementById('socialLinksContainer');
+        if (uniqueResults.size > 0) {
+          socialLinksContainer.style.display = 'block';
+        } else {
+          socialLinksContainer.style.display = 'none';
+        }
+      }
+
+      function toggleCoupon(event) {
+        const toggle = event.target;
+        const content = toggle.nextElementSibling;
+        toggle.classList.toggle('active');
+        content.classList.toggle('active');
+        event.stopPropagation();
+      }
+
+      function copyCoupon(coupon, event) {
+        navigator.clipboard.writeText(coupon)
+          .then(() => alert('הקופון הועתק'))
+          .catch(err => console.error('Failed to copy: ', err));
+        event.stopPropagation();
+
+        if (typeof plausible === 'function') {
+          plausible('CouponCopy', { props: { coupon: coupon } });
+        }
+      }
+
+      function performPriceComparison(query) {
+        showLoading();
+        sortContainer.style.display = 'none';
+
+        let urlString = `https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=20&wideSearch=true`;
+
+        const estimatedPrice = document.getElementById('estimatedPrice').value;
+        if (estimatedPrice) {
+          const minPrice = Math.floor(estimatedPrice * 0.5);
+          const maxPrice = Math.floor(estimatedPrice * 1.5);
+          urlString += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
         }
 
-        function toggleCoupon(event) {
-          const toggle = event.target;
-          const content = toggle.nextElementSibling;
-          toggle.classList.toggle('active');
-          content.classList.toggle('active');
-          event.stopPropagation();
-        }
-
-        function copyCoupon(coupon, event) {
-          navigator.clipboard.writeText(coupon)
-            .then(() => alert('הקופון הועתק'))
-            .catch(err => console.error('Failed to copy: ', err));
-          event.stopPropagation();
-
-          if (typeof plausible === 'function') {
-            plausible('CouponCopy', { props: { coupon: coupon } });
-          }
-        }
-
-        function performPriceComparison(query) {
-          showLoading();
-          sortContainer.style.display = 'none';
-
-          let urlString = `https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=20&wideSearch=true`;
-
-          // Add price range if estimated price is provided
-          const estimatedPrice = document.getElementById('estimatedPrice').value;
-          if (estimatedPrice) {
-            const minPrice = Math.floor(estimatedPrice * 0.5);  // 50% below
-            const maxPrice = Math.floor(estimatedPrice * 1.5);  // 150% above
-            urlString += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
-          }
-
-          fetch(urlString)
-            .then(response => response.json())
-            .then(data => {
-              hideLoading();
-              if (data.length === 0) {
-                resultsContainer.innerHTML = '<p>לא נמצאו תוצאות להשוואת מחירים</p>';
-              } else {
-                currentResults = data;
-                displayComparisonResults(data);
-                sortContainer.style.display = 'block';
-              }
-
-              if (typeof plausible === 'function') {
-                plausible('PriceComparison', {
-                  props: {
-                    query: query,
-                    estimatedPrice: estimatedPrice || 'none'
-                  }
-                });
-              }
-            })
-            .catch(error => {
-              console.error('Error:', error);
-              hideLoading();
-              resultsContainer.innerHTML = '<p>אירעה שגיאה בהשוואת המחירים</p>';
-            });
-        }
-
-        function displayComparisonResults(results) {
-          resultsContainer.innerHTML = '<div class="comparison-result"></div>';
-          const comparisonContainer = resultsContainer.querySelector('.comparison-result');
-results.forEach(product => {
-  const productDiv = document.createElement('div');
-  productDiv.className = 'comparison-item';
-
-  const siteInfo = findSiteInfo(product.url);
-
-  // --- NEW --- תמונה (אם קיימת)
-  const imageTag = product.image
-    ? `<img src="${product.image}"
-            alt="${product.name}"
-            class="w-full h-40 object-contain mb-3 rounded">`
-    : '';
-
-  // הטקסט שהיה קודם
-  let productContent = `
-    ${imageTag}
-    <h3 onclick="goToProduct('${product.urlAff}', '${product.site}', '${product.name}')">
-      ${product.name}
-    </h3>
-    <p>מחיר: ${product.price}</p>
-    <p>אתר: ${product.site}</p>
-  `;
-
-  // המשך הקוד ללא שינוי (קופונים, לינק וכו')
-  if (siteInfo && siteInfo.cupon && siteInfo.cupon !== "") {
-    productContent += `
-      <div class="coupon-details">
-        <button class="coupon-toggle">פרטי קופון</button>
-        <div class="coupon-content">
-          <span>${siteInfo.cupon}</span>
-          <span class="copy-icon" onclick="copyCoupon('${siteInfo.cupon}', event)">📋</span>
-          <a href="${product.urlAff}" class="site-link" target="_blank">עבור לאתר</a>
-          <p class="coupon-info">${siteInfo.cuponDetails || ''}</p>
-        </div>
-      </div>
-    `;
-  } else {
-    productContent += `<a href="${product.urlAff}" class="site-link" target="_blank">עבור לאתר</a>`;
-  }
-
-  productDiv.innerHTML = productContent;
-  productDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
-  comparisonContainer.appendChild(productDiv);
-});
-
-
-          // הצג את הלינקים החברתיים גם עם תוצאות השוואת מחירים
-          const socialLinksContainer = document.getElementById('socialLinksContainer');
-          if (results.length > 0) {
-            socialLinksContainer.style.display = 'block';
-          } else {
-            socialLinksContainer.style.display = 'none';
-          }
-        }
-
-        function goToProduct(url, siteName, productName) {
-          window.open(url, '_blank');
-
-          if (typeof plausible === 'function') {
-            plausible('ProductClick', {
-              props: {
-                site: siteName,
-                product: productName,
-                query: currentSearchQuery
-              }
-            });
-          }
-        }
-
-        function goToSite(url, siteName, linkType, event) {
-          if (event) event.preventDefault();
-
-          let finalUrl = url;
-
-          const siteInfo = allSites.find(site => site.siteName === siteName);
-
-          if (siteInfo) {
-            if (searchedUrl && linkType === 'למוצר') {
-              if (url.startsWith('https://track')) {
-                finalUrl = `${url}?forceURL=${encodeURIComponent(searchedUrl)}`;
-              } else {
-                finalUrl = searchedUrl;
-              }
-            } else if (siteInfo.affParam) {
-              const urlObj = new URL(finalUrl);
-              const separator = urlObj.search ? '&' : '?';
-
-              if (siteInfo.affParam.startsWith('/')) {
-                urlObj.pathname = siteInfo.affParam;
-                urlObj.search = '';
-              } else {
-                finalUrl = `${finalUrl}${separator}${siteInfo.affParam}`;
-              }
-            }
-          }
-
-          window.open(finalUrl, '_blank');
-
-          if (typeof plausible === 'function') {
-            plausible('SiteClick', {
-              props: {
-                site: siteName,
-                linkType: linkType,
-                originalUrl: url,
-                finalUrl: finalUrl
-              }
-            });
-          }
-        }
-
-        function findSiteInfo(url) {
-          const parsedUrl = new URL(url);
-          return allSites.find(site => {
-            const siteUrl = new URL(site.URL);
-            return siteUrl.hostname === parsedUrl.hostname;
-          });
-        }
-
-        function handleSearchInput() {
-          const query = searchInput.value.trim();
-          if (query === '') {
-            displayPopularSearches();
-            if (clearSearch) clearSearch.style.display = 'none';
-          } else {
-            search(query);
-            if (clearSearch) clearSearch.style.display = 'inline';
-          }
-        }
-
-        function initializeSearch() {
-          checkAndLogSource();
-          const queryParam = getUrlParameter('query');
-          const searchParam = getUrlParameter('search');
-
-          if (queryParam) {
-            searchInput.value = '';
-            animateTyping(queryParam, () => {
-              if (searchParam === 'true') {
-                performPriceComparison(queryParam);
-              }
-            });
-          } else {
-            displayPopularSearches();
-          }
-
-          searchInput.addEventListener('input', handleSearchInput);
-
-          if (clearSearch) {
-            clearSearch.addEventListener('click', function () {
-              searchInput.value = '';
-              handleSearchInput();
-              this.style.display = 'none';
-            });
-          }
-
-          compareButton.addEventListener('click', () => performPriceComparison(currentSearchQuery));
-
-          sortSelect.addEventListener('change', function () {
-            const sortedResults = [...currentResults].sort((a, b) => {
-              const priceA = parseFloat(a.price.replace(/[^\d.-]/g, ''));
-              const priceB = parseFloat(b.price.replace(/[^\d.-]/g, ''));
-              return this.value === 'price-asc' ? priceA - priceB : priceB - priceA;
-            });
-            displayComparisonResults(sortedResults);
-          });
-        }
-
-        // Fetch all sites data
-        fetch("https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/sites")
+        fetch(urlString)
           .then(response => response.json())
           .then(data => {
-            allSites = data;
-            initializeSearch();
-          })
-          .catch(error => console.error("Error fetching sites:", error));
+            hideLoading();
+            if (data.length === 0) {
+              resultsContainer.innerHTML = '<p>לא נמצאו תוצאות להשוואת מחירים</p>';
+            } else {
+              currentResults = data;
+              displayComparisonResults(data);
+              sortContainer.style.display = 'block';
+            }
 
-        // Global functions that need to be accessible from HTML
-        window.requestCoupon = requestCoupon;
-        window.copyCoupon = copyCoupon;
-        window.goToProduct = goToProduct;
-        window.goToSite = goToSite;
-      });
-    </script>
+            if (typeof plausible === 'function') {
+              plausible('PriceComparison', {
+                props: {
+                  query: query,
+                  estimatedPrice: estimatedPrice || 'none'
+                }
+              });
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            hideLoading();
+            resultsContainer.innerHTML = '<p>אירעה שגיאה בהשוואת המחירים</p>';
+          });
+      }
+
+      function displayComparisonResults(results) {
+        resultsContainer.innerHTML = '<div class="comparison-result"></div>';
+        const comparisonContainer = resultsContainer.querySelector('.comparison-result');
+
+        results.forEach(product => {
+          const productDiv = document.createElement('div');
+          productDiv.className = 'comparison-item';
+
+          const siteInfo = findSiteInfo(product.url);
+
+          const imageTag = product.image
+            ? `<img src="${product.image}"
+                  alt="${product.name}"
+                  class="w-full h-40 object-contain mb-3 rounded">`
+            : '';
+
+          let productContent = `
+            ${imageTag}
+            <h3 onclick="goToProduct('${product.urlAff}', '${product.site}', '${product.name}')">
+              ${product.name}
+            </h3>
+            <p>מחיר: ${product.price}</p>
+            <p>אתר: ${product.site}</p>
+          `;
+
+          if (siteInfo && siteInfo.cupon && siteInfo.cupon !== "") {
+            productContent += `
+              <div class="coupon-details">
+                <button class="coupon-toggle">פרטי קופון</button>
+                <div class="coupon-content">
+                  <span>${siteInfo.cupon}</span>
+                  <span class="copy-icon" onclick="copyCoupon('${siteInfo.cupon}', event)">📋</span>
+                  <a href="${product.urlAff}" class="site-link" target="_blank">עבור לאתר</a>
+                  <p class="coupon-info">${siteInfo.cuponDetails || ''}</p>
+                </div>
+              </div>
+            `;
+          } else {
+            productContent += `<a href="${product.urlAff}" class="site-link" target="_blank">עבור לאתר</a>`;
+          }
+
+          productDiv.innerHTML = productContent;
+          productDiv.querySelector('.coupon-toggle')?.addEventListener('click', toggleCoupon);
+          comparisonContainer.appendChild(productDiv);
+        });
+
+        const socialLinksContainer = document.getElementById('socialLinksContainer');
+        if (results.length > 0) {
+          socialLinksContainer.style.display = 'block';
+        } else {
+          socialLinksContainer.style.display = 'none';
+        }
+      }
+
+      function goToProduct(url, siteName, productName) {
+        window.open(url, '_blank');
+
+        if (typeof plausible === 'function') {
+          plausible('ProductClick', {
+            props: {
+              site: siteName,
+              product: productName,
+              query: currentSearchQuery
+            }
+          });
+        }
+      }
+
+      function goToSite(url, siteName, linkType, event) {
+        if (event) event.preventDefault();
+
+        let finalUrl = url;
+
+        const siteInfo = allSites.find(site => site.siteName === siteName);
+
+        if (siteInfo) {
+          if (searchedUrl && linkType === 'למוצר') {
+            if (url.startsWith('https://track')) {
+              finalUrl = `${url}?forceURL=${encodeURIComponent(searchedUrl)}`;
+            } else {
+              finalUrl = searchedUrl;
+            }
+          } else if (siteInfo.affParam) {
+            const urlObj = new URL(finalUrl);
+            const separator = urlObj.search ? '&' : '?';
+
+            if (siteInfo.affParam.startsWith('/')) {
+              urlObj.pathname = siteInfo.affParam;
+              urlObj.search = '';
+            } else {
+              finalUrl = `${finalUrl}${separator}${siteInfo.affParam}`;
+            }
+          }
+        }
+
+        window.open(finalUrl, '_blank');
+
+        if (typeof plausible === 'function') {
+          plausible('SiteClick', {
+            props: {
+              site: siteName,
+              linkType: linkType,
+              originalUrl: url,
+              finalUrl: finalUrl
+            }
+          });
+        }
+      }
+
+      function findSiteInfo(url) {
+        const parsedUrl = new URL(url);
+        return allSites.find(site => {
+          const siteUrl = new URL(site.URL);
+          return siteUrl.hostname === parsedUrl.hostname;
+        });
+      }
+
+      function handleSearchInput() {
+        const query = searchInput.value.trim();
+        if (query === '') {
+          displayPopularSearches();
+          if (clearSearch) clearSearch.style.display = 'none';
+        } else {
+          search(query);
+          if (clearSearch) clearSearch.style.display = 'inline';
+        }
+      }
+
+      function initializeSearch() {
+        checkAndLogSource();
+        const queryParam = getUrlParameter('query');
+        const searchParam = getUrlParameter('search');
+
+        if (queryParam) {
+          searchInput.value = '';
+          animateTyping(queryParam, () => {
+            if (searchParam === 'true') {
+              performPriceComparison(queryParam);
+            }
+          });
+        } else {
+          displayPopularSearches();
+        }
+
+        searchInput.addEventListener('input', handleSearchInput);
+
+        if (clearSearch) {
+          clearSearch.addEventListener('click', function () {
+            searchInput.value = '';
+            handleSearchInput();
+            this.style.display = 'none';
+          });
+        }
+
+        compareButton.addEventListener('click', () => performPriceComparison(currentSearchQuery));
+
+        sortSelect.addEventListener('change', function () {
+          const sortedResults = [...currentResults].sort((a, b) => {
+            const priceA = parseFloat(a.price.replace(/[^\d.-]/g, ''));
+            const priceB = parseFloat(b.price.replace(/[^\d.-]/g, ''));
+            return this.value === 'price-asc' ? priceA - priceB : priceB - priceA;
+          });
+          displayComparisonResults(sortedResults);
+        });
+      }
+
+      // Fetch all sites data
+      fetch("https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/sites")
+        .then(response => response.json())
+        .then(data => {
+          allSites = data;
+          initializeSearch();
+        })
+        .catch(error => console.error("Error fetching sites:", error));
+
+      // Global functions that need to be accessible from HTML
+      window.requestCoupon = requestCoupon;
+      window.copyCoupon = copyCoupon;
+      window.goToProduct = goToProduct;
+      window.goToSite = goToSite;
+    });
+  </script>
 </body>
 
 </html>
