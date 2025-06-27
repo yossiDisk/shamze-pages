@@ -1023,6 +1023,8 @@
           </div>
         </div>
 
+        <div id="flightSearchStatus" class="text-center text-sm text-gray-600 mt-4" style="display: none;"></div>
+
         <div id="flightResultsContainer"
           class="flight-results-container mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
       </div>
@@ -1411,7 +1413,7 @@
       function startPolling(url) {
         if (pollingInterval) return;
 
-        document.getElementById('loadingStatus').textContent = 'מחפש עוד טיסות...';
+        updateFlightSearchStatus('מצאנו תוצאות ראשוניות — ממשיכים לחפש במקומות נוספים כדי למצוא מחיר אפילו זול יותר...');
 
         pollingInterval = setInterval(async () => {
           try {
@@ -1436,7 +1438,17 @@
           pollingInterval = null;
         }
         document.getElementById('loadingStatus').textContent = '';
+        updateFlightSearchStatus('החיפוש הושלם ✅');
       }
+
+      function updateFlightSearchStatus(message, show = true) {
+  const statusDiv = document.getElementById('flightSearchStatus');
+  if (statusDiv) {
+    statusDiv.textContent = message;
+    statusDiv.style.display = show ? 'block' : 'none';
+  }
+}
+
 
       function processFlightResults(results, statusCode) {
         document.getElementById('flightLoadingContainer').style.display = 'none';
@@ -1499,7 +1511,7 @@
                   <span class="airline-name">${flight.airline_name}</span>
                   ${isDirect ? '<span class="direct-badge">ישירה</span>' : '<span class="connecting-badge">עם עצירה</span>'}
                 </div>
-                <div class="flight-price">${flight.price_usd}</div>
+                <div class="flight-price">${flight.price_usd} $</div>
               </div>
               
               <div class="flight-body">
@@ -1625,6 +1637,8 @@
             <p>אירעה שגיאה: ${message}</p>
           </div>
         `;
+        updateFlightSearchStatus('החיפוש הסתיים – לא נמצאו טיסות נוספות או שגיאה התרחשה.', true);
+
       }
 
       // פילטרים ומיון
