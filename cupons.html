@@ -75,26 +75,27 @@
     /* סגנון חיפוש טיסות */
     .flight-search-container {
       background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       max-width: 800px;
       margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
     .flight-inputs-row {
       display: flex;
       flex-wrap: wrap;
       gap: 15px;
-      margin-bottom: 20px;
       justify-content: center;
     }
 
     .flight-input-group {
-      position: relative;
       flex: 1;
-      min-width: 200px;
-      max-width: 250px;
+      min-width: 250px;
+      position: relative;
     }
 
     .flight-input-group label {
@@ -112,11 +113,55 @@
       border-radius: 8px;
       font-size: 16px;
       transition: border-color 0.3s ease;
+      background-color: #fff;
+      direction: rtl;
     }
 
     .flight-input:focus {
       outline: none;
-      border-color: var(--primary-green);
+      border-color: #166534;
+    }
+
+    .suggestions-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-top: none;
+      z-index: 10;
+      max-height: 200px;
+      overflow-y: auto;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .suggestion-item {
+      padding: 10px;
+      cursor: pointer;
+      text-align: right;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .suggestion-item:hover {
+      background-color: #f9f9f9;
+    }
+
+    .flight-results-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 0 16px;
+    }
+
+    @media (max-width: 600px) {
+      .flight-inputs-row {
+        flex-direction: column;
+      }
+
+      .flight-results-container {
+        grid-template-columns: 1fr;
+      }
     }
 
     .suggestions-dropdown {
@@ -736,6 +781,37 @@
       color: var(--primary-green);
     }
 
+    /* הפיכת כל לוח השנה לעימוד RTL */
+    .flatpickr-calendar {
+      direction: rtl !important;
+      text-align: right;
+    }
+
+    /* הפיכת סרגל החודשים (עם החיצים) לכיוון הנכון */
+    .flatpickr-months {
+      flex-direction: row-reverse !important;
+    }
+
+    /* הפיכת כפתורי ניווט (חיצים) לכיוון הנכון */
+    .flatpickr-prev-month,
+    .flatpickr-next-month {
+      transform: rotate(180deg);
+    }
+
+    /* כיוון טקסט של שם החודש */
+    .flatpickr-current-month {
+      direction: rtl;
+      text-align: right;
+    }
+
+    /* כדי לוודא ששמות הימים מופיעים מימין לשמאל */
+    .flatpickr-weekdays {
+      direction: rtl;
+    }
+
+
+
+
     .hover\:bg-green-600:hover {
       background-color: var(--primary-green);
     }
@@ -876,40 +952,39 @@
       <div id="flights-tab" class="tab-content">
         <h2 class="text-3xl font-bold text-center mb-8">השוואת מחירי טיסות</h2>
 
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
         <div class="flight-search-container">
+          <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">השוואת מחירי טיסות</h2>
+
           <div class="flight-inputs-row">
             <div class="flight-input-group">
-              <label for="originInput">מוצא</label>
-              <input type="text" id="originInput" class="flight-input" placeholder="הקלד עיר או קוד שדה תעופה">
+              <label for="originInput">✈️ מוצא</label>
+              <input type="text" id="originInput" class="flight-input" placeholder="לדוגמה: תל אביב או TLV">
               <div id="originSuggestions" class="suggestions-dropdown"></div>
             </div>
 
             <div class="flight-input-group">
-              <label for="destinationInput">יעד</label>
-              <input type="text" id="destinationInput" class="flight-input" placeholder="הקלד עיר או קוד שדה תעופה">
+              <label for="destinationInput">🛬 יעד</label>
+              <input type="text" id="destinationInput" class="flight-input" placeholder="לדוגמה: לונדון או LHR">
               <div id="destinationSuggestions" class="suggestions-dropdown"></div>
-            </div>
-
-            <div class="date-inputs-group">
-              <div class="date-input-wrapper">
-                <label for="dateFrom">יציאה</label>
-                <input type="date" id="dateFrom" class="flight-input">
-              </div>
-              <div class="date-input-wrapper">
-                <label for="dateTo">חזרה</label>
-                <input type="date" id="dateTo" class="flight-input">
-              </div>
             </div>
           </div>
 
+          <div class="flight-inputs-row">
+            <div class="flight-input-group">
+              <label for="dateRange">📅 טווח תאריכים</label>
+              <input type="text" id="dateRange" class="flight-input" placeholder="בחר תאריכים">
+            </div>
+          </div>
+
+          <input type="hidden" id="dateFrom">
+          <input type="hidden" id="dateTo">
+
           <button id="searchFlightsBtn"
-            class="bg-green-500 text-white px-6 py-3 rounded-full font-bold hover:bg-green-600 transition duration-300 inline-flex items-center mx-auto mt-4">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
-            חפש טיסות
+            class="w-full md:w-1/2 mx-auto bg-green-600 text-white font-bold py-3 px-6 rounded-full hover:bg-green-700 transition mt-4">
+            🔍 חפש טיסות
           </button>
         </div>
 
@@ -948,7 +1023,8 @@
           </div>
         </div>
 
-        <div id="flightResultsContainer" class="flight-results-container"></div>
+        <div id="flightResultsContainer"
+          class="flight-results-container mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
       </div>
     </main>
 
@@ -963,6 +1039,91 @@
       </div>
     </footer>
   </div>
+
+  <script>
+    flatpickr("#dateRange", {
+      mode: "range",
+      minDate: new Date().fp_incr(1), // ממחר בלבד
+      showMonths: 2, // הצגת שני חודשים
+      dateFormat: "Y-m-d",
+      position: "auto right", // פתיחה מימין לשמאל
+      locale: {
+        firstDayOfWeek: 0,
+        isRtl: true, // כיוון ימין לשמאל
+        weekdays: {
+          shorthand: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
+          longhand: ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'],
+        },
+        months: {
+          shorthand: ['ינו', 'פבר', 'מרץ', 'אפר', 'מאי', 'יונ', 'יול', 'אוג', 'ספט', 'אוק', 'נוב', 'דצמ'],
+          longhand: ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
+        },
+      },
+      onClose: function (selectedDates) {
+        if (selectedDates.length === 2) {
+          const [from, to] = selectedDates;
+          document.getElementById('dateFrom').value = from.toLocaleDateString('sv-SE'); // פורמט YYYY-MM-DD
+
+          document.getElementById('dateTo').value = to.toLocaleDateString('sv-SE');
+        }
+      },
+      // הוספנו שלושת האירועים האלה:
+      onReady: function (selectedDates, dateStr, instance) {
+        fixFlatpickrHeaderOrder(instance);
+      },
+      onMonthChange: function (selectedDates, dateStr, instance) {
+        fixFlatpickrHeaderOrder(instance);
+      },
+      onYearChange: function (selectedDates, dateStr, instance) {
+        fixFlatpickrHeaderOrder(instance);
+      }
+    });
+
+    // פונקציה שמסדרת את סדר כותרות החודשים
+    function fixFlatpickrHeaderOrder(instance) {
+      const container = instance.calendarContainer.querySelector(".flatpickr-months");
+      const months = container.querySelectorAll(".flatpickr-month");
+
+      if (months.length === 2) {
+        container.insertBefore(months[1], months[0]); // הופך את הסדר
+      }
+    }
+
+
+
+    function displayFlightResultCard(flight) {
+      const card = document.createElement('div');
+      card.className = 'bg-white rounded-xl shadow-md p-4 flex flex-col justify-between h-full';
+
+      const airline = document.createElement('div');
+      airline.className = 'text-lg font-semibold text-green-700';
+      airline.textContent = flight.airline_name || 'חברת תעופה';
+      card.appendChild(airline);
+
+      const route = document.createElement('div');
+      route.className = 'text-sm text-gray-600 my-2';
+      route.textContent = `${flight.origin_city} → ${flight.destination_city}`;
+      card.appendChild(route);
+
+      const dates = document.createElement('div');
+      dates.className = 'text-xs text-gray-500 mb-2';
+      dates.textContent = `${flight.date_from} - ${flight.date_to}`;
+      card.appendChild(dates);
+
+      const price = document.createElement('div');
+      price.className = 'text-xl font-bold text-green-600 mb-4';
+      price.textContent = `${flight.price_usd} $`;
+      card.appendChild(price);
+
+      const bookBtn = document.createElement('button');
+      bookBtn.textContent = 'הזמן טיסה';
+      bookBtn.className = 'bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition';
+      bookBtn.onclick = () => window.open(flight.fly_url, '_blank');
+      card.appendChild(bookBtn);
+
+      document.getElementById('flightResultsContainer').appendChild(card);
+    }
+  </script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -1009,6 +1170,7 @@
         });
       });
 
+
       // פונקציות לטאב הטיסות החדש
       async function loadCitiesData() {
         try {
@@ -1032,17 +1194,22 @@
         return citiesData.filter(city => {
           const cityHeb = normalize(city.city_name_heb || '');
           const cityEng = normalize(city.city_name_eng || '');
+          const countryHeb = normalize(city.country_name_heb || '');
+          const countryEng = normalize(city.country_name_eng || '');
           const iata = (city.airport_iata || '').toLowerCase();
           const synonyms = Array.isArray(city.city_synonyms) ? city.city_synonyms.map(normalize) : [];
 
           return (
             cityHeb.includes(normalizedQuery) ||
             cityEng.includes(normalizedQuery) ||
+            countryHeb.includes(normalizedQuery) ||
+            countryEng.includes(normalizedQuery) ||
             iata.includes(normalizedQuery) ||
             synonyms.some(s => s.includes(normalizedQuery))
           );
         }).slice(0, 10);
       }
+
 
 
       // הצגת הצעות לאוטוקומפליט
@@ -1154,16 +1321,20 @@
           const departureDate = new Date(dateFrom);
           departureDate.setHours(0, 0, 0, 0);
 
-          if (departureDate.getTime() === today.getTime()) {
+          const todayDateStr = new Date().toISOString().split('T')[0];
+          const fromDateStr = dateFrom;
+
+          if (fromDateStr === todayDateStr) {
             document.getElementById('flightResultsContainer').innerHTML = `
-              <div style="padding: 40px 20px; text-align: center; color: #e74c3c;">
-                <div style="font-size: 60px; margin-bottom: 20px;">🛑</div>
-                <h3 style="margin-bottom: 15px; font-size: 18px;">לא ניתן לחפש טיסות שיוצאות היום</h3>
-                <p>אנא בחר תאריך יציאה עתידי.</p>
-              </div>
-            `;
+    <div style="padding: 40px 20px; text-align: center; color: #e74c3c;">
+      <div style="font-size: 60px; margin-bottom: 20px;">🛑</div>
+      <h3 style="margin-bottom: 15px; font-size: 18px;">לא ניתן לחפש טיסות שיוצאות היום</h3>
+      <p>אנא בחר תאריך יציאה עתידי.</p>
+    </div>
+  `;
             return;
           }
+
 
           const url = `https://2gxkd3dzwd.execute-api.il-central-1.amazonaws.com/stag1/api/flights?origin=${originCode}&destination=${destinationCode}&date_from=${dateFrom}&date_to=${dateTo}`;
 
@@ -1187,7 +1358,7 @@
           if (statusCode >= 500 && statusCode < 600) {
             console.warn(`Server error ${statusCode}, attempt ${retryCount + 1}`);
 
-            if (retryCount < 2) {
+            if (retryCount < 10) {
               console.log(`Retrying in 3 seconds... (attempt ${retryCount + 2}/3)`);
               setTimeout(() => {
                 performFlightsRequest(url, retryCount + 1);
