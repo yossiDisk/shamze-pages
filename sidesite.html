@@ -2026,33 +2026,41 @@
             }
         }
 
-        function getAdvancedSearchStatus() {
-            try {
-                const enabled = localStorage.getItem(ADVANCED_SEARCH_KEY) === 'true';
-                const timestamp = parseInt(localStorage.getItem(ADVANCED_SEARCH_TIMESTAMP_KEY) || '0');
-                const now = Date.now();
-
-                // Check if 20 minutes have passed
-                if (enabled && (now - timestamp > ADVANCED_SEARCH_DURATION)) {
-                    // Clear expired setting
-                    localStorage.removeItem(ADVANCED_SEARCH_KEY);
-                    localStorage.removeItem(ADVANCED_SEARCH_TIMESTAMP_KEY);
-
-                    // Update UI
-                    const checkbox = document.getElementById('advanced-search-toggle');
-                    if (checkbox) {
-                        checkbox.checked = false;
-                    }
-
-                    return false;
-                }
-
-                return enabled;
-            } catch (error) {
-                console.error('Error reading advanced search status:', error);
-                return false;
-            }
+function getAdvancedSearchStatus() {
+    try {
+        const storedValue = localStorage.getItem(ADVANCED_SEARCH_KEY);
+        if (storedValue === null) {
+            // ערך לא קיים – נשתמש בברירת מחדל שהיא true
+            localStorage.setItem(ADVANCED_SEARCH_KEY, 'true');
+            localStorage.setItem(ADVANCED_SEARCH_TIMESTAMP_KEY, Date.now().toString());
+            return true;
         }
+
+        const enabled = storedValue === 'true';
+        const timestamp = parseInt(localStorage.getItem(ADVANCED_SEARCH_TIMESTAMP_KEY) || '0');
+        const now = Date.now();
+
+        if (enabled && (now - timestamp > ADVANCED_SEARCH_DURATION)) {
+            // תוקף פג – ניקוי
+            localStorage.removeItem(ADVANCED_SEARCH_KEY);
+            localStorage.removeItem(ADVANCED_SEARCH_TIMESTAMP_KEY);
+
+            // עדכון ה־UI
+            const checkbox = document.getElementById('advanced-search-toggle');
+            if (checkbox) {
+                checkbox.checked = false;
+            }
+
+            return false;
+        }
+
+        return enabled;
+    } catch (error) {
+        console.error('Error reading advanced search status:', error);
+        return false;
+    }
+}
+
 
         function setAdvancedSearchStatus(enabled) {
             try {
