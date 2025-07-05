@@ -785,7 +785,50 @@
     .flatpickr-calendar {
       direction: rtl !important;
       text-align: right;
+      max-width: 100vw !important;
+      box-sizing: border-box;
     }
+
+    /* הפחתת מרווחים בתוך הקלף */
+    .flight-card .flight-body {
+      padding: 12px;
+    }
+
+    /* הקטנת הגובה של התמונה או הפיכתה לרקע */
+    .flight-card img {
+      height: 100px;
+      /* במקום 192px */
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    /* אלטרנטיבה: שימוש בתמונה כרקע */
+    .flight-card.with-bg {
+      background-size: cover;
+      background-position: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flight-card.with-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-color: rgba(255, 255, 255, 0.6);
+      /* שכבה אפורה בהירה שקופה */
+      z-index: 0;
+    }
+
+
+    .flight-card.with-bg>* {
+      position: relative;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+      color: #000;
+      z-index: 2;
+    }
+
 
     /* הפיכת סרגל החודשים (עם החיצים) לכיוון הנכון */
     .flatpickr-months {
@@ -1442,12 +1485,12 @@
       }
 
       function updateFlightSearchStatus(message, show = true) {
-  const statusDiv = document.getElementById('flightSearchStatus');
-  if (statusDiv) {
-    statusDiv.textContent = message;
-    statusDiv.style.display = show ? 'block' : 'none';
-  }
-}
+        const statusDiv = document.getElementById('flightSearchStatus');
+        if (statusDiv) {
+          statusDiv.textContent = message;
+          statusDiv.style.display = show ? 'block' : 'none';
+        }
+      }
 
 
       function processFlightResults(results, statusCode) {
@@ -1505,7 +1548,7 @@
           const inboundDetails = flight.deal_details.inbound;
 
           return `
-            <div class="flight-card">
+          <div class="flight-card with-bg" style="background-image: url('${flight.image_url}')">
               <div class="flight-header">
                 <div class="flight-airline">
                   <span class="airline-name">${flight.airline_name}</span>
@@ -1515,7 +1558,7 @@
               </div>
               
               <div class="flight-body">
-                ${flight.image_url ? `<img src="${flight.image_url}" alt="${flight.destination_city}" class="w-full h-48 object-cover rounded-lg mb-4">` : ''}
+                ${flight.image_url ? '' : ''}
                 
                 <div class="flight-route">
                   <div class="flight-endpoint">
