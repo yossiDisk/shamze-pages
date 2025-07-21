@@ -583,6 +583,26 @@
       padding: 10px 0;
     }
 
+    @keyframes slow-spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .animate-spin-slow {
+      animation: slow-spin 3s linear infinite;
+    }
+
+
+    .animate-spin-slow {
+      animation: slow-spin 3s linear infinite;
+    }
+
+
     header .logo-container {
       display: flex;
       align-items: center;
@@ -1053,11 +1073,16 @@
               <div id="originSuggestions" class="suggestions-dropdown"></div>
             </div>
 
-            <div class="flight-input-group">
+            <div class="flight-input-group relative">
               <label for="destinationInput">🛬 יעד</label>
               <input type="text" id="destinationInput" class="flight-input" placeholder="לדוגמה: לונדון או LHR">
+              <button id="randomDestinationBtn" title="בחר יעד רנדומלי"
+                class="absolute left-3 top-11 text-xl text-gray-600 hover:text-green-700 transition">
+                🌍
+              </button>
               <div id="destinationSuggestions" class="suggestions-dropdown"></div>
             </div>
+
           </div>
 
           <div class="flight-inputs-row">
@@ -1238,6 +1263,97 @@
       let selectedOrigin = null;
       let selectedDestination = null;
       let pollingInterval = null;
+
+      const globeModal = document.getElementById('globeModal');
+      const globeIcon = document.getElementById('globeIcon');
+      const actionBtn = document.getElementById('globeActionBtn');
+      const closeBtn = document.getElementById('closeGlobeModalBtn');
+      const selectedCityText = document.getElementById('selectedCityText');
+      const randomBtn = document.getElementById('randomDestinationBtn');
+      const refreshBtn = document.getElementById('globeRefreshBtn');
+      const finger = document.getElementById('globeFinger');
+
+      let globeTimeout = null;
+      let selectedCity = null;
+      let isStopped = false;
+      let cityAnimationInterval = null;
+
+      function startSpinning() {
+        selectedCity = null;
+        isStopped = false;
+
+        globeModal.classList.remove('hidden');
+        globeIcon.classList.add('animate-spin-slow');
+        actionBtn.textContent = 'עצור';
+        refreshBtn.classList.add('hidden');
+
+        // הרחק את האצבע
+        finger.classList.remove('translate-x-10');
+        finger.classList.add('translate-x-20');
+
+        // הפעל אנימציה של שמות ערים
+        cityAnimationInterval = setInterval(() => {
+          if (!citiesData || citiesData.length === 0) return;
+          const randomCity = citiesData[Math.floor(Math.random() * citiesData.length)];
+          selectedCityText.textContent = `${randomCity.city_name_heb}, ${randomCity.country_name_heb}`;
+        }, 100);
+
+        globeTimeout = setTimeout(stopSpinningAndPickCity, 3000);
+      }
+
+      function stopSpinningAndPickCity() {
+        isStopped = true;
+        globeIcon.classList.remove('animate-spin-slow');
+
+        // עצור את האנימציה של הערים
+        clearInterval(cityAnimationInterval);
+
+        if (!citiesData || citiesData.length === 0) return;
+
+        selectedCity = citiesData[Math.floor(Math.random() * citiesData.length)];
+        selectedCityText.textContent = `${selectedCity.city_name_heb}, ${selectedCity.country_name_heb}`;
+
+        // קרב את האצבע
+        finger.classList.remove('translate-x-20');
+        finger.classList.add('translate-x-10');
+
+        actionBtn.textContent = 'בחר';
+        refreshBtn.classList.remove('hidden');
+      }
+
+      randomBtn.addEventListener('click', startSpinning);
+
+      actionBtn.addEventListener('click', () => {
+        if (!isStopped) {
+          clearTimeout(globeTimeout);
+          stopSpinningAndPickCity();
+        } else {
+          // ביצוע הבחירה בפועל
+          if (selectedCity) {
+            selectedDestination = {
+              code: selectedCity.airport_iata,
+              nameHeb: selectedCity.city_name_heb,
+              nameEng: selectedCity.city_name_eng
+            };
+            document.getElementById('destinationInput').value = `${selectedCity.city_name_heb} (${selectedCity.airport_iata})`;
+          }
+          globeModal.classList.add('hidden');
+        }
+      });
+
+      closeBtn.addEventListener('click', () => {
+        clearTimeout(globeTimeout);
+        clearInterval(cityAnimationInterval);
+        globeModal.classList.add('hidden');
+      });
+
+      // כפתור רענון חוזר — התחלה מחדש
+      refreshBtn.addEventListener('click', () => {
+        clearTimeout(globeTimeout);
+        clearInterval(cityAnimationInterval);
+        startSpinning();
+      });
+
 
       // פונקציות ניהול cache
       function saveFlightSearchToCache(searchParams, cheapestFlight) {
@@ -2441,6 +2557,49 @@
       window.copyCurrentPageLink = copyCurrentPageLink;
     });
   </script>
+  <div id="globeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm text-center relative min-h-[300px]"
+      style="min-width: 300px;">
+      <!-- כפתור איקס -->
+      <button id="closeGlobeModalBtn"
+        class="absolute top-2 left-2 text-gray-500 hover:text-gray-700 text-xl font-bold">×</button>
+
+      <!-- אנימציית גלובוס עם אצבע מימין -->
+      <div class="relative flex justify-center items-center mb-6" style="height: 100px;">
+        <!-- גלובוס -->
+        <div id="globeIcon" class="text-[80px] animate-spin-slow z-10">🌍</div>
+
+        <!-- אצבע מצביעה מימין -->
+        <div id="globeFinger"
+          class="absolute right-1/2 translate-x-20 top-1/2 -translate-y-1/2 text-[40px] transition-all duration-500 ease-out z-20">
+          👈
+        </div>
+      </div>
+
+      <!-- שם עיר רנדומלית אחרי העצירה -->
+      <!-- שם עיר רנדומלית -->
+      <div id="selectedCityText"
+        class="text-lg font-semibold text-gray-800 mb-4 transition-opacity duration-300 opacity-100 h-6">
+      </div>
+
+
+      <!-- כפתור פעולה -->
+      <div class="flex justify-center items-center gap-2">
+        <button id="globeActionBtn"
+          class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition">
+          עצור
+        </button>
+        <button id="globeRefreshBtn" title="בחר יעד רנדומלי נוסף"
+          class="hidden text-gray-600 hover:text-green-600 text-xl">
+          🔄
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+
 </body>
 
 </html>
