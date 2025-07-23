@@ -23,7 +23,7 @@
       min-height: 100vh;
       margin: 0;
       background-color: #f0f0f0;
-      color: #333;
+      color: #33;
       overflow-x: hidden;
       text-align: center;
     }
@@ -1736,7 +1736,7 @@
           if (statusCode >= 500 && statusCode < 600) {
             console.warn(`Server error ${statusCode}, attempt ${retryCount + 1}`);
 
-            if (retryCount < 2) {
+            if (retryCount < 4) {
               console.log(`Retrying in 3 seconds... (attempt ${retryCount + 2}/3)`);
               setTimeout(() => {
                 performFlightsRequest(url, retryCount + 1);
@@ -1752,7 +1752,7 @@
           if (!Array.isArray(rawResults)) {
             console.error('Invalid response format - not an array:', rawResults);
 
-            if (retryCount < 2) {
+            if (retryCount < 4) {
               console.log(`Invalid response format, retrying in 3 seconds... (attempt ${retryCount + 2}/3)`);
               setTimeout(() => {
                 performFlightsRequest(url, retryCount + 1);
