@@ -275,7 +275,7 @@
             });
 
             try {
-                const apiUrl = `https://vpfi5d6dw9.execute-api.il-central-1.amazonaws.com/default/getDirectShoppingLink?product_id=${product_id}`;
+                const apiUrl = `https://vpfi5d6dw9.execute-api.il-central-1.amazonaws.com/default/getDirectShoppingLink?product_id=${encodeURIComponent(product_id)}&expectedPrice=${encodeURIComponent(itemPrice)}&expectedMerchant=${encodeURIComponent(siteName)}`;
 
                 // שליחת בקשה ב-fetch ללא אפשרות follow לredirects (manual)
                 const response = await fetch(apiUrl, {
