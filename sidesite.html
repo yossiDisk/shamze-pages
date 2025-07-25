@@ -1565,6 +1565,26 @@
             // החזרת הסדר המבוקש: מוצרים מתחת למחיר ואז מוצרים מעל המחיר
             return [...belowRefProducts, ...aboveRefProducts];
         }
+
+        function calculateSimilarity(a, b) {
+            a = a.toLowerCase().trim();
+            b = b.toLowerCase().trim();
+
+            // דמיון פשוט על בסיס הכללה
+            if (a === b) return 100;
+            if (a.includes(b)) return 90;
+            if (b.includes(a)) return 90;
+
+            const aWords = a.split(/\s+/);
+            const bWords = b.split(/\s+/);
+
+            const commonWords = aWords.filter(word => bWords.includes(word));
+            const score = (commonWords.length / Math.max(aWords.length, bWords.length)) * 80;
+
+            return Math.round(score); // ניקוד גס
+        }
+
+
         function displaySearchResults(results) {
             const container = document.getElementById('searchResults');
             container.innerHTML = '';
@@ -1602,9 +1622,14 @@
             // אם לא בוחרו מיון ספציפי, השתמש בסדר ברירת המחדל
             const sortType = document.getElementById('sort-select')?.value;
             if (!sortType || sortType === 'default') {
-                const priceParam = getUrlParameter('price');
-                results = sortResultsByClosestToPrice(results, priceParam);
+                const queryText = currentSearchQuery || getUrlParameter('query') || '';
+                results.sort((a, b) => {
+                    const simA = calculateSimilarity(a.name || '', queryText);
+                    const simB = calculateSimilarity(b.name || '', queryText);
+                    return simB - simA; // מהדומה ביותר לפחות
+                });
             }
+
 
             // הצג רק 3 תוצאות ראשונות
             const initialResults = results.slice(0, 3);
@@ -2026,40 +2051,40 @@
             }
         }
 
-function getAdvancedSearchStatus() {
-    try {
-        const storedValue = localStorage.getItem(ADVANCED_SEARCH_KEY);
-        if (storedValue === null) {
-            // ערך לא קיים – נשתמש בברירת מחדל שהיא true
-            localStorage.setItem(ADVANCED_SEARCH_KEY, 'true');
-            localStorage.setItem(ADVANCED_SEARCH_TIMESTAMP_KEY, Date.now().toString());
-            return true;
-        }
+        function getAdvancedSearchStatus() {
+            try {
+                const storedValue = localStorage.getItem(ADVANCED_SEARCH_KEY);
+                if (storedValue === null) {
+                    // ערך לא קיים – נשתמש בברירת מחדל שהיא true
+                    localStorage.setItem(ADVANCED_SEARCH_KEY, 'true');
+                    localStorage.setItem(ADVANCED_SEARCH_TIMESTAMP_KEY, Date.now().toString());
+                    return true;
+                }
 
-        const enabled = storedValue === 'true';
-        const timestamp = parseInt(localStorage.getItem(ADVANCED_SEARCH_TIMESTAMP_KEY) || '0');
-        const now = Date.now();
+                const enabled = storedValue === 'true';
+                const timestamp = parseInt(localStorage.getItem(ADVANCED_SEARCH_TIMESTAMP_KEY) || '0');
+                const now = Date.now();
 
-        if (enabled && (now - timestamp > ADVANCED_SEARCH_DURATION)) {
-            // תוקף פג – ניקוי
-            localStorage.removeItem(ADVANCED_SEARCH_KEY);
-            localStorage.removeItem(ADVANCED_SEARCH_TIMESTAMP_KEY);
+                if (enabled && (now - timestamp > ADVANCED_SEARCH_DURATION)) {
+                    // תוקף פג – ניקוי
+                    localStorage.removeItem(ADVANCED_SEARCH_KEY);
+                    localStorage.removeItem(ADVANCED_SEARCH_TIMESTAMP_KEY);
 
-            // עדכון ה־UI
-            const checkbox = document.getElementById('advanced-search-toggle');
-            if (checkbox) {
-                checkbox.checked = false;
+                    // עדכון ה־UI
+                    const checkbox = document.getElementById('advanced-search-toggle');
+                    if (checkbox) {
+                        checkbox.checked = false;
+                    }
+
+                    return false;
+                }
+
+                return enabled;
+            } catch (error) {
+                console.error('Error reading advanced search status:', error);
+                return false;
             }
-
-            return false;
         }
-
-        return enabled;
-    } catch (error) {
-        console.error('Error reading advanced search status:', error);
-        return false;
-    }
-}
 
 
         function setAdvancedSearchStatus(enabled) {
