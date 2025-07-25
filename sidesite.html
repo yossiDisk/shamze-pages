@@ -1441,8 +1441,8 @@
 
             // Add price range parameters if we have a valid price
             if (cleanedPrice && cleanedPrice > 0) {
-                const minPrice = Math.max(1, cleanedPrice * 0.5); // Ensure minimum price is at least 1
-                const maxPrice = cleanedPrice * 1.5;
+                const minPrice = Math.max(1, cleanedPrice * 0.3); // Ensure minimum price is at least 1
+                const maxPrice = cleanedPrice * 3;
 
                 // Log the price range calculation
                 console.log('Price range:', { minPrice, maxPrice });
