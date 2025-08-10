@@ -307,6 +307,120 @@
                 opacity: 1;
             }
         }
+
+        /* מובייל ושיפורי נגישות/מגע */
+        :root {
+            --container-pad: 20px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                align-items: flex-start;
+            }
+
+            .container {
+                width: 100%;
+                max-width: 100%;
+                padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+            }
+
+            .logo {
+                margin-bottom: 16px;
+            }
+
+            .logo img {
+                max-width: 140px;
+            }
+
+            .messages {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+
+            h1 {
+                font-size: clamp(18px, 5.2vw, 22px);
+                margin-bottom: 12px;
+            }
+
+            .search-box {
+                padding: 12px;
+            }
+
+            .search-input {
+                width: 100%;
+                margin: 0 0 8px 0;
+                font-size: 16px;
+                /* מונע זום באייפון */
+            }
+
+            .search-button {
+                width: 100%;
+                padding: 12px;
+                font-size: 16px;
+                /* מונע זום באייפון */
+            }
+
+            .offers-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .original-info {
+                white-space: normal;
+                /* היה nowrap - גורם גלילה לרוחב */
+                width: 100%;
+            }
+
+            .offers-list {
+                grid-template-columns: 1fr;
+            }
+
+            /* מוודא עמודה אחת */
+            .offer-card {
+                padding: 12px;
+            }
+
+            .offer-price {
+                font-size: 16px;
+            }
+
+            .offer-merchant img {
+                width: 16px;
+                height: 16px;
+            }
+
+            .loading-text {
+                font-size: 16px;
+                max-width: 90%;
+            }
+        }
+
+        /* ביטול highlight בכפתורים בלחיצה בנייד */
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* אפקטי hover רק כשיש עכבר בפועל */
+        @media (hover:hover) {
+            .offer-card:hover {
+                background-color: #f9fbff;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+                transform: translateY(-2px);
+            }
+        }
+
+        /* העדפת משתמש להפחתת אנימציות */
+        @media (prefers-reduced-motion: reduce) {
+
+            .loading-spinner,
+            .magnifier,
+            .offer-card,
+            .offers-header {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -479,9 +593,13 @@
             offers.forEach((o, idx) => {
                 const diff = numericOriginal ? (numericOriginal - o.price) : 0;
 
-                const card = document.createElement('div');
+                const card = document.createElement('a');
                 card.className = 'offer-card';
-                card.onclick = () => window.open(o.link, '_blank');
+                card.href = o.link;
+                card.target = '_blank';
+                card.rel = 'noopener noreferrer';
+                card.style.textDecoration = 'none'; /* שמירה על מראה הכרטיס */
+
 
                 const top = document.createElement('div');
                 top.className = 'offer-top';
