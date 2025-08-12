@@ -2367,6 +2367,11 @@
       }
 
       function displayComparisonResults(results) {
+        // בדיקה שהנתונים נטענו לפני עיבוד התוצאות
+        if (!allSites || !Array.isArray(allSites)) {
+          console.warn('allSites not loaded yet, skipping site info lookup');
+        }
+
         resultsContainer.innerHTML = '<div class="comparison-result"></div>';
         const comparisonContainer = resultsContainer.querySelector('.comparison-result');
 
@@ -2374,35 +2379,37 @@
           const productDiv = document.createElement('div');
           productDiv.className = 'comparison-item';
 
-          const siteInfo = findSiteInfo(product.url);
+          // קרא לפונקציה רק אם הנתונים נטענו
+          const siteInfo = (allSites && Array.isArray(allSites)) ? findSiteInfo(product.url) : null;
 
           const imageTag = product.image
             ? `<img src="${product.image}"
-                  alt="${product.name}"
-                  class="w-full h-40 object-contain mb-3 rounded">`
+            alt="${product.name}"
+            class="w-full h-40 object-contain mb-3 rounded">`
             : '';
 
           let productContent = `
-            ${imageTag}
-            <h3 onclick="goToProduct('${product.urlAff}', '${product.site}', '${product.name}')">
-              ${product.name}
-            </h3>
-            <p>מחיר: ${product.price}</p>
-            <p>אתר: ${product.site}</p>
-          `;
+      ${imageTag}
+      <h3 onclick="goToProduct('${product.urlAff}', '${product.site}', '${product.name}')">
+        ${product.name}
+      </h3>
+      <p>מחיר: ${product.price}</p>
+      <p>אתר: ${product.site}</p>
+    `;
 
+          // בדיקה אם siteInfo קיים ואם יש קופון
           if (siteInfo && siteInfo.cupon && siteInfo.cupon !== "") {
             productContent += `
-              <div class="coupon-details">
-                <button class="coupon-toggle">פרטי קופון</button>
-                <div class="coupon-content">
-                  <span>${siteInfo.cupon}</span>
-                  <span class="copy-icon" onclick="copyCoupon('${siteInfo.cupon}', event)">📋</span>
-                  <a href="${product.urlAff}" class="site-link" target="_blank">עבור לאתר</a>
-                  <p class="coupon-info">${siteInfo.cuponDetails || ''}</p>
-                </div>
-              </div>
-            `;
+        <div class="coupon-details">
+          <button class="coupon-toggle">פרטי קופון</button>
+          <div class="coupon-content">
+            <span>${siteInfo.cupon}</span>
+            <span class="copy-icon" onclick="copyCoupon('${siteInfo.cupon}', event)">📋</span>
+            <a href="${product.urlAff}" class="site-link" target="_blank">עבור לאתר</a>
+            <p class="coupon-info">${siteInfo.cuponDetails || ''}</p>
+          </div>
+        </div>
+      `;
           } else {
             productContent += `<a href="${product.urlAff}" class="site-link" target="_blank">עבור לאתר</a>`;
           }
@@ -2475,12 +2482,68 @@
         }
       }
 
+
       function findSiteInfo(url) {
-        const parsedUrl = new URL(url);
-        return allSites.find(site => {
-          const siteUrl = new URL(site.URL);
-          return siteUrl.hostname === parsedUrl.hostname;
-        });
+        try {
+          // בדיקות בסיסיות
+          if (!url || typeof url !== 'string' || url.trim() === '') {
+            console.warn('Invalid or empty URL provided to findSiteInfo:', url);
+            return null;
+          }
+
+          // בדיקה אם allSites קיים ומאותחל
+          if (!allSites || !Array.isArray(allSites) || allSites.length === 0) {
+            console.warn('allSites is not initialized or empty');
+            return null;
+          }
+
+          // ניסיון ליצור אובייקט URL
+          const parsedUrl = new URL(url.trim());
+
+          return allSites.find(site => {
+            try {
+              // בדיקות בטיחות לאתר
+              if (!site || !site.URL || typeof site.URL !== 'string' || site.URL.trim() === '') {
+                return false;
+              }
+
+              // ניסיון ליצור URL לאתר
+              const siteUrl = new URL(site.URL.trim());
+              return siteUrl.hostname === parsedUrl.hostname;
+            } catch (siteError) {
+              console.warn('Invalid site URL:', site?.URL, siteError.message);
+              return false;
+            }
+          });
+        } catch (error) {
+          console.error('Error parsing URL in findSiteInfo:', url, error.message);
+
+          // נסיון חלופי רק אם allSites קיים
+          if (allSites && Array.isArray(allSites) && url && typeof url === 'string') {
+            try {
+              // ניסיון לחלץ את שם הדומיין מה-URL
+              const domainMatch = url.match(/https?:\/\/([^\/\s]+)/);
+              if (domainMatch && domainMatch[1]) {
+                const hostname = domainMatch[1].toLowerCase();
+                console.log('Attempting fallback with hostname:', hostname);
+
+                return allSites.find(site => {
+                  try {
+                    if (!site?.URL || typeof site.URL !== 'string') return false;
+                    const siteUrl = new URL(site.URL.trim());
+                    return siteUrl.hostname.toLowerCase() === hostname;
+                  } catch {
+                    return false;
+                  }
+                });
+              }
+            } catch (fallbackError) {
+              console.error('Fallback also failed:', fallbackError.message);
+            }
+          }
+
+          return null;
+        }
       }
 
       function handleSearchInput() {
