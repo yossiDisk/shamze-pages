@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>מדיניות פרטיות – שם זה זול יותר</title>
+  <meta name="description" content="מדיניות הפרטיות של האתר והתוסף 'שם זה זול יותר'" />
+  <style>
+    :root{
+      --bg:#0f172a;          /* slate-900 */
+      --panel:#0b1229;       /* deep panel */
+      --text:#e5e7eb;        /* gray-200 */
+      --muted:#94a3b8;       /* slate-400 */
+      --primary:#22c55e;     /* green-500 */
+      --accent:#16a34a;      /* green-600 */
+      --border:#1f2937;      /* gray-800 */
+    }
+    html,body{height:100%}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 80% -10%, rgba(34,197,94,.12), transparent 60%),
+                  radial-gradient(900px 600px at 10% 110%, rgba(34,197,94,.08), transparent 60%),
+                  var(--bg);
+      color:var(--text); line-height:1.65;
+    }
+    a{color:var(--primary); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:900px; margin:0 auto; padding:24px}
+    header{position:sticky; top:0; backdrop-filter: blur(8px); background:color-mix(in oklab, var(--bg) 80%, transparent); border-bottom:1px solid var(--border);}
+    header .wrap{display:flex; gap:16px; align-items:center;}
+    .logo{display:inline-flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px; color:#fff}
+    .badge{font-size:12px; color:var(--muted)}
+    .container{max-width:900px; margin:32px auto; padding:0 24px}
+    .panel{ background: linear-gradient(180deg, rgba(15,23,42,.65), rgba(2,6,23,.65)); border:1px solid var(--border); border-radius:16px; padding:24px}
+    h1{font-size:clamp(28px, 3.5vw, 42px); margin:12px 0 4px}
+    h2{font-size:clamp(20px, 2.5vw, 28px); margin:28px 0 12px}
+    p, li{font-size:18px}
+    .muted{color:var(--muted)}
+    .hero{display:grid; grid-template-columns:1fr; gap:18px; margin-top:18px}
+    .notice{border:1px solid var(--border); background:rgba(34,197,94,.05); padding:14px; border-radius:12px}
+    ol, ul{margin:0; padding-inline-start:20px}
+    li{margin:10px 0}
+    .foot{margin-top:28px; padding-top:16px; border-top:1px dashed var(--border); font-size:16px}
+    .chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:8px}
+    .chip{border:1px solid var(--border); border-radius:999px; padding:6px 12px; font-size:14px; color:var(--muted)}
+    @media (prefers-color-scheme: light){
+      :root{ --bg:#f8fafc; --panel:#ffffff; --text:#0f172a; --muted:#475569; --border:#e2e8f0 }
+      body{background:var(--bg)} a:hover{color:var(--accent)}
+      header{background:#ffffffd0}
+      .panel{background:#fff}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="logo" aria-label="שם זה זול יותר">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 12.5 10 18 20 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        שם זה זול יותר
+      </div>
+      <span class="badge">מדיניות פרטיות</span>
+      <span class="chips">
+        <span class="chip">עודכן לאחרונה: 18.08.2025</span>
+      </span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel hero" aria-labelledby="title">
+      <div>
+        <h1 id="title">מדיניות פרטיות</h1>
+        <p class="muted">מסמך זה מסביר כיצד אנו אוספים, משתמשים, שומרים ומשתפים מידע בעת שימוש באתר ובתוסף "שם זה זול יותר".</p>
+        <p class="notice"><strong>תמצית:</strong> אנו שואפים לאסוף מינימום מידע הנדרש להפעלת השירות, לא מוכרים מידע אישי, ומאפשרים שליטה בהגדרות פרטיות.</p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="scope">
+      <h2 id="scope">למי המדיניות חלה</h2>
+      <p>מדיניות זו חלה על מבקרי האתר <a href="https://shamze.com" target="_blank" rel="noopener">shamze.com</a> ועל משתמשי תוסף הדפדפן "שם זה זול יותר".</p>
+    </section>
+
+    <section class="panel" aria-labelledby="data-we-collect">
+      <h2 id="data-we-collect">איזה מידע נאסף</h2>
+      <ul>
+        <li><strong>מידע שימוש טכני:</strong> למשל דפדפן, דגם מכשיר, כתובות עמודים, זמני טעינה, אירועי קליקים על קישורים (לצרכי ניתוח אנונימי).</li>
+        <li><strong>מידע שמוסר המשתמש מרצונו:</strong> למשל פנייה לתמיכה במייל, הרשמה לקבלת תזכורות/התראות, או שליחת מייל הזמנה לשירותי מעקב מחיר.</li>
+        <li><strong>מידע תוסף:</strong> התוסף קורא מידע מדפי מוצר לצורך הצגת השוואת מחירים/קופונים, ומציג תוצאות לצד האתר. אלא אם הוצהר אחרת, מידע זה מעובד מקומית בדפדפן ונשלח לשרתים רק ככל שנדרש לביצוע החיפוש/השוואה.</li>
+        <li><strong>קבצי Cookie וטכנולוגיות דומות:</strong> משמשים לתפעול בסיסי, למדידת שימוש ולזיהוי הונאות. ניתן לנהל העדפות בדפדפן.</li>
+      </ul>
+    </section>
+
+    <section class="panel" aria-labelledby="purposes">
+      <h2 id="purposes">מטרות השימוש במידע</h2>
+      <ul>
+        <li>מתן השירות: הצגת קופונים, תוצאות השוואת מחירים והתראות רלוונטיות.</li>
+        <li>שיפור ובקרת איכות: איתור תקלות, מדידת ביצועים ושיפור חווית המשתמש.</li>
+        <li>מניעת שימוש לרעה והונאות.</li>
+        <li>עמידה בהוראות דין ובהתחייבויות חוזיות.</li>
+      </ul>
+    </section>
+
+    <section class="panel" aria-labelledby="analytics">
+      <h2 id="analytics">מדידות ואנליטיקות</h2>
+      <p>אנו עשויים להשתמש בכלי אנליטיקה (למשל Google Analytics 4) למדידת שימוש מצטבר ואנונימי ככל הניתן. כלי אלו עשויים להציב Cookies בדפדפן. ניתן לחסום או למחוק Cookies דרך הגדרות הדפדפן. אם ברצונכם להגביל מדידות, תוכלו להשתמש בתוספים לחסימת מעקב או בהגדרות "אל תעקוב" (Do Not Track) בדפדפן.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="affiliates">
+      <h2 id="affiliates">קישורים שיווקיים וקישורי שותפים</h2>
+      <p>חלק מהקישורים לתוצאות/חנויות עשויים להיות קישורי שותפים (Affiliate). קליקים/רכישות דרך קישורים אלה יכולים להניב לנו עמלה ללא תוספת תשלום עבורכם.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="legal-basis">
+      <h2 id="legal-basis">בסיס משפטי לעיבוד מידע (אם רלוונטי)</h2>
+      <ul>
+        <li><strong>ביצוע הסכם ושירות:</strong> לשם הפעלת הפונקציות שביקשתם.</li>
+        <li><strong>אינטרס לגיטימי:</strong> לשיפור השירות, אבטחה ומניעת הונאות.</li>
+        <li><strong>הסכמה:</strong> כאשר נדרשת הרשאה מפורשת (למשל קבלת התראות/ניוזלטר).</li>
+        <li><strong>עמידה בדין:</strong> עיבוד מידע כנדרש לפי חוק.</li>
+      </ul>
+    </section>
+
+    <section class="panel" aria-labelledby="sharing">
+      <h2 id="sharing">שיתוף מידע</h2>
+      <ul>
+        <li>ספקי תשתית ושירות (אחסון, אנליטיקה, אבטחה) לפי הצורך ובכפוף להתחייבויות סודיות ועיבוד נתונים.</li>
+        <li>העברה מכוח דין, צו בית משפט או בקשת רשות מוסמכת.</li>
+        <li>במקרה של מיזוג/אקזיט – בכפוף להמשך הגנה על פרטיותכם.</li>
+        <li>לא נמכור מידע אישי לזרים.</li>
+      </ul>
+    </section>
+
+    <section class="panel" aria-labelledby="retention">
+      <h2 id="retention">שמירת מידע</h2>
+      <p>נשמור מידע רק כל עוד הוא נחוץ למטרות המפורטות במדיניות זו, ובהתאם לדרישות הדין. מידע מצטבר/אנונימי עשוי להישמר לתקופה ארוכה יותר לצרכי סטטיסטיקה ושיפור.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="security">
+      <h2 id="security">אבטחת מידע</h2>
+      <p>אנו מיישמים אמצעי אבטחה סבירים כדי להגן על מידע, אך אין אבטחה מוחלטת. שימושכם בשירות נעשה על אחריותכם.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="user-rights">
+      <h2 id="user-rights">זכויות המשתמש</h2>
+      <ul>
+        <li>זכות עיון/תיקון/מחיקה של מידע אישי לפי דין החל.</li>
+        <li>זכות להתנגד לעיבוד מסוים או לבקש הגבלה.</li>
+        <li>זכות לניידות מידע, מקום שהדבר ישים.</li>
+      </ul>
+      <p>למימוש זכויות – פנו אלינו במייל: <a href="mailto:Shamzezolyoter@gmail.com">Shamzezolyoter@gmail.com</a>.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="children">
+      <h2 id="children">קטינים</h2>
+      <p>השירות לא מיועד לילדים מתחת לגיל הקבוע בדין הרלוונטי ללא הסכמת הורה/אפוטרופוס במקום שנדרש.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="international">
+      <h2 id="international">העברות בינלאומיות</h2>
+      <p>ייתכן שמידע יעובד על-ידי ספקים מחוץ לישראל. במקרים אלו נוודא קיום הגנות מתאימות לפי דין.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="changes">
+      <h2 id="changes">שינויים במדיניות</h2>
+      <p>אנו רשאים לעדכן מדיניות זו מעת לעת. תאריך העדכון מופיע בראש העמוד. המשך שימוש לאחר שינוי מהווה הסכמה לנוסח המעודכן.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="contact">
+      <h2 id="contact">צור קשר</h2>
+      <p>לשאלות, בקשות או תלונות בנוגע לפרטיות – כתבו לנו: <a href="mailto:Shamzezolyoter@gmail.com">Shamzezolyoter@gmail.com</a>.</p>
+      <p class="muted">מסמך זה אינו ייעוץ משפטי. מומלץ להתייעץ עם עו"ד כדי לוודא התאמה מלאה לדין החל (למשל חוק הגנת הפרטיות, תקנות הגנת הפרטיות, GDPR וכד').</p>
+    </section>
+
+    <footer class="wrap" style="text-align:center; color:var(--muted); margin-bottom:32px">
+      © <span id="year"></span> שם זה זול יותר · <a href="/legal/terms.html">תנאי שימוש</a>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
