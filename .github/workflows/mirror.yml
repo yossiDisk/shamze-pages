@@ -8,6 +8,9 @@ jobs:
   mirror:
     if: github.repository == 'yossiDisk/Shamze'
     runs-on: ubuntu-latest
+    env:
+      TARGET_REPO: yossiDisk/shamze-pages
+      DOMAIN: shamze.com
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
@@ -19,30 +22,48 @@ jobs:
         env:
           TOKEN: ${{ secrets.MIRROR_TOKEN }}
         run: |
+          set -euo pipefail
           set -x
-
-          # וידוא שה‐TOKEN לא ריק
-          if [ -z "$TOKEN" ]; then
+          if [ -z "${TOKEN:-}" ]; then
             echo "❌ MIRROR_TOKEN is empty!" >&2
             exit 1
           else
             echo "✅ MIRROR_TOKEN present"
           fi
 
-          # קונפיגורציה של git
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # הסרת remote קיים (אם יש) כדי למנוע כפילויות
           git remote remove target || true
-
-          # הוספת ה-remote עם ה-PAT
-          git remote add target https://$TOKEN@github.com/yossiDisk/shamze-pages.git
-
-          # בדיקת קישור (ללא חשיפת הטוקן)
+          git remote add target https://$TOKEN@github.com/${TARGET_REPO}.git
           git remote get-url target | sed -e 's#//.*@#//<token>@#' -e 's#\.git#<…>.git#'
           echo -n "Trying git ls-remote… "
           git ls-remote target HEAD && echo "✅ ls-remote OK" || { echo "❌ ls-remote FAILED"; exit 1; }
 
-          # הדחיפה בפועל
+          # המירור בפועל
           git push --force target main:main
+
+      - name: Ensure CNAME exists in target repo
+        env:
+          TOKEN: ${{ secrets.MIRROR_TOKEN }}
+        run: |
+          set -euo pipefail
+          set -x
+          tmpdir="$(mktemp -d)"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # שיבוט מהיר של היעד
+          git clone --depth 1 https://$TOKEN@github.com/${TARGET_REPO}.git "$tmpdir"
+          cd "$tmpdir"
+
+          # צור/עדכן CNAME רק אם התוכן שונה
+          if [ ! -f CNAME ] || ! cmp -s <(printf '%s\n' "$DOMAIN") CNAME; then
+            printf '%s\n' "$DOMAIN" > CNAME
+            git add CNAME
+            git commit -m "chore: ensure CNAME ($DOMAIN) after mirror"
+            git push origin HEAD:main
+            echo "✅ CNAME ensured in target repo"
+          else
+            echo "ℹ️ CNAME already up-to-date"
+          fi
