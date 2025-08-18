@@ -80,7 +80,8 @@
       if (debug) {
         el('status').textContent = 'מצב בדיקה — אין הפניה';
         el('payload').style.display = 'block';
-        el('payload').textContent = JSON.stringify(payload, null, 2);
+        $1console.log('[redirect] Debug payload to be sent:', payload);
+      console.log('[redirect] Track endpoint:', TRACK_ENDPOINT);
       }
 
       // ---- שליחת Beacon ----
