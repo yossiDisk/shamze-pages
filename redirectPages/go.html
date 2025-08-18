@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta http-equiv="Cache-Control" content="no-store">
+  <title>מקדמים אותך ליעד…</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Arial, sans-serif; margin: 0; min-height: 100vh; display: grid; place-items: center; }
+    .box { text-align: center; padding: 24px; max-width: 640px; }
+    .small { opacity: .7; font-size: .9rem; margin-top: .5rem; }
+    pre { text-align: left; direction: ltr; background: #f4f4f4; padding: 12px; border-radius: 8px; overflow: auto; max-height: 60vh; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div id="status">מקדמים אותך ליעד…</div>
+    <div class="small">אם לא הועברת אוטומטית, <a id="fallback" href="#">לחץ כאן</a>.</div>
+    <pre id="payload" style="display:none"></pre>
+  </div>
+
+  <script>
+    (function () {
+      // ---- קונפיגורציה ----
+      const TRACK_ENDPOINT = 'https://YOUR_API_DOMAIN/track'; // החלף לכתובת ה-API שלך
+      const ALLOWLIST = []; // לדוגמה: ["example.com", "shamze.com"] - השאר ריק כדי לאפשר כל דומיין
+
+      // ---- עזר ----
+      const qs = new URLSearchParams(location.search);
+      const el = (id) => document.getElementById(id);
+      const setInvalid = (msg) => { el('status').textContent = msg || 'קישור לא תקין'; };
+
+      // ---- קריאת פרמטר יעד ----
+      let target = '';
+      if (qs.has('b64')) {
+        try { target = atob(qs.get('b64')); } catch (e) {}
+      }
+      if (!target) { target = (qs.get('to') || '').trim(); }
+
+      let url;
+      try { url = new URL(target); } catch (e) { setInvalid('יעד לא תקין.'); return; }
+      if (!/^https?:$/.test(url.protocol)) { setInvalid('סוג קישור אינו נתמך.'); return; }
+
+      // ---- Allowlist (לא חובה) ----
+      if (ALLOWLIST.length) {
+        const ok = ALLOWLIST.some(d => url.hostname === d || url.hostname.endsWith('.' + d));
+        if (!ok) { setInvalid('הדומיין של היעד אינו מורשה.'); return; }
+      }
+
+      // ---- בניית נתוני אירוע ----
+      const src = qs.get('src') || qs.get('utm_source') || '';
+      const utm = {
+        source: qs.get('utm_source') || src || '',
+        medium: qs.get('utm_medium') || '',
+        campaign: qs.get('utm_campaign') || '',
+        term: qs.get('utm_term') || '',
+        content: qs.get('utm_content') || ''
+      };
+
+      const payload = {
+        ts: Date.now(),
+        ts_iso: new Date().toISOString(),
+        dest: url.toString(),
+        domain: url.hostname,
+        src,
+        utm,
+        ref: document.referrer || '',
+        client: {
+          ua: navigator.userAgent,
+          lang: navigator.language,
+          tz: (Intl && Intl.DateTimeFormat().resolvedOptions().timeZone) || '',
+          screen: { w: screen.width, h: screen.height, dpr: (window.devicePixelRatio || 1) }
+        }
+      };
+
+      // ---- מצב בדיקה (ללא הפניה) ----
+      const debug = qs.get('debug') === '1';
+      if (debug) {
+        el('status').textContent = 'מצב בדיקה — אין הפניה';
+        el('payload').style.display = 'block';
+        el('payload').textContent = JSON.stringify(payload, null, 2);
+      }
+
+      // ---- שליחת Beacon ----
+      if (TRACK_ENDPOINT && !debug) {
+        try {
+          const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+          const sent = navigator.sendBeacon && navigator.sendBeacon(TRACK_ENDPOINT, blob);
+          if (!sent) {
+            fetch(TRACK_ENDPOINT, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+              keepalive: true
+            }).catch(() => {});
+          }
+        } catch (e) { /* התעלם משגיאות דיווח */ }
+      }
+
+      // ---- קישור גיבוי והפניה ----
+      el('fallback').href = url.toString();
+      if (!debug) {
+        // replace = לא משאיר את העמוד בהיסטוריה
+        location.replace(url.toString());
+      }
+    })();
+  </script>
+</body>
+</html>
