@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>תנאי שימוש – שם זה זול יותר</title>
+  <meta name="description" content="תנאי השימוש באתר ובתוסף 'שם זה זול יותר'" />
+  <style>
+    :root{
+      --bg:#0f172a;          /* slate-900 */
+      --panel:#0b1229;       /* deep panel */
+      --text:#e5e7eb;        /* gray-200 */
+      --muted:#94a3b8;       /* slate-400 */
+      --primary:#22c55e;     /* green-500 */
+      --accent:#16a34a;      /* green-600 */
+      --border:#1f2937;      /* gray-800 */
+    }
+    html,body{height:100%}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 80% -10%, rgba(34,197,94,.12), transparent 60%),
+                  radial-gradient(900px 600px at 10% 110%, rgba(34,197,94,.08), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.65;
+    }
+    a{color:var(--primary); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:900px; margin:0 auto; padding:24px}
+    header{position:sticky; top:0; backdrop-filter: blur(8px); background:color-mix(in oklab, var(--bg) 80%, transparent); border-bottom:1px solid var(--border);}
+    header .wrap{display:flex; gap:16px; align-items:center;}
+    .logo{
+      display:inline-flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px; color:#fff
+    }
+    .badge{font-size:12px; color:var(--muted)}
+    .container{max-width:900px; margin:32px auto; padding:0 24px}
+    .panel{ background: linear-gradient(180deg, rgba(15,23,42,.65), rgba(2,6,23,.65)); border:1px solid var(--border); border-radius:16px; padding:24px}
+    h1{font-size:clamp(28px, 3.5vw, 42px); margin:12px 0 4px}
+    h2{font-size:clamp(20px, 2.5vw, 28px); margin:28px 0 12px}
+    p, li{font-size:18px}
+    .muted{color:var(--muted)}
+    .hero{display:grid; grid-template-columns:1fr; gap:18px; margin-top:18px}
+    .cta{
+      display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:999px; border:1px solid var(--border);
+      background: color-mix(in oklab, var(--panel) 85%, black 15%);
+    }
+    .cta .dot{width:8px; height:8px; border-radius:50%; background:var(--primary); box-shadow:0 0 0 4px rgba(34,197,94,.15)}
+    ol{margin:0; padding-inline-start:20px}
+    li{margin:10px 0}
+    .foot{margin-top:28px; padding-top:16px; border-top:1px dashed var(--border); font-size:16px}
+    .chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:8px}
+    .chip{border:1px solid var(--border); border-radius:999px; padding:6px 12px; font-size:14px; color:var(--muted)}
+    .notice{border:1px solid var(--border); background:rgba(34,197,94,.05); padding:14px; border-radius:12px}
+    @media (prefers-color-scheme: light){
+      :root{ --bg:#f8fafc; --panel:#ffffff; --text:#0f172a; --muted:#475569; --border:#e2e8f0 }
+      body{background:var(--bg)} a:hover{color:var(--accent)}
+      header{background:#ffffffd0}
+      .panel{background:#fff}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="logo" aria-label="שם זה זול יותר">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 12.5 10 18 20 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        שם זה זול יותר
+      </div>
+      <span class="badge">תנאי שימוש</span>
+      <span class="chips">
+        <span class="chip">עודכן לאחרונה: 18.08.2025</span>
+      </span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel hero" aria-labelledby="title">
+      <div>
+        <h1 id="title">תנאי שימוש באתר ובתוסף "שם זה זול יותר"</h1>
+        <p class="muted">ברוך הבא! מסמך זה מגדיר את ההסכמות שבין המשתמשים לבין מפעילי האתר/התוסף. אנא קראו בעיון.</p>
+        <p class="notice"><strong>הסכמה לתנאים:</strong> בהתקנת התוסף או בשימוש באתר המשתמשים מצהירים כי קראו, הבינו והם מסכימים לתנאי השימוש המפורטים להלן.</p>
+        <a class="cta" href="#terms" aria-label="גלילה לתנאים">
+          <span class="dot" aria-hidden="true"></span>
+          גלילה לסעיפי התנאים
+        </a>
+      </div>
+    </section>
+
+    <section id="terms" class="panel" aria-labelledby="terms-title">
+      <h2 id="terms-title">הסעיפים המחייבים</h2>
+      <ol>
+        <li><strong>שירותים:</strong> "שם זה זול יותר" מציג קופונים והשוואת מחירים באתרים שונים.</li>
+        <li><strong>אופי ההצעות:</strong> ההצעות של "שם זה זול יותר" הן המלצות בלבד, ואינן בהכרח מוזילות את המחיר.</li>
+        <li><strong>קופונים:</strong> אין התחייבות לתקינות הקופונים המוצגים.</li>
+        <li><strong>מחירים:</strong> אין התחייבות לאמינות המחירים המוצגים. המחירים נשמרים בקבועי זמן, ואינם בהכרח תואמים למחיר המוצג באתר. אין התחייבות להצגת מחיר זול יותר.</li>
+        <li><strong>אחריות לבדיקות:</strong> האתר ומפעיליו לא מאמתים את האתרים המוצגים. אחריות וידוא אמינות האתר, המחיר, התוצאה וכל הקשור בה – מוטלת על המשתמש.</li>
+        <li><strong>שימוש והרשמה:</strong> "שם זה זול יותר" ניתן לשימוש בחינם וניתן לשימוש גם ללא רישום המשתמש. ניתן להסיר את התוסף בכל עת בעמוד התוסף או באזור התוספים בדפדפן.</li>
+        <li><strong>אופי המידע:</strong> מידע על קופונים, מבצעים ומחירים ניתן כשירות לציבור ולא יוכל לשמש עילה לתביעה כלשהי או אישור לזכויות כלשהן. מסירת המידע אינה מהווה אישור בדבר אמיתות תוכנו.</li>
+        <li><strong>חוויית שימוש:</strong> למשתמש לא יהיו טענות על חוויית השימוש בתוסף או באתר, כולל אך לא רק: מחירים מוצגים, תקינות קופונים, אופן הצגת התוצאות, אופן הצגת המודל, תוצאות חיפוש או כל גורם אחר הקשור בשימוש בתוסף.</li>
+        <li><strong>התקנה והסרה:</strong> בהתקנת התוסף, המשתמש מודע לאפשרות הסרת התוסף על ידו ולא יהיו לו טענות על אופן ההתקנה או ההסרה. לכל תקלה ניתן לפנות למייל: <a href="mailto:Shamzezolyoter@gmail.com">Shamzezolyoter@gmail.com</a>.</li>
+        <li><strong>שימוש מותר:</strong> השימוש אסור למטרות מסחריות של השוואת מחירים. השימוש הוא לצורך פרטי בלבד.</li>
+      </ol>
+
+      <div class="foot">
+        <p class="muted">לתשומת לב: התנאים עשויים להשתנות מעת לעת. המשך שימוש באתר או בתוסף לאחר שינוי התנאים יהווה הסכמה לנוסח המעודכן.</p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="more">
+      <h2 id="more">הבהרות נוספות (כלליות)</h2>
+      <p class="muted">הסעיפים הבאים הם הבהרות כלליות מקובלות ומקלים על הבהרת ציפיות. ניתן להסירם אם אינכם מעוניינים:</p>
+      <ul>
+        <li><strong>הגבלת אחריות:</strong> השירות ניתן „כמו שהוא” (AS IS). מפעילי השירות לא יהיו אחראים לכל נזק עקיף/תוצאתי הנובע מן השימוש.</li>
+        <li><strong>קניין רוחני:</strong> כל הזכויות בתוכן ובקוד שייכות למפעילי השירות. אין להעתיק, לשכפל או לעשות שימוש מסחרי בלא רשות מראש ובכתב.</li>
+        <li><strong>שינויים והפסקת שירות:</strong> המפעילים רשאים לשנות את השירות או חלקו, להשהות או להפסיקו, לפי שיקול דעתם הבלעדי.</li>
+        <li><strong>שיפוט ודין:</strong> על תנאים אלו יחולו דיני מדינת ישראל וסמכות השיפוט המקומית נתונה לבתי המשפט המוסמכים בירושלים.</li>
+        <li><strong>פנייה ותמיכה:</strong> לכל שאלה ניתן לפנות ל־<a href="mailto:Shamzezolyoter@gmail.com">Shamzezolyoter@gmail.com</a>.</li>
+      </ul>
+    </section>
+
+    <footer class="wrap" style="text-align:center; color:var(--muted); margin-bottom:32px">
+      © <span id="year"></span> שם זה זול יותר · כל הזכויות שמורות
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
