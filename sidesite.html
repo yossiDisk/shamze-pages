@@ -1652,8 +1652,10 @@
     `;
 
             productDiv.onclick = () => {
+                logClick(product);
                 handleProductClick(product);
             };
+
 
 
             if (!product.image) {
@@ -1760,8 +1762,44 @@
     `;
 
                     offerCard.onclick = () => {
+                        // חילוץ base URL + domain מהקישור של ההצעה
+                        const base_url = (() => {
+                            try {
+                                const u = new URL(offer.link);
+                                return u.origin; // למשל: https://www.ksp.co.il
+                            } catch {
+                                // נפילה קדימה לפונקציה שכבר יש לך
+                                return extractDomainFromUrl(offer.link) || 'unknown';
+                            }
+                        })();
+
+                        const base_domain = (() => {
+                            try {
+                                return new URL(offer.link).hostname.replace(/^www\./, ''); // למשל: ksp.co.il
+                            } catch {
+                                const d = extractDomainFromUrl(offer.link);
+                                return d ? d.replace(/^www\./, '') : 'unknown';
+                            }
+                        })();
+
+                        // אירוע GA על בחירת הצעה עם base_url / base_domain
+                        sendGAEvent('offer_select', {
+                            event_category: 'offers_list',
+                            event_label: `${offer.merchant}_${product.name || 'unknown'}`,
+                            product_name: product.name || 'unknown',
+                            product_site: product.site || 'unknown',
+                            search_query: currentSearchQuery || (new URLSearchParams(window.location.search).get('query')) || 'unknown',
+                            reference_price: isNaN(numericPrice) ? 'none' : numericPrice,
+                            offer_merchant: offer.merchant,
+                            offer_price: offer.price,
+                            selected_is_cheapest: !!isCheapest,
+                            target_url: offer.link,
+                            base_domain      // ← אופציונלי: לשיוך לפי דומיין בלבד
+                        });
+
                         window.open(offer.link, '_blank');
                     };
+
 
                     resultsContainer.appendChild(offerCard);
                 });
