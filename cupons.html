@@ -6,8 +6,16 @@
   <meta name="agd-partner-manual-verification" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>שם זה זול יותר - קופונים והשוואת מחירים</title>
-  <script defer data-domain="yossidisk.github.io/shamze/cupons.html" src="https://plausible.io/js/script.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J5RK908M0K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-J5RK908M0K');
+  </script>
+
   <meta name='impact-site-verification' value='860575b0-9474-438c-8bda-f30e4b2626ee'>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap');
@@ -2014,9 +2022,13 @@
       window.bookFlight = function (url) {
         window.open(url, '_blank');
 
-        if (typeof plausible === 'function') {
-          plausible('FlightBooking', { props: { url: url } });
+        // FlightBooking  ->  GA4: flight_booking
+        if (typeof gtag === 'function') {
+          gtag('event', 'flight_booking', {
+            url: url
+          });
         }
+
       };
 
       function displayError(message) {
@@ -2159,9 +2171,10 @@
           }
         }
 
-        if (typeof plausible === 'function') {
-          plausible('Search', { props: { query: query } });
-        }
+        gtag('event', 'Search', {
+          query: query
+        });
+
       }
 
       function searchByUrl(url) {
@@ -2197,14 +2210,13 @@
         submitButton.onclick = function () {
           const email = emailInput.value;
           if (email) {
-            if (typeof plausible === 'function') {
-              plausible('CouponRequest', {
-                props: {
-                  site: siteName,
-                  email: email
-                }
+            if (typeof gtag === 'function') {
+              gtag('event', 'coupon_request', {
+                site: siteName,
+                email_domain: (email || '').split('@')[1] || ''
               });
             }
+
             alert('הבקשה נשלחה');
             emailInput.remove();
             submitButton.remove();
@@ -2239,9 +2251,13 @@
           button.className = 'popular-search-button';
           button.addEventListener('click', () => {
             searchInput.value = searchQuery;
-            if (typeof plausible === 'function') {
-              plausible('PopularSearch', { props: { query: searchQuery } });
+            // PopularSearch  ->  GA4: popular_search
+            if (typeof gtag === 'function') {
+              gtag('event', 'popular_search', {
+                query: searchQuery
+              });
             }
+
             handleSearchInput();
           });
           buttonContainer.appendChild(button);
@@ -2319,9 +2335,10 @@
           .catch(err => console.error('Failed to copy: ', err));
         event.stopPropagation();
 
-        if (typeof plausible === 'function') {
-          plausible('CouponCopy', { props: { coupon: coupon } });
-        }
+        gtag('event', 'coupon_copy', {
+          coupon: coupon
+        });
+
       }
 
       function performPriceComparison(query) {
@@ -2349,14 +2366,11 @@
               sortContainer.style.display = 'block';
             }
 
-            if (typeof plausible === 'function') {
-              plausible('PriceComparison', {
-                props: {
-                  query: query,
-                  estimatedPrice: estimatedPrice || 'none'
-                }
-              });
-            }
+            gtag('event', 'price_comparison', {
+              query: query,
+              estimated_price: estimatedPrice || 'none'
+            });
+
           })
           .catch(error => {
             console.error('Error:', error);
@@ -2429,15 +2443,15 @@
       function goToProduct(url, siteName, productName) {
         window.open(url, '_blank');
 
-        if (typeof plausible === 'function') {
-          plausible('ProductClick', {
-            props: {
-              site: siteName,
-              product: productName,
-              query: currentSearchQuery
-            }
+        // ProductClick  ->  GA4: product_click
+        if (typeof gtag === 'function') {
+          gtag('event', 'product_click', {
+            site: siteName,
+            product: productName,
+            query: currentSearchQuery
           });
         }
+
       }
 
       function goToSite(url, siteName, linkType, event) {
@@ -2469,16 +2483,13 @@
 
         window.open(finalUrl, '_blank');
 
-        if (typeof plausible === 'function') {
-          plausible('SiteClick', {
-            props: {
-              site: siteName,
-              linkType: linkType,
-              originalUrl: url,
-              finalUrl: finalUrl
-            }
-          });
-        }
+        gtag('event', 'site_click', {
+          site: siteName,
+          link_type: linkType,
+          original_url: url,
+          final_url: finalUrl
+        });
+
       }
 
 
