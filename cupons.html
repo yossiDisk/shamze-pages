@@ -265,7 +265,8 @@
     }
 
     .flight-input {
-      width: 100%;
+      width: 100% !important;
+      min-width: 250px;
       padding: 12px;
       border: 2px solid #e0e0e0;
       border-radius: 8px;
@@ -856,20 +857,20 @@
     }
 
     /* לוח שנה RTL */
-    .flatpickr-calendar {
+    html[dir="rtl"] .flatpickr-calendar {
       direction: rtl !important;
       text-align: right;
       max-width: 100vw !important;
       box-sizing: border-box;
     }
 
-    .flatpickr-months {
+    html[dir="rtl"] .flatpickr-months {
       flex-direction: row-reverse !important;
     }
 
-    .flatpickr-prev-month,
-    .flatpickr-next-month {
-      transform: rotate(180deg);
+    html[dir="rtl"] .flatpickr-prev-month,
+    html[dir="rtl"] .flatpickr-next-month {
+      transform: none !important;
     }
 
     .flatpickr-current-month {
@@ -877,8 +878,19 @@
       text-align: right;
     }
 
-    .flatpickr-weekdays {
+    html[dir="rtl"] .flatpickr-weekdays {
       direction: rtl;
+      text-align: right;
+    }
+
+    html[dir="rtl"] .flatpickr-day.startRange {
+      border-radius: 0 50% 50% 0 !important;
+      /* עיגול בצד ימין */
+    }
+
+    html[dir="rtl"] .flatpickr-day.endRange {
+      border-radius: 50% 0 0 50% !important;
+      /* עיגול בצד שמאל */
     }
 
     /* תמונות רקע לקלפי טיסות */
@@ -907,6 +919,34 @@
 
     /* Responsive */
     @media (max-width: 768px) {
+      .flatpickr-calendar.static.open {
+        position: fixed !important;
+        inset: auto 0 0 0 !important;
+        /* נדבק לתחתית, רוחב מלא */
+        margin: 0 !important;
+        border-radius: 16px 16px 0 0 !important;
+        box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.15) !important;
+        background: #fff;
+      }
+
+      /* הסתרת ״חץ״ הטול־טיפ של Flatpickr */
+      .flatpickr-calendar::before,
+      .flatpickr-calendar::after {
+        display: none !important;
+      }
+
+      .flatpickr-day {
+        height: 44px !important;
+        line-height: 44px !important;
+        font-size: 16px !important;
+      }
+
+      /* תיבות חודש/שנה קריאות */
+      .flatpickr-monthDropdown-months,
+      .numInput.cur-year {
+        font-size: 16px !important;
+      }
+
       footer {
         display: none;
       }
@@ -1203,50 +1243,55 @@
       return params.origin && params.destination && params.dateFrom && params.dateTo;
     }
 
-    // הגדרת flatpickr
-    flatpickr("#dateRange", {
-      mode: "range",
-      minDate: new Date().fp_incr(1),
-      showMonths: 2,
-      dateFormat: "Y-m-d",
-      position: "auto right",
-      locale: {
-        firstDayOfWeek: 0,
-        isRtl: true,
-        weekdays: {
-          shorthand: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
-          longhand: ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'],
-        },
-        months: {
-          shorthand: ['ינו', 'פבר', 'מרץ', 'אפר', 'מאי', 'יונ', 'יול', 'אוג', 'ספט', 'אוק', 'נוב', 'דצמ'],
-          longhand: ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
-        },
-      },
-      onClose: function (selectedDates) {
-        if (selectedDates.length === 2) {
-          const [from, to] = selectedDates;
-          document.getElementById('dateFrom').value = from.toLocaleDateString('sv-SE');
-          document.getElementById('dateTo').value = to.toLocaleDateString('sv-SE');
-        }
-      },
-      onReady: function (selectedDates, dateStr, instance) {
-        fixFlatpickrHeaderOrder(instance);
-      },
-      onMonthChange: function (selectedDates, dateStr, instance) {
-        fixFlatpickrHeaderOrder(instance);
-      },
-      onYearChange: function (selectedDates, dateStr, instance) {
-        fixFlatpickrHeaderOrder(instance);
-      }
-    });
+    // הגדרת Flatpickr (RTL תקין + חוויית מובייל עדינה)
+    (function initDatepicker() {
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-    function fixFlatpickrHeaderOrder(instance) {
-      const container = instance.calendarContainer.querySelector(".flatpickr-months");
-      const months = container.querySelectorAll(".flatpickr-month");
-      if (months.length === 2) {
-        container.insertBefore(months[1], months[0]);
+      const fp = flatpickr("#dateRange", {
+        mode: "range",
+        disableMobile: true,                 // נכפה שימוש ב־Flatpickr ולא בקלט מובייל דפדפני
+        static: isMobile,                    // במובייל - קבוע מתחת לשדה (יחד עם ה־CSS זה הופך ל־bottom sheet)
+        showMonths: isMobile ? 1 : 2,        // מובייל: חודש אחד; דסקטופ: שניים
+        minDate: new Date().fp_incr(1),
+        dateFormat: "Y-m-d",
+        position: isMobile ? "auto center" : "auto right",
+        locale: {
+          firstDayOfWeek: 0,
+          isRtl: true,
+          rangeSeparator: " עד ",
+          weekdays: {
+            shorthand: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
+            longhand: ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'],
+          },
+          months: {
+            shorthand: ['ינו', 'פבר', 'מרץ', 'אפר', 'מאי', 'יונ', 'יול', 'אוג', 'ספט', 'אוק', 'נוב', 'דצמ'],
+            longhand: ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
+          },
+        },
+        onClose(selectedDates, dateStr, instance) {
+          if (selectedDates.length === 2) {
+            const [from, to] = selectedDates;
+            document.getElementById('dateFrom').value = from.toLocaleDateString('sv-SE');
+            document.getElementById('dateTo').value = to.toLocaleDateString('sv-SE');
+            // נעדכן גם את הטקסט בשדה כדי שיתאים לעברית
+            instance.input.value = `${from.toLocaleDateString('sv-SE')} עד ${to.toLocaleDateString('sv-SE')}`;
+          }
+        },
+        onReady(_, __, instance) {
+          // מבטיחים שהיומן עצמו ירש RTL (למקרה שנטען בתוך קונטיינר אחר)
+          instance.calendarContainer.setAttribute('dir', 'rtl');
+        }
+      });
+
+      // אם כבר יש ערכים מה־URL / מהקאש – לשמר אותם גם בשדה התצוגה
+      const from = document.getElementById('dateFrom')?.value;
+      const to = document.getElementById('dateTo')?.value;
+      if (from && to) {
+        fp.setDate([from, to], true);
+        fp.input.value = `${from} עד ${to}`;
       }
-    }
+    })();
+
 
     document.addEventListener('DOMContentLoaded', function () {
       // משתנים גלובליים
