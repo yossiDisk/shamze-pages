@@ -29,10 +29,7 @@
         /* סרגל עליון */
         header {
             border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
             background: #fff;
-            z-index: 1000;
         }
 
         .top-bar {
@@ -237,9 +234,131 @@
             font-weight: bold;
             color: var(--text-main);
         }
+
+        /* ===== מדריך הפעלת תוסף Srok (מוצג רק ב-iPhone/iPad) ===== */
+        :root { --srok-blue: #2f6fed; --srok-purple: #7b4fe0; --srok-ink: #1b2433; --srok-muted: #66708a; --srok-line: #e6eaf3; --srok-hl: #fff2b3; --srok-green: #1f9d5a; }
+        #srok-guide { display: none; position: sticky; top: 0; z-index: 2000; padding: 10px 10px 0; background: linear-gradient(180deg, rgba(255,255,255,.96) 70%, rgba(255,255,255,0)); direction: rtl; }
+        #srok-guide.srok-visible { display: block; }
+        .srok-card { background: #fff; border: 1px solid var(--srok-line); border-radius: 18px; box-shadow: 0 10px 30px rgba(27,36,51,.14); color: var(--srok-ink); font-size: 14px; line-height: 1.45; overflow: hidden; max-height: 62vh; display: flex; flex-direction: column; }
+        .srok-head { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--srok-line); }
+        .srok-logo { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--srok-blue), var(--srok-purple)); color: #fff; font-weight: 900; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; letter-spacing: .02em; }
+        .srok-head h2 { font-size: 16px; font-weight: 800; margin: 0; flex: 1; }
+        .srok-head small { display: block; font-weight: 400; font-size: 12px; color: var(--srok-muted); margin-top: 1px; }
+        .srok-collapse { border: 0; background: #f2f4f9; color: var(--srok-muted); width: 32px; height: 32px; border-radius: 50%; font-size: 16px; cursor: pointer; flex-shrink: 0; }
+        .srok-body { padding: 6px 14px 14px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+        #srok-guide.srok-collapsed .srok-body { display: none; }
+        #srok-guide.srok-collapsed .srok-card { max-height: none; }
+        #srok-guide.srok-collapsed .srok-collapse { transform: rotate(180deg); }
+
+        .srok-steps { list-style: none; margin: 0; padding: 0; }
+        .srok-steps li { position: relative; padding: 10px 40px 10px 0; }
+        .srok-steps li + li { border-top: 1px dashed var(--srok-line); }
+        .srok-steps .srok-n { position: absolute; right: 0; top: 11px; width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--srok-blue), var(--srok-purple)); color: #fff; font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+        .srok-steps b { display: block; font-size: 15px; font-weight: 800; margin-bottom: 6px; }
+        .srok-steps p { margin: 6px 0 0; font-size: 12.5px; color: var(--srok-muted); }
+        .srok-path { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+        .srok-chip { display: inline-flex; align-items: center; gap: 4px; background: #f2f4f9; border: 1px solid var(--srok-line); border-radius: 999px; padding: 3px 10px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+        .srok-chip.hl { background: var(--srok-hl); border-color: #f5d76e; font-weight: 800; }
+        .srok-chip .srok-tg { width: 22px; height: 13px; border-radius: 7px; background: #34c759; position: relative; display: inline-block; }
+        .srok-chip .srok-tg::after { content: ""; position: absolute; top: 1.5px; left: 10.5px; width: 10px; height: 10px; border-radius: 50%; background: #fff; }
+        .srok-arrow { color: #b3bacb; font-size: 13px; }
+        .srok-bubble-hint { display: inline-flex; align-items: center; gap: 8px; }
+        .srok-bubble-hint i { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, var(--srok-blue), var(--srok-purple)); box-shadow: 0 3px 8px rgba(47,111,237,.35); display: inline-block; }
+
+        .srok-note { display: none; margin-top: 10px; background: #fff8e1; border: 1px solid #f5d76e; border-radius: 12px; padding: 9px 12px; font-size: 13px; }
+        .srok-note.srok-visible { display: block; }
+        .srok-note a { color: var(--srok-blue); font-weight: 700; }
+        .srok-btn { display: block; width: 100%; border: 0; border-radius: 12px; padding: 12px 14px; font-size: 15px; font-weight: 800; text-align: center; text-decoration: none; cursor: pointer; margin-top: 8px; font-family: inherit; }
+        .srok-btn-primary { background: linear-gradient(135deg, var(--srok-blue), var(--srok-purple)); color: #fff; box-shadow: 0 6px 14px rgba(47,111,237,.28); }
+        .srok-btn-secondary { background: #fff; color: var(--srok-blue); border: 1.5px solid var(--srok-blue); }
+        .srok-btn-ghost { background: #f2f4f9; color: var(--srok-ink); font-weight: 700; font-size: 14px; padding: 10px; }
+
+        /* מצב הצלחה */
+        .srok-success-only { display: none; }
+        #srok-guide.srok-success .srok-success-only { display: block; }
+        #srok-guide.srok-success .srok-setup-only { display: none; }
+        #srok-guide.srok-success .srok-logo { background: var(--srok-green); }
+        .srok-ok { display: flex; align-items: center; gap: 12px; padding: 12px 0 6px; }
+        .srok-ok i { width: 44px; height: 44px; border-radius: 50%; background: #e3f5ea; color: var(--srok-green); font-size: 24px; font-style: normal; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .srok-ok b { font-size: 16px; display: block; }
+        .srok-ok span { font-size: 12.5px; color: var(--srok-muted); }
+        .srok-step4 { border-top: 1px dashed var(--srok-line); padding-top: 10px; margin-top: 6px; }
+        .srok-step4 b { font-size: 14.5px; }
+        .srok-step4 p { margin: 4px 0 0; font-size: 12.5px; color: var(--srok-muted); }
+        .srok-fallback { display: none; margin-top: 8px; font-size: 12.5px; color: var(--srok-muted); text-align: center; }
+        .srok-fallback.srok-visible { display: block; }
     </style>
 </head>
 <body>
+
+    <!-- ===== מדריך הפעלת תוסף Srok ב-Safari =====
+         מוצג רק ב-iPhone/iPad. התוסף מזריק לדף <div id="srok-bubble"> כשהוא פעיל ומורשה —
+         הסקריפט בתחתית הקובץ בודק זאת כל שנייה ומחליף את המדריך במצב הצלחה.
+         קישור החזרה לאפליקציה: srok://extension-enabled?host=demo
+         מצב ?step=permissions מציג רק את צעד ההרשאה (למי שאישר רק "לאתר זה"). -->
+    <section id="srok-guide" aria-live="polite">
+      <div class="srok-card">
+        <div class="srok-head">
+            <div class="srok-logo">Srok</div>
+            <h2 id="srok-guide-title">הפעלת Srok ב-Safari<small id="srok-guide-sub">שלושה צעדים, פחות מדקה</small></h2>
+            <button class="srok-collapse" type="button" id="srok-collapse" aria-label="כיווץ / הרחבה">⌃</button>
+        </div>
+
+        <div class="srok-body">
+          <!-- מצב הדרכה -->
+          <div class="srok-setup-only">
+            <ol class="srok-steps">
+                <li id="srok-step-1">
+                    <span class="srok-n">1</span>
+                    <b>הדליקו את התוסף</b>
+                    <div class="srok-path">
+                        <span class="srok-chip" data-icon>AA</span><span class="srok-arrow">←</span>
+                        <span class="srok-chip">נהל הרחבות</span><span class="srok-arrow">←</span>
+                        <span class="srok-chip">Srok <span class="srok-tg"></span></span>
+                    </div>
+                    <p>הכפתור נמצא בשורת הכתובת של Safari.</p>
+                </li>
+                <li id="srok-step-2">
+                    <span class="srok-n">2</span>
+                    <b>אשרו גישה — פעמיים</b>
+                    <div class="srok-path">
+                        <span class="srok-chip" data-icon>AA</span><span class="srok-arrow">←</span>
+                        <span class="srok-chip">Srok</span><span class="srok-arrow">←</span>
+                        <span class="srok-chip hl">אפשר תמיד</span><span class="srok-arrow">←</span>
+                        <span class="srok-chip hl">אפשר תמיד בכל אתר</span>
+                    </div>
+                    <p>Safari שואל פעמיים כדי שהתוסף יעבוד בכל חנות — שופרסל, סופר-פארם, Booking. התוסף לא רואה סיסמאות או פרטי תשלום.</p>
+                </li>
+                <li id="srok-step-3">
+                    <span class="srok-n">3</span>
+                    <b>זהו — הבועה תופיע כאן למטה</b>
+                    <div class="srok-bubble-hint"><i></i><span>לחיצה עליה מציגה את המחיר בחנויות אחרות</span></div>
+                </li>
+            </ol>
+
+            <div class="srok-note" id="srok-retry">
+                עשיתם את הצעדים ועדיין אין בועה? התוסף נכנס לפעולה רק בטעינת הדף.
+                <button class="srok-btn srok-btn-ghost" type="button" onclick="location.reload()">רעננו את הדף</button>
+            </div>
+            <div class="srok-note" id="srok-realsite-hint">
+                לא ראיתם בועה בסופר-פארם? כנראה אושר רק "לאתר זה". צריך לבחור <b>אפשר תמיד בכל אתר</b> — <a href="?step=permissions">איך עושים את זה</a>
+            </div>
+          </div>
+
+          <!-- מצב הצלחה -->
+          <div class="srok-success-only">
+            <div class="srok-ok"><i>✓</i><div><b>Srok פעיל!</b><span>ככה זה ייראה בכל אתר קניות — הבועה למטה.</span></div></div>
+            <div class="srok-step4">
+                <b>עכשיו בדקו באתר אמיתי</b>
+                <p>פתחו סופר-פארם והיכנסו לעמוד מוצר. אם בחרתם "אפשר תמיד בכל אתר" — הבועה תופיע גם שם.</p>
+                <a class="srok-btn srok-btn-secondary" id="srok-realsite-btn" href="https://shop.super-pharm.co.il/search?text=libre%20intense">פתחו סופר-פארם</a>
+            </div>
+            <a class="srok-btn srok-btn-primary" id="srok-back-btn" href="srok://extension-enabled?host=demo">חזרה ל-Srok</a>
+            <div class="srok-fallback" id="srok-fallback">פתחו את אפליקציית Srok במכשיר — התוסף כבר פעיל.</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- סרגל עליון מבצעים -->
     <div class="top-bar">
@@ -249,7 +368,7 @@
     <!-- כותרת האתר -->
     <header>
         <div class="navbar">
-            <a href="#" class="logo">SROK</a>
+            <a href="#" class="logo">שם זה זול יותר</a>
             <div class="cart-icon">
                 🛒 עגלת קניות (<span id="cart-count">0</span>)
             </div>
@@ -311,5 +430,75 @@
 
     </main>
 
+
+    <script>
+    (function () {
+        var ua = navigator.userAgent || "";
+        var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+        var guide = document.getElementById("srok-guide");
+        if (!guide || !isIOS) return; // בדסקטופ / אנדרואיד הדף נשאר כמו שהיה
+
+        var params = new URLSearchParams(location.search);
+        var permissionsOnly = params.get("step") === "permissions";
+
+        // iOS 18+: תפריט הדף (אייקון פאזל) במקום כפתור AA
+        var m = ua.match(/OS (\d+)_/);
+        if (m && parseInt(m[1], 10) >= 18) {
+            document.querySelectorAll("[data-icon]").forEach(function (el) { el.textContent = "🧩 תפריט הדף"; });
+        }
+
+        if (permissionsOnly) {
+            document.getElementById("srok-guide-title").firstChild.textContent = "אפשרו את Srok בכל האתרים";
+            document.getElementById("srok-guide-sub").textContent = "צעד אחד — ואז הבועה תופיע בכל חנות";
+            document.getElementById("srok-step-1").style.display = "none";
+            document.getElementById("srok-step-3").style.display = "none";
+            document.getElementById("srok-step-2").querySelector(".srok-n").textContent = "!";
+        }
+
+        // המשתמש כבר ניסה את סופר-פארם וחזר לכאן — כנראה הרשאה חלקית
+        try {
+            if (sessionStorage.getItem("srokTriedRealSite") === "1" && !permissionsOnly) {
+                document.getElementById("srok-realsite-hint").classList.add("srok-visible");
+            }
+        } catch (_) {}
+
+        guide.classList.add("srok-visible");
+
+        document.getElementById("srok-collapse").addEventListener("click", function () {
+            guide.classList.toggle("srok-collapsed");
+        });
+
+        // ===== זיהוי הצלחה: התוסף מזריק <div id="srok-bubble"> =====
+        var started = Date.now();
+        var timer = setInterval(function () {
+            if (document.getElementById("srok-bubble")) {
+                clearInterval(timer);
+                guide.classList.remove("srok-collapsed");
+                guide.classList.add("srok-success");
+                document.getElementById("srok-guide-title").firstChild.textContent = "הכול מוכן";
+                document.getElementById("srok-guide-sub").textContent = "התוסף פעיל בדף הזה";
+                return;
+            }
+            if (Date.now() - started > 90000) {
+                document.getElementById("srok-retry").classList.add("srok-visible");
+                clearInterval(timer);
+            }
+        }, 1000);
+
+        // "פתחו סופר-פארם": לזכור שניסינו, כדי להציג רמז על הרשאה חלקית בחזרה
+        document.getElementById("srok-realsite-btn").addEventListener("click", function () {
+            try { sessionStorage.setItem("srokTriedRealSite", "1"); } catch (_) {}
+        });
+
+        // "חזרה ל-Srok": אם הדף עדיין גלוי אחרי 2 שניות — האפליקציה כנראה לא מותקנת
+        document.getElementById("srok-back-btn").addEventListener("click", function () {
+            setTimeout(function () {
+                if (document.visibilityState === "visible") {
+                    document.getElementById("srok-fallback").classList.add("srok-visible");
+                }
+            }, 2000);
+        });
+    })();
+    </script>
 </body>
 </html>
