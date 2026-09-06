@@ -282,9 +282,6 @@
         .srok-ok i { width: 44px; height: 44px; border-radius: 50%; background: #e3f5ea; color: var(--srok-green); font-size: 24px; font-style: normal; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .srok-ok b { font-size: 16px; display: block; }
         .srok-ok span { font-size: 12.5px; color: var(--srok-muted); }
-        .srok-step4 { border-top: 1px dashed var(--srok-line); padding-top: 10px; margin-top: 6px; }
-        .srok-step4 b { font-size: 14.5px; }
-        .srok-step4 p { margin: 4px 0 0; font-size: 12.5px; color: var(--srok-muted); }
         .srok-fallback { display: none; margin-top: 8px; font-size: 12.5px; color: var(--srok-muted); text-align: center; }
         .srok-fallback.srok-visible { display: block; }
     </style>
@@ -340,19 +337,11 @@
                 עשיתם את הצעדים ועדיין אין בועה? התוסף נכנס לפעולה רק בטעינת הדף.
                 <button class="srok-btn srok-btn-ghost" type="button" onclick="location.reload()">רעננו את הדף</button>
             </div>
-            <div class="srok-note" id="srok-realsite-hint">
-                לא ראיתם בועה בסופר-פארם? כנראה אושר רק "לאתר זה". צריך לבחור <b>אפשר תמיד בכל אתר</b> — <a href="?step=permissions">איך עושים את זה</a>
-            </div>
           </div>
 
           <!-- מצב הצלחה -->
           <div class="srok-success-only">
-            <div class="srok-ok"><i>✓</i><div><b>Srok פעיל!</b><span>ככה זה ייראה בכל אתר קניות — הבועה למטה.</span></div></div>
-            <div class="srok-step4">
-                <b>עכשיו בדקו באתר אמיתי</b>
-                <p>פתחו סופר-פארם והיכנסו לעמוד מוצר. אם בחרתם "אפשר תמיד בכל אתר" — הבועה תופיע גם שם.</p>
-                <a class="srok-btn srok-btn-secondary" id="srok-realsite-btn" href="https://shop.super-pharm.co.il/search?text=libre%20intense">פתחו סופר-פארם</a>
-            </div>
+            <div class="srok-ok"><i>✓</i><div><b>Srok פעיל!</b><span>ככה זה ייראה בכל אתר קניות — הבועה למטה. אם בחרתם "אפשר תמיד בכל אתר", זה יעבוד גם בשופרסל, בסופר-פארם וב-Booking.</span></div></div>
             <a class="srok-btn srok-btn-primary" id="srok-back-btn" href="srok://extension-enabled?host=demo">חזרה ל-Srok</a>
             <div class="srok-fallback" id="srok-fallback">פתחו את אפליקציית Srok במכשיר — התוסף כבר פעיל.</div>
           </div>
@@ -455,13 +444,6 @@
             document.getElementById("srok-step-2").querySelector(".srok-n").textContent = "!";
         }
 
-        // המשתמש כבר ניסה את סופר-פארם וחזר לכאן — כנראה הרשאה חלקית
-        try {
-            if (sessionStorage.getItem("srokTriedRealSite") === "1" && !permissionsOnly) {
-                document.getElementById("srok-realsite-hint").classList.add("srok-visible");
-            }
-        } catch (_) {}
-
         guide.classList.add("srok-visible");
 
         document.getElementById("srok-collapse").addEventListener("click", function () {
@@ -484,11 +466,6 @@
                 clearInterval(timer);
             }
         }, 1000);
-
-        // "פתחו סופר-פארם": לזכור שניסינו, כדי להציג רמז על הרשאה חלקית בחזרה
-        document.getElementById("srok-realsite-btn").addEventListener("click", function () {
-            try { sessionStorage.setItem("srokTriedRealSite", "1"); } catch (_) {}
-        });
 
         // "חזרה ל-Srok": אם הדף עדיין גלוי אחרי 2 שניות — האפליקציה כנראה לא מותקנת
         document.getElementById("srok-back-btn").addEventListener("click", function () {
