@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SROK — השוואת מחירים חכמה</title>
+<meta name="description" content="SROK היא אפליקציה ישראלית חינמית לאייפון שמוצאת את המחיר הזול ביותר אונליין: מחפשים מוצר, מדביקים קישור או סורקים ברקוד ומקבלים מחירים מכל החנויות. תוסף ה-Safari של SROK מזהה מוצרים, מלונות וטיסות בזמן הגלישה ומקפיץ הצעה זולה יותר או קופון. מבית ״שם זה זול יותר״.">
+<link rel="canonical" href="https://shamze.com/srok/">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<meta name="author" content="Yossi Rubinstein">
+<meta name="apple-itunes-app" content="app-id=6747339283">
+<meta name="theme-color" content="#0F7A58">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:site_name" content="SROK">
+<meta property="og:title" content="SROK — השוואת מחירים חכמה">
+<meta property="og:description" content="מוצאים את המחיר הזול ביותר אונליין — למוצרים, טיסות ומלונות. תוסף Safari שמקפיץ הצעה זולה יותר או קופון בזמן הגלישה. חינם. מבית ״שם זה זול יותר״.">
+<meta property="og:url" content="https://shamze.com/srok/">
+<meta property="og:image" content="https://shamze.com/srok/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="text/plain" href="https://shamze.com/srok/llms.txt" title="llms.txt">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karantina:wght@400;700&family=Heebo:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "MobileApplication",
+      "@id": "https://shamze.com/srok/#app",
+      "name": "SROK - השוואת מחירים חכמה",
+      "alternateName": ["SROK", "סרוק", "Srok השוואת מחירים", "Srok price comparison"],
+      "url": "https://shamze.com/srok/",
+      "installUrl": "https://apps.apple.com/il/app/id6747339283",
+      "downloadUrl": "https://apps.apple.com/il/app/id6747339283",
+      "sameAs": ["https://apps.apple.com/il/app/id6747339283"],
+      "applicationCategory": "ShoppingApplication",
+      "applicationSubCategory": "Price comparison",
+      "operatingSystem": "iOS 18.0+, macOS 15.0+ (Apple Silicon), visionOS 2.0+",
+      "inLanguage": ["he", "en"],
+      "countriesSupported": "IL",
+      "isAccessibleForFree": true,
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "ILS", "availability": "https://schema.org/InStock"},
+      "description": "אפליקציה ישראלית חינמית להשוואת מחירים: מחפשים מוצר בשם, מדביקים קישור או סורקים ברקוד ומקבלים את המחירים מכל החנויות אונליין עם סימון המחיר הנמוך ביותר. משווה טיסות (ישירות/עם עצירה, לפי חברת תעופה) ומלונות (ארוחת בוקר, ציון, מחיר ללילה) בין אתרי הזמנות. כוללת תוסף Safari שמזהה אוטומטית דפי מוצר, אתרי מלונות ואתרי טיסות בזמן הגלישה ומקפיץ הצעה זולה יותר או קופון פעיל. בנוסף: סריקת ברקוד בסופר עם מחירי 20+ רשתות לפי סניפים קרובים, רשימת קניות עם סיווג אוטומטי ועגלה עם סכום. ללא הרשמה וללא איסוף מידע.",
+      "featureList": [
+        "השוואת מחירים אונליין: חיפוש מוצר בשם, הדבקת קישור או סריקת ברקוד",
+        "סימון המחיר הנמוך ביותר וכמה הוא זול יותר מכל חנות",
+        "תוסף Safari: זיהוי אוטומטי של דף מוצר והצגת חנויות זולות יותר",
+        "תוסף Safari: זיהוי חיפוש מלון (עיר, תאריכים) והשוואה בין אתרי הזמנות",
+        "תוסף Safari: זיהוי חיפוש טיסה (מוצא, יעד, תאריכים) והשוואה בין אתרים",
+        "תוסף Safari: קופון פעיל באתר מוקפץ עם כפתור העתקה",
+        "השוואת טיסות באפליקציה: ישיר/עם עצירה, סינון לפי חברת תעופה, התראה כשמגיעות תוצאות",
+        "השוואת מלונות באפליקציה: ארוחת בוקר, ציון 8+, מיון, מחיר ללילה ולכל השהות",
+        "שיתוף קישור מ-Safari ישירות ל-SROK להשוואה",
+        "סריקת ברקוד בסופר: מחירים ב-20+ רשתות לפי סניפים קרובים",
+        "רשימת קניות עם סיווג אוטומטי לקטגוריות ועגלה עם סכום כולל",
+        "ייצוא סיכום קנייה ל-PDF"
+      ],
+      "screenshot": "https://shamze.com/srok/og.png",
+      "author": {"@id": "https://shamze.com/#developer"},
+      "publisher": {"@id": "https://shamze.com/#org"},
+      "isRelatedTo": {"@id": "https://shamze.com/#extension"},
+      "datePublished": "2025-06-24",
+      "dateModified": "2026-09-09"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://shamze.com/#extension",
+      "name": "שם זה זול יותר",
+      "alternateName": ["Shamze", "Sham Ze Zol Yoter", "It's Cheaper Elsewhere"],
+      "url": "https://shamze.com/",
+      "installUrl": "https://chromewebstore.google.com/detail/neigoggljhfnodeneidndcflnclldnpm",
+      "applicationCategory": "BrowserApplication",
+      "operatingSystem": "Chrome, Edge (Chromium)",
+      "isAccessibleForFree": true,
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "ILS"},
+      "description": "תוסף דפדפן ישראלי למחשב (70,000+ משתמשים) שמשווה מחירים אוטומטית ומאתר קופונים ב-400+ אתרי קניות, טיסות ומלונות. הגרסה למחשב של SROK.",
+      "author": {"@id": "https://shamze.com/#developer"}
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://shamze.com/#org",
+      "name": "שם זה זול יותר",
+      "alternateName": "Shamze",
+      "url": "https://shamze.com/",
+      "email": "shamzezolyoter@gmail.com",
+      "founder": {"@id": "https://shamze.com/#developer"},
+      "areaServed": "IL",
+      "sameAs": ["https://chromewebstore.google.com/detail/neigoggljhfnodeneidndcflnclldnpm", "https://apps.apple.com/il/app/id6747339283"]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://shamze.com/#developer",
+      "name": "Yossi Rubinstein",
+      "alternateName": "יוסי רובינשטיין",
+      "jobTitle": "מפתח ומייסד",
+      "worksFor": {"@id": "https://shamze.com/#org"},
+      "email": "shamzezolyoter@gmail.com",
+      "knowsAbout": ["השוואת מחירים", "צרכנות בישראל", "פיתוח אפליקציות iOS", "תוספי דפדפן"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://shamze.com/srok/#page",
+      "url": "https://shamze.com/srok/",
+      "name": "SROK — השוואת מחירים חכמה",
+      "inLanguage": "he",
+      "isPartOf": {"@type": "WebSite", "@id": "https://shamze.com/#site", "url": "https://shamze.com/", "name": "שם זה זול יותר"},
+      "about": {"@id": "https://shamze.com/srok/#app"},
+      "dateModified": "2026-09-09",
+      "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "שם זה זול יותר", "item": "https://shamze.com/"},
+        {"@type": "ListItem", "position": 2, "name": "SROK", "item": "https://shamze.com/srok/"}
+      ]}
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://shamze.com/srok/#faq",
+      "mainEntity": [
+        {"@type": "Question", "name": "מה זה SROK?", "acceptedAnswer": {"@type": "Answer", "text": "SROK (סרוק) היא אפליקציה ישראלית חינמית לאייפון להשוואת מחירים. מחפשים מוצר בשם, מדביקים קישור או סורקים ברקוד ומקבלים את המחירים מכל החנויות אונליין עם סימון הזול ביותר. היא משווה גם טיסות ומלונות, וכוללת תוסף Safari שמקפיץ הצעה זולה יותר או קופון בזמן הגלישה. פותחה על ידי יוסי רובינשטיין, מפתח תוסף הדפדפן ״שם זה זול יותר״."}},
+        {"@type": "Question", "name": "מה עושה תוסף ה-Safari של SROK?", "acceptedAnswer": {"@type": "Answer", "text": "התוסף רץ ברקע בזמן הגלישה באייפון. בדף מוצר הוא מזהה את שם המוצר והמחיר, בודק חנויות אחרות ומראה אם יש זול יותר. באתר מלונות הוא מזהה את העיר והתאריכים ומשווה מלונות בין אתרי הזמנות. באתר טיסות הוא מזהה מוצא, יעד ותאריכים ומשווה טיסות. באתר שיש בו קופון פעיל הוא מקפיץ את הקוד עם כפתור העתקה לשימוש במסך התשלום."}},
+        {"@type": "Question", "name": "איך מפעילים את תוסף ה-Safari של SROK?", "acceptedAnswer": {"@type": "Answer", "text": "התוסף מגיע עם האפליקציה. ב-Safari מקישים על אייקון ההרחבות (פאזל) בשורת הכתובת, מפעילים את Srok ומאשרים גישה ״תמיד״ ו״בכל האתרים״. מרגע זה בועת Srok מופיעה בתחתית דפי מוצר, מלונות וטיסות."}},
+        {"@type": "Question", "name": "האם SROK חינמית?", "acceptedAnswer": {"@type": "Answer", "text": "כן. SROK חינמית לחלוטין, ללא רכישות בתוך האפליקציה וללא הרשמה. גם תוסף ה-Safari וגם תוסף הכרום למחשב חינמיים."}},
+        {"@type": "Question", "name": "איך משווים מחיר של מוצר ב-SROK?", "acceptedAnswer": {"@type": "Answer", "text": "בשלוש דרכים: מקלידים את שם המוצר בחיפוש, מדביקים קישור לדף מוצר (או משתפים אותו מ-Safari ישירות ל-SROK), או סורקים ברקוד. SROK מציגה את ההצעות מהחנויות, מסמנת את המחיר הנמוך ביותר ומראה בכמה כל חנות יקרה או זולה יותר."}},
+        {"@type": "Question", "name": "האם SROK משווה טיסות ומלונות?", "acceptedAnswer": {"@type": "Answer", "text": "כן. בטאב טיסות בוחרים מוצא, יעד ותאריכים ומקבלים טיסות מכמה אתרים עם סינון ישיר/עם עצירה ולפי חברת תעופה; החיפוש ממשיך ברקע ו-SROK שולחת התראה כשיש תוצאות. בטאב מלונות בוחרים עיר, תאריכים ומספר אורחים ומקבלים מלונות מכמה אתרי הזמנות עם מחיר ללילה ולכל השהות, סינון ארוחת בוקר וציון 8+."}},
+        {"@type": "Question", "name": "האם SROK עובדת גם בסופר?", "acceptedAnswer": {"@type": "Answer", "text": "כן. סורקים ברקוד על המדף ורואים את המחיר בסניפים הקרובים של 20+ רשתות (שופרסל, רמי לוי, אושר עד, סופר-פארם ועוד) לפי מאגר שקיפות המחירים, וגם את המחיר אונליין. יש רשימת קניות עם סיווג אוטומטי, עגלה עם סכום כולל וייצוא PDF."}},
+        {"@type": "Question", "name": "האם SROK אוספת מידע אישי?", "acceptedAnswer": {"@type": "Answer", "text": "לא. לפי הצהרת הפרטיות ב-App Store, האפליקציה לא אוספת נתונים. המיקום משמש רק למציאת חנויות קרובות."}},
+        {"@type": "Question", "name": "האם יש גרסה למחשב?", "acceptedAnswer": {"@type": "Answer", "text": "כן. ״שם זה זול יותר״ הוא תוסף כרום מאותו מפתח, עם 70,000+ משתמשים, שמשווה מחירים ומאתר קופונים אוטומטית ב-400+ אתרי קניות, טיסות ומלונות. SROK היא הגרסה לאייפון, כולל תוסף ל-Safari."}},
+        {"@type": "Question", "name": "על אילו מכשירים SROK עובדת?", "acceptedAnswer": {"@type": "Answer", "text": "iPhone עם iOS 18 ומעלה, וגם Mac עם Apple Silicon (macOS 15+) ו-Apple Vision (visionOS 2+). האפליקציה בעברית ובאנגלית."}}
+      ]
+    }
+  ]
+}
+</script>
+
+<style>
+:root{
+  --bg:#F5F7F3; --bg-2:#EAEFE8; --ink:#111D17; --ink-2:#3A4941; --muted:#66746C; --line:#CFD8D1;
+  --accent:#0F7A58; --accent-ink:#FFFFFF; --accent-soft:#D7EDE3; --sticker:#FFD23F; --sticker-ink:#2A2200;
+  --paper:#FFFFFF; --red:#D93B3B; --shadow:0 18px 50px rgba(17,29,23,.14); --radius:14px; --max:1120px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1613; --bg-2:#162019; --ink:#EEF3EE; --ink-2:#C2CCC5; --muted:#8B9891; --line:#2A3730;
+    --accent:#3FC393; --accent-ink:#06261A; --accent-soft:#163A2D; --paper:#182219; --red:#FF6B6B; --shadow:0 18px 50px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1613; --bg-2:#162019; --ink:#EEF3EE; --ink-2:#C2CCC5; --muted:#8B9891; --line:#2A3730;
+  --accent:#3FC393; --accent-ink:#06261A; --accent-soft:#163A2D; --paper:#182219; --red:#FF6B6B; --shadow:0 18px 50px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Heebo",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--sticker);outline-offset:3px}
+img{max-width:100%}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:"Karantina","Heebo",Impact,sans-serif;font-weight:700;line-height:.95;letter-spacing:.005em;text-wrap:balance;margin:0}
+h1{font-size:clamp(3rem,7vw,5.6rem)}
+h2{font-size:clamp(2.4rem,5.5vw,4rem)}
+h3{font-size:1.9rem;font-weight:400}
+p{margin:0}
+.lede{font-size:1.2rem;color:var(--ink-2);max-width:34em}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";display:inline-block;width:22px;height:2px;background:var(--accent)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.tldr{border-inline-start:4px solid var(--accent);background:var(--accent-soft);padding:14px 18px;border-radius:8px 0 0 8px;color:var(--ink);font-size:1.02rem;max-width:44em}
+.tldr strong{color:var(--accent)}
+
+header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:"Karantina",sans-serif;font-size:2rem;font-weight:700}
+.logo .mark{width:34px;height:34px;border-radius:8px;background:var(--ink);display:grid;place-items:center}
+.nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0;font-size:.95rem}
+.nav ul a{color:var(--ink-2);text-decoration:none}
+.nav ul a:hover{color:var(--accent)}
+@media(max-width:820px){.nav ul{display:none}}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;padding:12px 20px;border-radius:999px;border:0;font-size:1rem;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(15,122,88,.28)}
+.btn.small{padding:8px 16px;font-size:.9rem}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.ghost:hover{border-color:var(--ink);box-shadow:none}
+
+/* ===== shared UI-simulation primitives ===== */
+.ui{font-size:.8rem;line-height:1.35;color:var(--ink)}
+.ui .bar{display:flex;align-items:center;gap:8px;background:var(--bg-2);border-radius:9px;padding:6px 10px;font-size:.72rem;color:var(--muted);font-family:"IBM Plex Mono",monospace}
+.ui .bar b{color:var(--ink);font-family:"Heebo",sans-serif;font-weight:500}
+.ui .chip{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:999px;padding:2px 9px;font-size:.68rem;color:var(--ink-2);background:var(--paper)}
+.ui .chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.ui .field{display:flex;flex-direction:column;gap:2px;background:var(--bg-2);border-radius:8px;padding:6px 9px}
+.ui .field small{font-size:.62rem;color:var(--muted)}
+.ui .field span{font-weight:500;font-size:.78rem}
+.ui .price{font-family:"IBM Plex Mono",monospace;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tag{background:var(--sticker);color:var(--sticker-ink);font-size:.64rem;font-weight:700;padding:2px 7px;border-radius:5px;font-family:"Heebo",sans-serif;white-space:nowrap}
+.tag.g{background:var(--accent);color:var(--accent-ink)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
+.row+.row{margin-top:5px}
+.row.best{border-color:var(--accent);background:var(--accent-soft)}
+.row .name{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.row .name small{color:var(--muted);font-size:.66rem}
+.row .name b{font-weight:500;font-size:.78rem}
+.row.best .price{color:var(--accent)}
+.row .r{display:flex;align-items:center;gap:6px}
+.strike{text-decoration:line-through;color:var(--muted);font-weight:400;font-size:.68rem}
+.diff{font-size:.64rem;color:var(--red)}
+.diff.ok{color:var(--accent)}
+
+/* Srok bubble (extension) */
+.bubble{background:var(--paper);border:1.5px solid var(--accent);border-radius:16px;box-shadow:0 12px 30px rgba(17,29,23,.22);padding:10px 10px 9px;animation:pop .8s cubic-bezier(.2,.9,.3,1.2) both}
+.bubble.cp{border-color:var(--sticker)}
+@keyframes pop{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){.bubble{animation:none}}
+.bubble .bt{display:flex;align-items:center;gap:7px;font-weight:700;font-size:.8rem;margin-bottom:7px}
+.bubble .bt .dot{width:20px;height:20px;border-radius:6px;background:var(--ink);display:grid;place-items:center;flex:none}
+.bubble .bt .dot svg{width:11px;height:11px}
+.bubble .bt small{margin-inline-start:auto;color:var(--muted);font-weight:400;font-size:.66rem;white-space:nowrap}
+.bubble .foot{font-size:.7rem;color:var(--accent);font-weight:600;text-align:center;margin-top:6px}
+.code{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--bg-2);border:1px dashed var(--line);border-radius:10px;padding:8px 10px}
+.code .c{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:1rem;letter-spacing:.08em}
+.code .copy{background:var(--sticker);color:var(--sticker-ink);font-weight:700;font-size:.7rem;padding:5px 10px;border-radius:7px}
+
+/* product illustration */
+.pimg{border-radius:10px;background:var(--bg-2);display:grid;place-items:center;overflow:hidden}
+.pimg svg{width:60%;height:60%}
+
+/* ===== hero ===== */
+.hero{padding:64px 0 56px;position:relative;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+@media(max-width:860px){.hero .wrap{grid-template-columns:1fr}}
+.hero-copy{display:flex;flex-direction:column;gap:22px}
+.hero h1 .hl{background:linear-gradient(transparent 62%,var(--sticker) 62%);padding:0 .06em}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.store-note{font-size:.88rem;color:var(--muted)}
+.facts{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:.9rem;color:var(--ink-2);list-style:none;padding:0;margin:4px 0 0}
+.facts li::before{content:"✓ ";color:var(--accent);font-weight:700}
+
+.phone-wrap{display:flex;justify-content:center;position:relative;padding-bottom:30px}
+.phone{width:300px;background:var(--ink);border-radius:44px;padding:12px;box-shadow:var(--shadow);position:relative}
+:root[data-theme="dark"] .phone{background:#000}
+.screen{background:var(--paper);border-radius:34px;overflow:hidden;min-height:580px;display:flex;flex-direction:column;position:relative;padding:0 12px 12px}
+.notch{height:26px;display:grid;place-items:center}
+.notch i{width:90px;height:22px;background:var(--ink);border-radius:20px;display:block}
+:root[data-theme="dark"] .notch i{background:#000}
+.shop{padding:12px 4px 4px;display:flex;flex-direction:column;gap:7px}
+.shop .pimg{height:120px}
+.shop b{font-size:.95rem;line-height:1.3}
+.shop .meta{display:flex;gap:6px;flex-wrap:wrap}
+.shop .p{font-family:"IBM Plex Mono",monospace;font-size:1.1rem;font-weight:600}
+.shop .buy{background:var(--ink-2);color:var(--bg);text-align:center;border-radius:8px;padding:7px;font-size:.8rem;opacity:.55}
+.screen .bubble{position:absolute;inset-inline:12px;bottom:12px}
+.example-note{position:absolute;bottom:0;inset-inline:0;text-align:center;font-size:.75rem;color:var(--muted)}
+
+/* strip */
+.chains{border-block:1px solid var(--line);background:var(--bg-2);padding:18px 0}
+.chains .wrap{display:flex;flex-wrap:wrap;gap:8px 26px;align-items:center;justify-content:center}
+.chains span{font-family:"Karantina",sans-serif;font-size:1.6rem;color:var(--ink-2);white-space:nowrap}
+.chains .lbl{font-family:"IBM Plex Mono",monospace;font-size:.75rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+
+section{padding:72px 0}
+.section-head{display:flex;flex-direction:column;gap:14px;margin-bottom:36px;max-width:44em}
+
+/* ===== Safari detect cards ===== */
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+@media(max-width:860px){.grid2{grid-template-columns:1fr}}
+.detect{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+.detect .mini{background:var(--bg-2);padding:16px 16px 0;position:relative;height:300px;overflow:hidden}
+.detect .site{background:var(--paper);border-radius:12px 12px 0 0;height:100%;padding:10px 12px;border:1px solid var(--line);border-bottom:0;display:flex;flex-direction:column;gap:7px}
+.detect .site .ghost{opacity:.5}
+.detect .mini .bubble{position:absolute;inset-inline:26px;bottom:14px}
+.detect .body{padding:18px 20px 22px;display:flex;flex-direction:column;gap:8px}
+.detect .body .k{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.12em;color:var(--accent);text-transform:uppercase}
+.detect h3{font-size:1.7rem}
+.detect p{font-size:.95rem;color:var(--ink-2)}
+.prodline{display:flex;gap:10px;align-items:center}
+.prodline .pimg{width:64px;height:64px;flex:none}
+.prodline .t{display:flex;flex-direction:column;gap:2px}
+.prodline .t b{font-size:.85rem;line-height:1.25}
+.hotel{display:flex;gap:10px;align-items:stretch;border:1px solid var(--line);border-radius:10px;padding:8px}
+.hotel .pimg{width:70px;flex:none;border-radius:8px}
+.hotel .t{display:flex;flex-direction:column;gap:2px;flex:1}
+.hotel .t b{font-size:.82rem}
+.hotel .t small{font-size:.66rem;color:var(--muted)}
+.score{background:var(--ink);color:var(--bg);font-family:"IBM Plex Mono",monospace;font-size:.66rem;padding:1px 6px;border-radius:5px}
+.flight{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.flight .leg{display:flex;align-items:center;gap:8px;font-family:"IBM Plex Mono",monospace;font-size:.72rem}
+.flight .leg i{flex:1;height:1px;background:var(--line);position:relative}
+.flight .leg i::after{content:"✈";position:absolute;top:-9px;left:50%;transform:translateX(-50%) scaleX(-1);font-size:.7rem;font-style:normal;color:var(--muted)}
+.flight small{font-size:.64rem;color:var(--muted)}
+.checkout{display:flex;flex-direction:column;gap:7px}
+.checkout .line{display:flex;justify-content:space-between;font-size:.76rem}
+.checkout .total{border-top:1px solid var(--line);padding-top:6px;font-weight:700}
+.checkout .input{border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:.72rem;color:var(--muted);display:flex;justify-content:space-between}
+
+/* ===== in-app screens ===== */
+.screens{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;align-items:start}
+@media(max-width:960px){.screens{grid-template-columns:1fr}}
+.scr{display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center}
+.scr .ph{width:100%;max-width:290px;background:var(--ink);border-radius:36px;padding:10px;box-shadow:var(--shadow)}
+:root[data-theme="dark"] .scr .ph{background:#000}
+.scr .sc{background:var(--paper);border-radius:28px;min-height:520px;padding:0 10px 12px;display:flex;flex-direction:column;gap:7px;text-align:start}
+.scr .sc .ttl{font-weight:700;font-size:1rem;padding:6px 2px 0}
+.scr .sc .lbl{font-size:.64rem;color:var(--muted);padding:4px 2px 0;font-family:"IBM Plex Mono",monospace;letter-spacing:.06em}
+.scr .sc .grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.scr .sc .go{background:var(--accent);color:var(--accent-ink);text-align:center;border-radius:9px;padding:7px;font-weight:600;font-size:.78rem}
+.scr .sc .chips{display:flex;gap:5px;flex-wrap:wrap}
+.scr .sc .note{font-size:.66rem;color:var(--muted);text-align:center;padding-top:2px}
+.scr .sc .tabbar{margin-top:auto;display:flex;justify-content:space-around;border-top:1px solid var(--line);padding-top:8px;font-size:.6rem;color:var(--muted)}
+.scr .sc .tabbar span.on{color:var(--accent);font-weight:700}
+.scr h3{font-size:1.8rem}
+.scr p{font-size:.95rem;color:var(--ink-2);max-width:30em}
+.scr .k{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+
+/* also-in-store strip */
+.also{display:flex;gap:18px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:18px 22px;margin-top:36px}
+@media(max-width:700px){.also{flex-direction:column;align-items:flex-start}}
+.also .ic{width:44px;height:44px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:none}
+.also .ic svg{width:24px;height:24px}
+.also p{font-size:.95rem;color:var(--ink-2)}
+.also b{color:var(--ink)}
+
+/* desktop extension */
+.ext{background:var(--ink);color:var(--bg)}
+:root[data-theme="dark"] .ext{background:var(--bg-2);color:var(--ink)}
+.ext .wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+@media(max-width:860px){.ext .wrap{grid-template-columns:1fr}}
+.ext .eyebrow{color:var(--sticker)}
+.ext .eyebrow::before{background:var(--sticker)}
+.ext p{color:inherit;opacity:.85}
+.ext .btn{background:var(--sticker);color:var(--sticker-ink)}
+.ext .btn:hover{box-shadow:0 8px 20px rgba(255,210,63,.3)}
+.ext a.inl{color:var(--sticker)}
+.ext .btn.ghost{background:transparent;color:inherit;border-color:rgba(255,255,255,.35)}
+:root[data-theme="dark"] .ext .btn.ghost{border-color:var(--line)}
+.ext-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;font-size:1rem}
+.ext-list li{display:flex;gap:10px;align-items:flex-start}
+.ext-list li::before{content:"→";color:var(--sticker);font-weight:700;flex:none}
+/* desktop browser mock */
+.browser{background:var(--paper);color:var(--ink);border-radius:12px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.browser .top{background:var(--bg-2);padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line)}
+.browser .top i{width:9px;height:9px;border-radius:50%;background:var(--line);display:block}
+.browser .top .url{flex:1;background:var(--paper);border-radius:6px;padding:3px 10px;font-family:"IBM Plex Mono",monospace;font-size:.68rem;color:var(--muted);direction:ltr;text-align:left}
+.browser .page{padding:14px;display:grid;grid-template-columns:1fr 1.2fr;gap:14px;position:relative;min-height:230px}
+.browser .page .pimg{height:130px}
+.browser .toast{position:absolute;bottom:12px;inset-inline-start:12px;width:min(300px,85%);background:var(--paper);border:1.5px solid var(--sticker);border-radius:12px;padding:9px 10px;box-shadow:0 10px 26px rgba(0,0,0,.25)}
+.browser .toast .bt{display:flex;align-items:center;gap:6px;font-weight:700;font-size:.78rem;margin-bottom:6px}
+
+/* press / about / faq / final / footer */
+.press{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:860px){.press{grid-template-columns:1fr}}
+.press a{display:flex;flex-direction:column;gap:8px;text-decoration:none;color:var(--ink);padding:22px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);transition:border-color .15s}
+.press a:hover{border-color:var(--accent)}
+.press .src{font-family:"IBM Plex Mono",monospace;font-size:.75rem;letter-spacing:.1em;color:var(--accent);text-transform:uppercase}
+.press q{font-size:1.02rem;line-height:1.5;quotes:"״" "״"}
+.press .d{font-size:.82rem;color:var(--muted)}
+.about .wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+@media(max-width:860px){.about .wrap{grid-template-columns:1fr}}
+.about p{color:var(--ink-2);margin-bottom:14px}
+.kv{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.kv li{display:grid;grid-template-columns:140px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.kv li span:first-child{color:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:.8rem;letter-spacing:.05em}
+.faq details{border-bottom:1px solid var(--line);padding:4px 0}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 0;font-weight:500;font-size:1.1rem}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:"IBM Plex Mono",monospace;font-size:1.4rem;color:var(--accent);flex:none;transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding:0 0 18px;color:var(--ink-2);max-width:40em}
+.final{text-align:center;padding:80px 0}
+.final .wrap{display:flex;flex-direction:column;align-items:center;gap:20px}
+.final h2{font-size:clamp(3rem,8vw,6rem)}
+footer{border-top:1px solid var(--line);padding:32px 0;font-size:.88rem;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px}
+footer a{color:var(--ink-2);text-decoration:none}
+footer a:hover{color:var(--accent)}
+.en-summary{padding:40px 0 0;font-size:.9rem;color:var(--muted);max-width:60em;line-height:1.6}
+.en-summary h2{font-family:"Heebo",sans-serif;font-size:1rem;font-weight:600;color:var(--ink-2);margin-bottom:6px}
+.updated{font-family:"IBM Plex Mono",monospace;font-size:.78rem}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-srok" viewBox="0 0 20 20"><rect x="2" y="3" width="2" height="14" fill="#F5F7F3"/><rect x="6" y="3" width="1" height="14" fill="#F5F7F3"/><rect x="9" y="3" width="3" height="14" fill="#F5F7F3"/><rect x="14" y="3" width="1" height="14" fill="#F5F7F3"/><rect x="17" y="3" width="1.5" height="14" fill="#F5F7F3"/></symbol>
+    <symbol id="i-headphones" viewBox="0 0 64 64"><path d="M12 40V32a20 20 0 0 1 40 0v8" fill="none" stroke="#111D17" stroke-width="4" stroke-linecap="round"/><rect x="8" y="36" width="12" height="18" rx="4" fill="#0F7A58"/><rect x="44" y="36" width="12" height="18" rx="4" fill="#0F7A58"/><rect x="11" y="39" width="6" height="12" rx="2" fill="#111D17" opacity=".25"/><rect x="47" y="39" width="6" height="12" rx="2" fill="#111D17" opacity=".25"/></symbol>
+    <symbol id="i-hotel" viewBox="0 0 64 64"><rect x="10" y="14" width="44" height="42" rx="3" fill="#0F7A58"/><rect x="18" y="22" width="8" height="8" fill="#F5F7F3"/><rect x="30" y="22" width="8" height="8" fill="#F5F7F3"/><rect x="42" y="22" width="4" height="8" fill="#F5F7F3"/><rect x="18" y="34" width="8" height="8" fill="#F5F7F3"/><rect x="30" y="34" width="8" height="8" fill="#FFD23F"/><rect x="42" y="34" width="4" height="8" fill="#F5F7F3"/><rect x="26" y="44" width="12" height="12" fill="#111D17"/><rect x="6" y="54" width="52" height="4" fill="#111D17"/></symbol>
+    <symbol id="i-plane" viewBox="0 0 64 64"><path d="M6 36l14-4 20-20a5 5 0 0 1 7 7L27 39l-4 14-5-9-9-5z" fill="#0F7A58"/><path d="M18 46l-8 8" stroke="#111D17" stroke-width="3" stroke-linecap="round"/></symbol>
+    <symbol id="i-perfume" viewBox="0 0 64 64"><rect x="26" y="6" width="12" height="10" rx="2" fill="#111D17"/><rect x="18" y="18" width="28" height="40" rx="6" fill="#0F7A58"/><rect x="24" y="26" width="16" height="22" rx="3" fill="#FFD23F" opacity=".85"/></symbol>
+    <symbol id="i-shoe" viewBox="0 0 64 64"><path d="M6 44c0-6 10-10 18-16l6-8c4 2 8 6 14 6 10 0 14 10 14 14v4H6z" fill="#0F7A58"/><rect x="6" y="44" width="52" height="6" rx="2" fill="#111D17"/><path d="M28 26l4 4M32 22l4 4" stroke="#F5F7F3" stroke-width="2"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2l2.4 12h11.2L21 8H7" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="20" r="1.5" fill="currentColor"/><circle cx="17" cy="20" r="1.5" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top" aria-label="SROK">
+      <span class="mark" aria-hidden="true"><svg width="20" height="20"><use href="#i-srok"/></svg></span>
+      SROK
+    </a>
+    <nav aria-label="ניווט ראשי">
+      <ul>
+        <li><a href="#safari">התוסף ל-Safari</a></li>
+        <li><a href="#app">באפליקציה</a></li>
+        <li><a href="#extension">הגרסה למחשב</a></li>
+        <li><a href="#faq">שאלות ותשובות</a></li>
+      </ul>
+    </nav>
+    <a class="btn small" href="https://apps.apple.com/il/app/id6747339283" rel="noopener">הורדה ל-iPhone</a>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero" aria-labelledby="h1">
+  <div class="wrap">
+    <div class="hero-copy">
+      <p class="eyebrow">אפליקציה ישראלית · חינם · ללא איסוף מידע</p>
+      <h1 id="h1">לפני שקונים,<br>SROK בודקת <span class="hl">איפה זה זול יותר.</span></h1>
+      <p class="lede">מחפשים מוצר, מדביקים קישור או סורקים ברקוד — ו-SROK מביאה את המחירים מכל החנויות אונליין ומסמנת את הזול ביותר. ותוסף ה-Safari שלה עובד לבד: בזמן שאתם גולשים הוא מזהה מוצרים, מלונות וטיסות ומקפיץ הצעה זולה יותר או קופון.</p>
+      <div class="cta-row">
+        <a class="btn" href="https://apps.apple.com/il/app/id6747339283" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.8 1.3 10.3.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.4-.8s2 .8 3.4.8 2.3-1.3 3.1-2.5c1-1.4 1.4-2.8 1.4-2.9 0 0-2.8-1.1-2.8-4.2zM13.8 4.9c.7-.9 1.2-2.1 1.1-3.3-1 0-2.3.7-3 1.6-.7.8-1.3 2-1.1 3.2 1.1.1 2.3-.6 3-1.5z"/></svg>
+          הורדה חינם ב-App Store
+        </a>
+        <span class="store-note">iPhone (iOS 18+) · כולל תוסף ל-Safari</span>
+      </div>
+      <ul class="facts">
+        <li>מוצרים, טיסות ומלונות</li>
+        <li>קופונים שקופצים לבד</li>
+        <li>בלי הרשמה</li>
+        <li>מבית ״שם זה זול יותר״</li>
+      </ul>
+    </div>
+
+    <div class="phone-wrap" aria-hidden="true">
+      <div class="phone">
+        <div class="screen ui">
+          <div class="notch"><i></i></div>
+          <div class="bar"><span>🔒</span><span>shop.example.co.il</span><span style="margin-inline-start:auto">Safari</span></div>
+          <div class="shop">
+            <div class="pimg"><svg><use href="#i-headphones"/></svg></div>
+            <b>אוזניות אלחוטיות עם ביטול רעשים אקטיבי</b>
+            <div class="meta"><span class="chip">שחור</span><span class="chip">במלאי</span><span class="chip">משלוח 3–5 ימים</span></div>
+            <span class="p">₪749.00</span>
+            <div class="buy">הוסף לסל</div>
+          </div>
+          <div class="bubble">
+            <div class="bt"><span class="dot"><svg><use href="#i-srok"/></svg></span>Srok מצא זול יותר<small>מחיר באתר: ₪749</small></div>
+            <div class="row best"><span class="name"><b>חנות ב׳</b><small>משלוח חינם · במלאי</small></span><span class="r"><span class="tag">🔥 הכי זול</span><span class="price">₪629</span></span></div>
+            <div class="row"><span class="name"><b>חנות ג׳</b><small>איסוף עצמי</small></span><span class="price">₪689</span></div>
+            <div class="row"><span class="name"><b>חנות ד׳</b><small>משלוח ₪29</small></span><span class="price">₪735</span></div>
+            <div class="foot">חוסכים ₪120 על הקנייה הזו</div>
+          </div>
+        </div>
+      </div>
+      <p class="example-note">מסך לדוגמה — החנויות והמחירים משתנים</p>
+    </div>
+  </div>
+</section>
+
+<div class="chains" aria-label="מה SROK משווה">
+  <div class="wrap">
+    <span class="lbl">משווים</span>
+    <span>מוצרים אונליין</span><span>טיסות</span><span>מלונות</span><span>קופונים</span><span>פארם</span><span>אלקטרוניקה</span><span>אופנה</span><span>וגם בסופר</span>
+  </div>
+</div>
+
+<!-- SAFARI EXTENSION -->
+<section id="safari" aria-labelledby="h-safari">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">התוסף ל-Safari · מובנה באפליקציה</p>
+      <h2 id="h-safari">אתם גולשים. SROK משווה.</h2>
+      <p class="tldr"><strong>בקצרה:</strong> תוסף ה-Safari של SROK רץ ברקע באייפון. בדף מוצר הוא בודק חנויות אחרות ומראה אם יש זול יותר; באתר מלונות או טיסות הוא מזהה את החיפוש ומשווה בין אתרי הזמנות; ובאתר עם קופון פעיל הוא מקפיץ את הקוד. בלי לפתוח את האפליקציה ובלי לחפש בעצמכם.</p>
+    </div>
+    <div class="grid2">
+
+      <article class="detect">
+        <div class="mini ui" aria-hidden="true">
+          <div class="site">
+            <div class="bar"><span>🔒</span><span>sport-shop.example</span></div>
+            <div class="prodline">
+              <div class="pimg"><svg><use href="#i-shoe"/></svg></div>
+              <div class="t"><b>נעלי ריצה — דגם 2026</b><span class="chip">מידה 43</span><span class="price" style="font-size:1rem">₪499.90</span></div>
+            </div>
+            <div class="ghost"><div class="chip">הוסף לסל</div></div>
+          </div>
+          <div class="bubble">
+            <div class="bt"><span class="dot"><svg><use href="#i-srok"/></svg></span>Srok מצא זול יותר<small>מחיר באתר: ₪499.90</small></div>
+            <div class="row best"><span class="name"><b>חנות ספורט ב׳</b><small>מידה 43 במלאי</small></span><span class="r"><span class="tag">🔥 הכי זול</span><span class="price">₪419</span></span></div>
+            <div class="row"><span class="name"><b>חנות ג׳</b></span><span class="price">₪459</span></div>
+          </div>
+        </div>
+        <div class="body">
+          <span class="k">מוצרים</span>
+          <h3>מזהה את המוצר, מוצא זול יותר</h3>
+          <p>התוסף קורא את שם המוצר והמחיר בדף שאתם רואים, בודק חנויות אחרות ומציג את ההצעות לצד ״המחיר באתר״. הזול ביותר מסומן — לוחצים ועוברים.</p>
+        </div>
+      </article>
+
+      <article class="detect">
+        <div class="mini ui" aria-hidden="true">
+          <div class="site">
+            <div class="bar"><span>🔒</span><b>מלונות · תל אביב</b><span>12–15.10 · 2 אורחים</span></div>
+            <div class="hotel">
+              <div class="pimg"><svg><use href="#i-hotel"/></svg></div>
+              <div class="t"><b>מלון על החוף</b><small>1.2 ק״מ מהמרכז · <span class="score">8.7</span></small><span class="price" style="font-size:.9rem">₪780 <small>ללילה</small></span></div>
+            </div>
+            <div class="hotel ghost">
+              <div class="pimg"><svg><use href="#i-hotel"/></svg></div>
+              <div class="t"><b>מלון בוטיק בעיר</b><small>0.4 ק״מ מהמרכז · <span class="score">8.4</span></small><span class="price" style="font-size:.9rem">₪860 <small>ללילה</small></span></div>
+            </div>
+          </div>
+          <div class="bubble">
+            <div class="bt"><span class="dot"><svg><use href="#i-srok"/></svg></span>Srok — השוואת מלונות<small>מצאנו 14 השוואות</small></div>
+            <div class="row best"><span class="name"><b>מלון על החוף · אתר א׳</b><small>🍳 כולל ארוחת בוקר · 3 לילות ₪2,070</small></span><span class="r"><span class="tag">🔥 הכי זול</span><span class="price">₪690</span></span></div>
+            <div class="row"><span class="name"><b>מלון על החוף · אתר ב׳</b><small>לא כולל ארוחת בוקר</small></span><span class="price">₪745</span></div>
+          </div>
+        </div>
+        <div class="body">
+          <span class="k">מלונות</span>
+          <h3>מזהה עיר ותאריכים, משווה אתרים</h3>
+          <p>באתר הזמנת מלונות התוסף מזהה את העיר, הצ׳ק-אין והצ׳ק-אאוט ומביא את אותם מלונות מאתרים אחרים — מחיר ללילה ולכל השהות, ארוחת בוקר וציון.</p>
+        </div>
+      </article>
+
+      <article class="detect">
+        <div class="mini ui" aria-hidden="true">
+          <div class="site">
+            <div class="bar"><span>🔒</span><b dir="ltr">TLV → ATH</b><span>3–7.11 · הלוך-חזור · 2 נוסעים</span></div>
+            <div class="flight">
+              <div><div class="leg"><span>06:40 TLV</span><i></i><span>09:15 ATH</span></div><small>ישירה · 2 ש׳ 35 ד׳ · חברה א׳</small></div>
+              <span class="price">₪1,120</span>
+            </div>
+            <div class="flight ghost">
+              <div><div class="leg"><span>11:30 TLV</span><i></i><span>16:50 ATH</span></div><small>עם עצירה · 5 ש׳ 20 ד׳ · חברה ב׳</small></div>
+              <span class="price">₪940</span>
+            </div>
+          </div>
+          <div class="bubble">
+            <div class="bt"><span class="dot"><svg><use href="#i-srok"/></svg></span>Srok — השוואת טיסות<small>טיסות: TLV→ATH · 4 לילות</small></div>
+            <div class="row best"><span class="name"><b>אתר א׳ · חברה א׳</b><small>ישירה · 06:40 → 09:15</small></span><span class="r"><span class="tag">🔥 הכי זול</span><span class="price">₪890</span></span></div>
+            <div class="row"><span class="name"><b>אתר ב׳ · חברה ג׳</b><small>עם עצירה</small></span><span class="price">₪960</span></div>
+          </div>
+        </div>
+        <div class="body">
+          <span class="k">טיסות</span>
+          <h3>מזהה מוצא, יעד ותאריכים</h3>
+          <p>באתרי טיסות התוסף קולט את המסלול והתאריכים מהחיפוש שלכם ומשווה מול אתרים נוספים — ישירות או עם עצירה, לפי חברת תעופה, עם מספר הלילות.</p>
+        </div>
+      </article>
+
+      <article class="detect">
+        <div class="mini ui" aria-hidden="true">
+          <div class="site">
+            <div class="bar"><span>🔒</span><b>קופה · סיום הזמנה</b></div>
+            <div class="checkout">
+              <div class="line"><span>סרום פנים 30 מ״ל</span><span class="price">₪189</span></div>
+              <div class="line"><span>שמפו ×2</span><span class="price">₪78</span></div>
+              <div class="line"><span>משלוח</span><span class="price">₪0</span></div>
+              <div class="line total"><span>סה״כ לתשלום</span><span class="price">₪267</span></div>
+              <div class="input"><span>קוד קופון</span><span>הפעל</span></div>
+            </div>
+          </div>
+          <div class="bubble cp">
+            <div class="bt"><span class="dot"><svg><use href="#i-srok"/></svg></span>יש קופון פעיל באתר זה!<small>קופון הנחה</small></div>
+            <div class="code"><span class="c">STF626</span><span class="copy">העתק קוד</span></div>
+            <div class="foot" style="color:var(--ink-2);font-weight:400">5% הנחה בנוסף למבצעים הקיימים · יש להזין במסך התשלום</div>
+          </div>
+        </div>
+        <div class="body">
+          <span class="k">קופונים</span>
+          <h3>מקפיץ קופון עם כפתור העתקה</h3>
+          <p>כשיש קופון פעיל באתר, בועה קטנה מציגה את הקוד ואת תנאי ההנחה. לוחצים ״העתק קוד״ ומדביקים במסך התשלום.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- IN THE APP -->
+<section id="app" aria-labelledby="h-app" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">באפליקציה</p>
+      <h2 id="h-app">מחפשים פעם אחת, רואים את כל החנויות</h2>
+      <p class="tldr"><strong>בקצרה:</strong> שלושה מסכי השוואה — מוצרים (חיפוש, קישור או ברקוד), טיסות ומלונות. ההצעה הזולה ביותר תמיד מסומנת, וליד כל אחת רואים בכמה היא יקרה יותר.</p>
+    </div>
+    <div class="screens">
+
+      <div class="scr">
+        <div class="ph" aria-hidden="true">
+          <div class="sc ui">
+            <div class="notch"><i></i></div>
+            <div class="ttl">חפש, השווה וחסוך</div>
+            <div class="bar"><span>🔍</span><b>בושם לגבר</b><span style="margin-inline-start:auto">▣ סרוק</span></div>
+            <div class="prodline" style="padding:2px 2px 0">
+              <div class="pimg" style="width:52px;height:52px"><svg><use href="#i-perfume"/></svg></div>
+              <div class="t"><b>בושם לגבר 100 מ״ל</b><small style="color:var(--muted)">מחיר משוער · 6 הצעות</small></div>
+            </div>
+            <div class="lbl">הצעות מחיר</div>
+            <div class="row best"><span class="name"><b>חנות פארם א׳</b><small>משלוח חינם</small></span><span class="r"><span class="tag g">המחיר הנמוך ביותר</span><span class="price">₪189.90</span></span></div>
+            <div class="row"><span class="name"><b>חנות ב׳</b><small class="diff">₪29.10 יקר יותר</small></span><span class="price">₪219.00</span></div>
+            <div class="row"><span class="name"><b>חנות ג׳</b><small class="diff">₪55.10 יקר יותר</small></span><span class="price">₪245.00</span></div>
+            <div class="row"><span class="name"><b>חנות ד׳</b><small class="diff">₪70.00 יקר יותר</small></span><span class="price">₪259.90</span></div>
+            <div class="tabbar"><span class="on">ראשי</span><span>רשימת קניות</span><span>טיסות</span><span>מלונות</span><span>הגדרות</span></div>
+          </div>
+        </div>
+        <span class="k">ראשי · השוואת מחירים</span>
+        <h3>חפשו מוצר, הדביקו קישור, או סרקו</h3>
+        <p>מקלידים שם, מדביקים קישור לדף מוצר (או משתפים אותו מ-Safari ישירות ל-SROK), או סורקים ברקוד. ההצעות מכל החנויות במסך אחד.</p>
+      </div>
+
+      <div class="scr">
+        <div class="ph" aria-hidden="true">
+          <div class="sc ui">
+            <div class="notch"><i></i></div>
+            <div class="ttl">השוואת טיסות</div>
+            <div class="grid"><div class="field"><small>מוצא</small><span>תל אביב (TLV)</span></div><div class="field"><small>יעד</small><span>אתונה (ATH)</span></div></div>
+            <div class="grid"><div class="field"><small>תאריך יציאה</small><span>3.11.2026</span></div><div class="field"><small>תאריך חזרה</small><span>7.11.2026</span></div></div>
+            <div class="chips"><span class="chip on">ישיר בלבד</span><span class="chip">הכל</span><span class="chip">חברת תעופה ▾</span></div>
+            <div class="lbl">5 טיסות נמצאו</div>
+            <div class="row best"><span class="name"><b>חברה א׳ · ישיר</b><small>הלוך 06:40 · חזור 18:10 · 4 לילות</small></span><span class="r"><span class="tag g">המחיר הזול ביותר</span><span class="price">₪890</span></span></div>
+            <div class="row"><span class="name"><b>חברה ב׳ · ישיר</b><small>הלוך 11:30 · חזור 21:45</small></span><span class="price">₪1,040</span></div>
+            <div class="row"><span class="name"><b>חברה ג׳ · ישיר</b><small>הלוך 15:20 · חזור 07:00</small></span><span class="price">₪1,120</span></div>
+            <div class="note">ממשיך לחפש תוצאות זולות יותר… נודיע לך, אפשר לצאת מהאפליקציה</div>
+            <div class="tabbar"><span>ראשי</span><span>רשימת קניות</span><span class="on">טיסות</span><span>מלונות</span><span>הגדרות</span></div>
+          </div>
+        </div>
+        <span class="k">השוואת טיסות</span>
+        <h3>מוצא, יעד, תאריכים — וזהו</h3>
+        <p>תוצאות מכמה אתרי טיסות במסך אחד, סינון ״ישיר בלבד״ ולפי חברת תעופה. החיפוש ממשיך ברקע ו-SROK שולחת התראה כשיש תוצאות.</p>
+      </div>
+
+      <div class="scr">
+        <div class="ph" aria-hidden="true">
+          <div class="sc ui">
+            <div class="notch"><i></i></div>
+            <div class="ttl">השוואת מלונות</div>
+            <div class="field"><small>עיר</small><span>תל אביב</span></div>
+            <div class="grid"><div class="field"><small>צ׳ק-אין</small><span>12.10</span></div><div class="field"><small>צ׳ק-אאוט</small><span>15.10</span></div></div>
+            <div class="chips"><span class="chip on">🍳 כולל ארוחת בוקר</span><span class="chip">ציון 8+</span><span class="chip">מיון ▾</span></div>
+            <div class="lbl">12 מלונות נמצאו · 3 לילות · 2 אורחים</div>
+            <div class="hotel" style="border-color:var(--accent);background:var(--accent-soft)">
+              <div class="pimg"><svg><use href="#i-hotel"/></svg></div>
+              <div class="t"><b>מלון על החוף</b><small>🍳 כולל ארוחת בוקר · <span class="score">8.7</span> (1,240 ביקורות)</small><span class="r"><span class="tag">🔥 הכי זול</span><span class="price">₪690 <small>ללילה</small></span></span><small>₪2,070 ל-3 לילות</small></div>
+            </div>
+            <div class="hotel">
+              <div class="pimg"><svg><use href="#i-hotel"/></svg></div>
+              <div class="t"><b>מלון בוטיק בעיר</b><small>🍳 כולל ארוחת בוקר · <span class="score">8.4</span> (610 ביקורות)</small><span class="price">₪810 <small>ללילה</small></span><small>₪2,430 ל-3 לילות</small></div>
+            </div>
+            <div class="tabbar"><span>ראשי</span><span>רשימת קניות</span><span>טיסות</span><span class="on">מלונות</span><span>הגדרות</span></div>
+          </div>
+        </div>
+        <span class="k">השוואת מלונות</span>
+        <h3>עיר, תאריכים, אורחים</h3>
+        <p>מלונות מכמה אתרי הזמנות עם מחיר ללילה ולכל השהות, סינון ״כולל ארוחת בוקר״ ו״ציון 8+״, ומיון לפי מחיר. הזול ביותר מסומן.</p>
+      </div>
+
+    </div>
+
+    <div class="also">
+      <div class="ic"><svg><use href="#i-cart"/></svg></div>
+      <p><b>וגם בסופר:</b> בטאב רשימת הקניות סורקים ברקוד על המדף ורואים את המחיר בסניפים הקרובים של 20+ רשתות — וגם אונליין. רשימה עם סיווג אוטומטי, עגלה עם סכום, וסיכום ל-PDF.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DESKTOP EXTENSION -->
+<section id="extension" class="ext" aria-labelledby="h-ext">
+  <div class="wrap">
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <p class="eyebrow">הגרסה למחשב</p>
+      <h2 id="h-ext">״שם זה זול יותר״<br>אותו רעיון, בכרום</h2>
+      <p>SROK היא הגרסה לאייפון של תוסף הכרום ״שם זה זול יותר״ — התוסף הישראלי שמאז 2023 משווה מחירים אוטומטית בזמן הגלישה במחשב: מזהה את המוצר, הטיסה או המלון שאתם רואים, בודק אם יש זול יותר באתרים אחרים ומקפיץ קופונים בקופה. אותו מפתח, אותה גישה: חינם, בלי הרשמה, בלי איסוף מידע.</p>
+      <ul class="ext-list">
+        <li>השוואת מחירים אוטומטית ב-400+ אתרי קניות ישראליים ובינלאומיים</li>
+        <li>איתור והפעלת קופונים בקופה, כולל טיסות ומלונות</li>
+        <li>היסטוריית מחירים לכל מוצר וחישוב החיסכון</li>
+        <li>70,000+ משתמשים · מוזכר ב<a class="inl" href="https://www.geektime.co.il/new-extension-will-make-your-online-shopping-a-little-easier/" rel="noopener">גיקטיים</a> וב<a class="inl" href="https://www.globes.co.il/news/article.aspx?did=1001477045" rel="noopener">גלובס</a></li>
+      </ul>
+      <div class="cta-row">
+        <a class="btn" href="https://chromewebstore.google.com/detail/neigoggljhfnodeneidndcflnclldnpm" rel="noopener">התקנת התוסף לכרום</a>
+        <a class="btn ghost" href="https://shamze.com/" rel="noopener" style="color:inherit;border-color:rgba(255,255,255,.35)">לאתר התוסף</a>
+      </div>
+    </div>
+    <div class="browser ui" aria-hidden="true">
+      <div class="top"><i></i><i></i><i></i><span class="url">https://electronics-store.example/product/tv-55</span></div>
+      <div class="page">
+        <div class="pimg"><svg viewBox="0 0 64 64" style="width:70%;height:70%"><rect x="4" y="10" width="56" height="36" rx="3" fill="#111D17"/><rect x="8" y="14" width="48" height="28" fill="#0F7A58"/><rect x="24" y="48" width="16" height="4" fill="#111D17"/><rect x="18" y="52" width="28" height="3" fill="#111D17"/></svg></div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <b style="font-size:.95rem">טלוויזיה 55״ 4K חכמה</b>
+          <div class="chips" style="display:flex;gap:5px"><span class="chip">במלאי</span><span class="chip">אחריות 3 שנים</span></div>
+          <span class="price" style="font-size:1.3rem">₪2,490</span>
+          <span class="chip" style="opacity:.5;align-self:flex-start">הוסף לסל</span>
+        </div>
+        <div class="toast">
+          <div class="bt"><span class="dot" style="width:18px;height:18px;border-radius:5px;background:var(--ink);display:grid;place-items:center"><svg width="10" height="10"><use href="#i-srok"/></svg></span>שם זה זול יותר</div>
+          <div class="row best" style="padding:6px 8px"><span class="name"><b>חנות אלקטרוניקה ב׳</b><small>₪300 זול יותר</small></span><span class="price">₪2,190</span></div>
+          <div class="code" style="margin-top:6px;padding:6px 8px"><span style="font-size:.7rem">קופון 5% בקופה</span><span class="copy">העתק</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRESS -->
+<section id="press" aria-labelledby="h-press">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">כתבו עלינו</p>
+      <h2 id="h-press">מהתקשורת</h2>
+    </div>
+    <div class="press">
+      <a href="https://www.ice.co.il/consumerism/news/article/1075420" rel="noopener">
+        <span class="src">ice · צרכנות</span>
+        <q>באמצעות אפליקציה שפותחה בעזה: כך תשיגו את סל הקניות הזול במדינה</q>
+        <span class="d">על SROK · יולי 2025</span>
+      </a>
+      <a href="https://www.geektime.co.il/new-extension-will-make-your-online-shopping-a-little-easier/" rel="noopener">
+        <span class="src">גיקטיים</span>
+        <q>מ-KSP ועד סופרפארם: תוסף ישראלי חדש יעזור לכם לחסוך כסף בקנייה הבאה</q>
+        <span class="d">על ״שם זה זול יותר״ · ספטמבר 2023</span>
+      </a>
+      <a href="https://www.globes.co.il/news/article.aspx?did=1001477045" rel="noopener">
+        <span class="src">גלובס</span>
+        <q>תוספים וטריקים: כך קונים ברשת חכם ובזול</q>
+        <span class="d">על ״שם זה זול יותר״</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about" aria-labelledby="h-about" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div>
+      <div class="section-head">
+        <p class="eyebrow">מי מאחורי SROK</p>
+        <h2 id="h-about">מפתח אחד, בעיה ישראלית מאוד</h2>
+      </div>
+      <p>SROK פותחה על ידי יוסי רובינשטיין, מפתח ישראלי שבנה ב-2023 את תוסף הכרום ״שם זה זול יותר״ אחרי שגילה שקנייה של כל מוצרי החג באתר אחד עלתה למשפחתו כ-300 ₪ יותר מהצורך. התוסף צבר עשרות אלפי משתמשים במחשב, והשאלה הבאה הייתה טבעית: רוב הקניות היום נעשות מהטלפון — למה שההשוואה לא תקפוץ גם שם?</p>
+      <p>חלק ניכר מהאפליקציה נכתב במהלך שירות מילואים, בין היתר בעזה ובנחל עוז, ושוחרר לחנות ביוני 2025. מאז נוספו השוואת טיסות ומלונות, שיתוף קישורים מ-Safari, ותוסף ה-Safari שמביא את יכולות התוסף למחשב לאייפון.</p>
+      <p>המטרה: שלא תשלמו יותר ממה שצריך — לא באונליין, לא בנסיעה, ולא מול המדף.</p>
+    </div>
+    <ul class="kv" aria-label="פרטי האפליקציה">
+      <li><span>שם</span><span>SROK – השוואת מחירים חכמה (סרוק)</span></li>
+      <li><span>מפתח</span><span>Yossi Rubinstein · שם זה זול יותר</span></li>
+      <li><span>פלטפורמה</span><span>iPhone (iOS 18+), Mac (Apple Silicon), Apple Vision</span></li>
+      <li><span>כולל</span><span>תוסף Safari · הרחבת שיתוף (Share)</span></li>
+      <li><span>שפות</span><span>עברית, אנגלית</span></li>
+      <li><span>מחיר</span><span>חינם, ללא רכישות בתוך האפליקציה</span></li>
+      <li><span>פרטיות</span><span>לא נאספים נתונים (הצהרת App Store)</span></li>
+      <li><span>השקה</span><span>יוני 2025</span></li>
+      <li><span>יצירת קשר</span><span><a href="mailto:shamzezolyoter@gmail.com">shamzezolyoter@gmail.com</a></span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="faq" aria-labelledby="h-faq">
+  <div class="wrap" style="max-width:820px">
+    <div class="section-head">
+      <p class="eyebrow">שאלות ותשובות</p>
+      <h2 id="h-faq">מה שואלים על SROK</h2>
+    </div>
+    <details open><summary>מה זה SROK?</summary><p>SROK (סרוק) היא אפליקציה ישראלית חינמית לאייפון להשוואת מחירים. מחפשים מוצר בשם, מדביקים קישור או סורקים ברקוד ומקבלים את המחירים מכל החנויות אונליין עם סימון הזול ביותר. היא משווה גם טיסות ומלונות, וכוללת תוסף Safari שמקפיץ הצעה זולה יותר או קופון בזמן הגלישה. פותחה על ידי יוסי רובינשטיין, מפתח תוסף הדפדפן ״שם זה זול יותר״.</p></details>
+    <details><summary>מה עושה תוסף ה-Safari של SROK?</summary><p>התוסף רץ ברקע בזמן הגלישה באייפון. בדף מוצר הוא מזהה את שם המוצר והמחיר, בודק חנויות אחרות ומראה אם יש זול יותר. באתר מלונות הוא מזהה את העיר והתאריכים ומשווה מלונות בין אתרי הזמנות. באתר טיסות הוא מזהה מוצא, יעד ותאריכים ומשווה טיסות. באתר שיש בו קופון פעיל הוא מקפיץ את הקוד עם כפתור העתקה לשימוש במסך התשלום.</p></details>
+    <details><summary>איך מפעילים את תוסף ה-Safari של SROK?</summary><p>התוסף מגיע עם האפליקציה. ב-Safari מקישים על אייקון ההרחבות (פאזל) בשורת הכתובת, מפעילים את Srok ומאשרים גישה ״תמיד״ ו״בכל האתרים״. מרגע זה בועת Srok מופיעה בתחתית דפי מוצר, מלונות וטיסות.</p></details>
+    <details><summary>האם SROK חינמית?</summary><p>כן. SROK חינמית לחלוטין, ללא רכישות בתוך האפליקציה וללא הרשמה. גם תוסף ה-Safari וגם תוסף הכרום למחשב חינמיים.</p></details>
+    <details><summary>איך משווים מחיר של מוצר ב-SROK?</summary><p>בשלוש דרכים: מקלידים את שם המוצר בחיפוש, מדביקים קישור לדף מוצר (או משתפים אותו מ-Safari ישירות ל-SROK), או סורקים ברקוד. SROK מציגה את ההצעות מהחנויות, מסמנת את המחיר הנמוך ביותר ומראה בכמה כל חנות יקרה או זולה יותר.</p></details>
+    <details><summary>האם SROK משווה טיסות ומלונות?</summary><p>כן. בטאב טיסות בוחרים מוצא, יעד ותאריכים ומקבלים טיסות מכמה אתרים עם סינון ישיר/עם עצירה ולפי חברת תעופה; החיפוש ממשיך ברקע ו-SROK שולחת התראה כשיש תוצאות. בטאב מלונות בוחרים עיר, תאריכים ומספר אורחים ומקבלים מלונות מכמה אתרי הזמנות עם מחיר ללילה ולכל השהות, סינון ארוחת בוקר וציון 8+.</p></details>
+    <details><summary>האם SROK עובדת גם בסופר?</summary><p>כן. סורקים ברקוד על המדף ורואים את המחיר בסניפים הקרובים של 20+ רשתות (שופרסל, רמי לוי, אושר עד, סופר-פארם ועוד) לפי מאגר שקיפות המחירים, וגם את המחיר אונליין. יש רשימת קניות עם סיווג אוטומטי, עגלה עם סכום כולל וייצוא PDF.</p></details>
+    <details><summary>האם SROK אוספת מידע אישי?</summary><p>לא. לפי הצהרת הפרטיות ב-App Store, האפליקציה לא אוספת נתונים. המיקום משמש רק למציאת חנויות קרובות.</p></details>
+    <details><summary>האם יש גרסה למחשב?</summary><p>כן. ״שם זה זול יותר״ הוא תוסף כרום מאותו מפתח, עם 70,000+ משתמשים, שמשווה מחירים ומאתר קופונים אוטומטית ב-400+ אתרי קניות, טיסות ומלונות. SROK היא הגרסה לאייפון, כולל תוסף ל-Safari.</p></details>
+    <details><summary>על אילו מכשירים SROK עובדת?</summary><p>iPhone עם iOS 18 ומעלה, וגם Mac עם Apple Silicon (macOS 15+) ו-Apple Vision (visionOS 2+). האפליקציה בעברית ובאנגלית.</p></details>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final" aria-labelledby="h-final">
+  <div class="wrap">
+    <p class="eyebrow" style="justify-content:center">הקנייה הבאה</p>
+    <h2 id="h-final">תנו ל-SROK לבדוק לפניכם.</h2>
+    <p class="lede" style="text-align:center">חינם ב-App Store. מתקינים, מפעילים את התוסף, וגולשים כרגיל.</p>
+    <a class="btn" href="https://apps.apple.com/il/app/id6747339283" rel="noopener">הורדת SROK ל-iPhone</a>
+  </div>
+</section>
+
+<div class="wrap en-summary" dir="ltr" lang="en">
+  <h2>About SROK (English summary)</h2>
+  <p>SROK is a free Israeli iPhone app that finds the cheapest price online. Search a product by name, paste a link (or share it from Safari), or scan a barcode, and SROK lists offers from online stores with the lowest price highlighted and the difference per store. It also compares flights (direct/with stops, by airline, with background search and a notification when results arrive) and hotels (price per night and per stay, breakfast, rating 8+) across booking sites. Its built-in Safari extension works while you browse: on a product page it detects the item and shows cheaper stores; on hotel and flight sites it reads your search (city, dates / origin, destination, dates) and compares other sites; on sites with an active coupon it pops up the code with a copy button. It can also scan barcodes in supermarkets to show prices at 20+ Israeli chains nearby. No sign-up, no data collection. SROK is made by Yossi Rubinstein, developer of “Sham Ze Zol Yoter” (שם זה זול יותר), a Chrome extension with 70,000+ users that compares prices and applies coupons across 400+ shopping, flight and hotel sites — the desktop counterpart of the app. Requires iOS 18+. Download: <a href="https://apps.apple.com/il/app/id6747339283">App Store</a>.</p>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 שם זה זול יותר · <a href="mailto:shamzezolyoter@gmail.com">shamzezolyoter@gmail.com</a></span>
+    <span>
+      <a href="https://apps.apple.com/il/app/id6747339283" rel="noopener">App Store</a> ·
+      <a href="https://chromewebstore.google.com/detail/neigoggljhfnodeneidndcflnclldnpm" rel="noopener">תוסף כרום</a> ·
+      <a href="https://shamze.com/" rel="noopener">shamze.com</a> ·
+      <a href="https://shamze.com/srok/privacy.html">מדיניות פרטיות ותנאי שימוש</a> ·
+      <a href="https://shamze.com/srok/llms.txt">llms.txt</a>
+    </span>
+    <span class="updated">עודכן לאחרונה: 9 בספטמבר 2026</span>
+  </div>
+</footer>
+
+</body>
+</html>

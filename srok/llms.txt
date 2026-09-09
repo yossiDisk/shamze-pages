@@ -1,0 +1,40 @@
+# SROK — השוואת מחירים חכמה
+
+> SROK (סרוק) is a free Israeli iPhone app that finds the cheapest price online for products, flights and hotels, with a built-in Safari extension that detects what you are browsing and pops up a cheaper offer or an active coupon. Made by Yossi Rubinstein, developer of the "שם זה זול יותר" (Sham Ze Zol Yoter / Shamze) Chrome extension — the desktop counterpart.
+
+## Key facts
+- Name: SROK - השוואת מחירים חכמה (also: SROK - סריקת קניות חכמה, סרוק, Srok השוואת מחירים)
+- Platform: iPhone (iOS 18+), Mac (Apple Silicon, macOS 15+), Apple Vision (visionOS 2+). Includes a Safari web extension and a Share extension.
+- Price: Free. No in-app purchases, no sign-up.
+- Privacy: no data collected (App Store privacy declaration). Location is used only to find nearby stores.
+- Languages: Hebrew, English
+- Developer: Yossi Rubinstein (יוסי רובינשטיין), Israel. Contact: shamzezolyoter@gmail.com
+- Launched: June 2025. App Store ID 6747339283.
+- Download: https://apps.apple.com/il/app/id6747339283
+
+## Safari extension (runs while browsing on iPhone)
+- Product pages: detects product name and price, checks other stores, shows cheaper offers with the lowest highlighted ("Srok מצא זול יותר").
+- Hotel sites: detects city and check-in/check-out dates, compares the same hotels across booking sites (price per night, breakfast, rating).
+- Flight sites: detects origin, destination and dates, compares flights across other sites (direct / with stops, by airline).
+- Coupons: on sites with an active coupon, pops up the code and terms with a copy button for checkout.
+- Requires enabling in Safari with "always allow, all websites"; the app guides users with a demo site.
+
+## In the app
+- Price comparison: search by product name, paste a product link (or share it from Safari to SROK), or scan a barcode; lowest price highlighted and the difference per store shown.
+- Flights: origin, destination, dates; results from several flight sites; direct-only and airline filters; search continues in background with a push notification when results arrive; recent searches.
+- Hotels: city, dates, guests; results from several booking sites; price per night and per stay; breakfast-included and rating 8+ filters; sort by price.
+- Supermarket scanning: barcode scan shows prices at 20+ Israeli chains by nearest branch (Shufersal, Rami Levy, Osher Ad, Super-Pharm, Victory, Yeinot Bitan, Yochananof, Hatzi Hinam, Tiv Taam, Mega, Fresh Market and more), based on the government-mandated price transparency data — plus the online price.
+- Shopping list with autocomplete and automatic category sorting; cart with running total; PDF export.
+
+## Desktop counterpart
+- "שם זה זול יותר" (Shamze) — Chrome extension, 70,000+ users. Compares prices and auto-applies coupons on 400+ shopping, flight and hotel sites. Free.
+- Install: https://chromewebstore.google.com/detail/neigoggljhfnodeneidndcflnclldnpm
+- Site: https://shamze.com/
+
+## Press
+- ice (July 2025): https://www.ice.co.il/consumerism/news/article/1075420 — "באמצעות אפליקציה שפותחה בעזה: כך תשיגו את סל הקניות הזול במדינה"
+- Geektime (Sept 2023, on the extension): https://www.geektime.co.il/new-extension-will-make-your-online-shopping-a-little-easier/
+- Globes (on the extension): https://www.globes.co.il/news/article.aspx?did=1001477045
+
+## Pages
+- Home / full description with FAQ: https://shamze.com/srok/
