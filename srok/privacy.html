@@ -5,108 +5,238 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>מדיניות פרטיות ותנאי שימוש - SROK</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      direction: rtl;
-      background-color: #f8f8f8;
-      color: #333;
+    :root {
+      --bg: #f8f8f8;
+      --surface: #ffffff;
+      --text: #222222;
+      --muted: #6b7280;
+      --border: rgba(0,0,0,0.08);
+      --link: #2980b9;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #121212;
+        --surface: #1c1c1e;
+        --text: #eaeaea;
+        --muted: #9a9a9a;
+        --border: rgba(255,255,255,0.12);
+        --link: #6cb2eb;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
       margin: 0;
       padding: 0;
+      background: var(--bg);
     }
 
-    .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 2rem;
-      background-color: #fff;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-      border-radius: 8px;
-      margin-top: 3rem;
-      margin-bottom: 3rem;
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      direction: rtl;
+      color: var(--text);
+      line-height: 1.7;
+      padding: 1.25rem;
     }
 
-    h1, h2, h3 {
-      color: #2c3e50;
+    .page {
+      max-width: 680px;
+      margin: 0 auto;
+      padding-bottom: 3rem;
     }
+
+    header.top {
+      margin: 1rem 0 2rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin: 0 0 0.25rem;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    section.term-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.1rem;
+      margin: 0 0 0.75rem;
+    }
+
+    p {
+      margin: 0 0 0.85rem;
+      font-size: 0.98rem;
+    }
+
+    p:last-child { margin-bottom: 0; }
 
     ul {
-      list-style-type: disc;
-      padding-right: 1.5rem;
+      margin: 0 0 0.85rem;
+      padding-right: 1.3rem;
+    }
+
+    ul:last-child { margin-bottom: 0; }
+
+    li {
+      margin: 0.3rem 0;
+      font-size: 0.98rem;
     }
 
     a {
-      color: #2980b9;
+      color: var(--link);
       text-decoration: none;
     }
 
-    a:hover {
-      text-decoration: underline;
-    }
+    a:hover { text-decoration: underline; }
 
-    .footer {
+    strong { font-weight: 700; }
+
+    .updated-at {
       text-align: center;
-      font-size: 0.9rem;
-      color: #888;
+      color: var(--muted);
+      font-size: 0.85rem;
       margin-top: 2rem;
     }
+
+    .error-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .error-box p { margin-bottom: 0.75rem; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>מדיניות פרטיות ותנאי שימוש - SROK</h1>
-    <p><strong>תאריך עדכון אחרון:</strong> יוני 2025</p>
-
-    <h2>📌 מדיניות פרטיות</h2>
-    <ul>
-      <li>האפליקציה משתמשת במיקום שלך לזיהוי חנויות קרובות, המידע לא נשמר ולא נשלח לשרתים.</li>
-      <li>המצלמה משמשת לסריקת ברקודים בלבד, ללא שמירת תמונות או שליחתן.</li>
-      <li>נתוני שימוש כגון עגלת קניות ורשימות עשויים להשלח לשרותי צד ג׳ לצורך שיפור השירות, אך לא מקושרים למשתמש.</li>
-      <li>בעתיד ייתכן שייאסף מידע נוסף לצרכים שיפור השירות.</li>
-      <li>השימוש באפליקציה מהווה הסכמה לשימוש במידע בהתאם למדיניות זו.</li>
-      <li>משתמש רשאי לבקש לעיין, לעדכן או למחוק את המידע עליו בכל עת.</li>
-      <li>האפליקציה עושה שימוש אפשרי בשירותי צד ג' (כגון Firebase או Google), לרבות העברת מידע לחו"ל בכפוף להסכמה.</li>
-    </ul>
-
-    <h2>👶 שימוש על ידי קטינים</h2>
-    <ul>
-      <li>השימוש באפליקציה על ידי קטינים מותר רק באישור הורה או אפוטרופוס.</li>
-      <li>אין לאסוף או לשתף מידע על קטינים לצרכים שיווקיים ללא הסכמה הורית.</li>
-      <li>הרכישות מתוך האפליקציה על ידי קטינים מותרות רק באישור מפורש של ההורה.</li>
-    </ul>
-
-    <h2>📃 תנאי שימוש</h2>
-    <ul>
-      <li>השימוש באפליקציה הוא אישי בלבד ואינו מסחרי.</li>
-      <li>המשתמש מצהיר שהשימוש באחריותו המלאה, והאפליקציה ניתנת כמות שהיא (As-Is).</li>
-      <li>התכנים המוצגים עשויים להגיע מצדדים שלישיים. אין לראות בהם המלצה או התחייבות.</li>
-      <li>האפליקציה רשאית להציג פרסומות. אין לראות בכך תמיכה בתוכן המפורסם.</li>
-      <li>SROK אינה אחראית לכל נזק ישיר או עקיף משימוש בשירות, אובדן מידע, או הפרעות בשירות.</li>
-      <li>ביצוע רכישות באפליקציה כפוף לתנאים של ספקי התשלום (Apple וכו').</li>
-      <li>לא ניתן לבטל רכישה של מוצר דיגיטלי לאחר שנעשה בו שימוש, בכפוף לחוק.</li>
-      <li>משתמש מתחייב לשפות את SROK בגין נזקים או תביעות כתוצאה מהפרת תנאים אלו.</li>
-      <li>השירות עשוי להתעדכן, להפסיק או להשתנות בכל עת וללא הודעה מוקדמת.</li>
-      <li>כל המידע שמקורו בספקים חיצוניים מוצג לנוחיות בלבד ואינו באחריות SROK.</li>
-    </ul>
-
-    <h2>🌍 שירותים חיצוניים והעברת מידע</h2>
-    <ul>
-      <li>SROK עשויה לשלב שירותים חיצוניים (כגון Firebase, Google Maps, AdMob).</li>
-      <li>שירותים אלו עשויים לאסוף מידע כללי (כגון מזהה מכשיר, מיקום כללי, נתוני שימוש).</li>
-      <li>השימוש בשירותים אלה כפוף גם למדיניות הפרטיות של אותם גורמים.</li>
-      <li>בהסכמתך לתנאים אלו, הנך מסכים להעברת מידע לחו"ל בהתאם לחוקי מדינת ישראל.</li>
-    </ul>
-
-    <h2>⚖️ סמכות שיפוט והוראות כלליות</h2>
-    <ul>
-      <li>השימוש באפליקציה כפוף לדיני מדינת ישראל בלבד.</li>
-      <li>הסמכות הבלעדית לדון בכל סכסוך היא בבתי המשפט בירושלים.</li>
-      <li>SROK שומרת לעצמה את הזכות לעדכן את התנאים בכל עת, והמשתמש נדרש לעיין בהם מעת לעת.</li>
-    </ul>
-
-    <h2>✉️ יצירת קשר</h2>
-    <p>לשאלות או בקשות ניתן לפנות בדוא"ל: <a href="mailto:shamzezolyoter@gmail.com">shamzezolyoter@gmail.com</a></p>
-
-    <div class="footer">© 2025 SROK</div>
+  <div class="page">
+    <header class="top">
+      <h1>מדיניות פרטיות ותנאי שימוש</h1>
+      <div class="subtitle">SROK</div>
+    </header>
+    <main id="content"></main>
+    <div class="updated-at" id="updatedAt"></div>
   </div>
+
+  <script>
+    (function () {
+      // ============================================================
+      // הגדרות - כאן משנים את מקור התוכן ופרטי הקשר
+      // ============================================================
+
+      // כתובת קובץ ה-JSON שמכיל את תנאי השימוש (יחסי לקובץ הזה).
+      // חייב להישאר באותה תיקייה: srok/terms.json לצד srok/privacy.html.
+      var TERMS_JSON_URL = "https://yossidisk.github.io/Shamze/srok/terms.json";
+
+      // כתובת המייל שמוצגת במסך השגיאה אם טעינת ה-JSON נכשלת.
+      var CONTACT_EMAIL = "shamzezolyoter@gmail.com";
+
+      // ============================================================
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      function parseInline(str) {
+        // str is already HTML-escaped.
+        // Bold: **text** -> <strong>text</strong>
+        str = str.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+        // Links: [text](url) -> <a href="url">text</a>  (http(s):// or mailto: only)
+        str = str.replace(
+          /\[([^\]]+)\]\((https?:\/\/[^\s)]+|mailto:[^\s)]+)\)/g,
+          function (match, text, url) {
+            return '<a href="' + url + '" target="_blank" rel="noopener">' + text + "</a>";
+          }
+        );
+        return str;
+      }
+
+      function renderBody(body) {
+        var escaped = escapeHtml(body);
+        var blocks = escaped.split(/\n\s*\n/);
+        var html = "";
+
+        blocks.forEach(function (block) {
+          var lines = block.split("\n").filter(function (l) {
+            return l.length > 0;
+          });
+          var i = 0;
+          while (i < lines.length) {
+            if (lines[i].indexOf("• ") === 0) {
+              var items = [];
+              while (i < lines.length && lines[i].indexOf("• ") === 0) {
+                items.push(parseInline(lines[i].slice(2)));
+                i++;
+              }
+              html += "<ul>" + items.map(function (it) {
+                return "<li>" + it + "</li>";
+              }).join("") + "</ul>";
+            } else {
+              var textLines = [];
+              while (i < lines.length && lines[i].indexOf("• ") !== 0) {
+                textLines.push(lines[i]);
+                i++;
+              }
+              html += "<p>" + parseInline(textLines.join(" ")) + "</p>";
+            }
+          }
+        });
+
+        return html;
+      }
+
+      function render(data) {
+        var content = document.getElementById("content");
+        var sections = (data && data.sections) || [];
+        var html = "";
+
+        sections.forEach(function (sec) {
+          html += '<section class="term-section">';
+          html += "<h2>" + escapeHtml(sec.title || "") + "</h2>";
+          html += renderBody(sec.body || "");
+          html += "</section>";
+        });
+
+        content.innerHTML = html;
+
+        var updatedEl = document.getElementById("updatedAt");
+        if (data && data.updatedAt) {
+          updatedEl.textContent = "עדכון אחרון: " + data.updatedAt;
+        }
+      }
+
+      function showError() {
+        var content = document.getElementById("content");
+        content.innerHTML =
+          '<div class="error-box">' +
+          "<p>אירעה שגיאה בטעינת תנאי השימוש. נסו לרענן את העמוד.</p>" +
+          '<p><a href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + "</a></p>" +
+          "</div>";
+      }
+
+      fetch(TERMS_JSON_URL)
+        .then(function (res) {
+          if (!res.ok) throw new Error("bad status: " + res.status);
+          return res.json();
+        })
+        .then(render)
+        .catch(showError);
+    })();
+  </script>
 </body>
 </html>
