@@ -2712,9 +2712,9 @@
         if (flight.price_il_usd != null && flight.fly_url2 && Number(flight.price_il_usd) > 0 && flight.fly_url2 !== flight.fly_url) {
           channels.push({ key: 'il', label: 'ספק ישראלי', icon: '🇮🇱', price: Number(flight.price_il_usd), url: flight.fly_url2 });
         }
-        if (flight.price_premium_usd != null && flight.fly_url_premium && Number(flight.price_premium_usd) > 0) {
-          channels.push({ key: 'premium', label: 'פרימיום', icon: '⭐', price: Number(flight.price_premium_usd), url: flight.fly_url_premium });
-        }
+        //if (flight.price_premium_usd != null && flight.fly_url_premium && Number(flight.price_premium_usd) > 0) {
+        //  channels.push({ key: 'premium', label: 'פרימיום', icon: '⭐', price: Number(flight.price_premium_usd), url: flight.fly_url_premium });
+        //}
         if (flight.price_airline_usd != null && flight.fly_url_airline && Number(flight.price_airline_usd) > 0) {
           channels.push({ key: 'airline', label: 'ישירות מחברת התעופה', icon: '🛫', price: Number(flight.price_airline_usd), url: flight.fly_url_airline });
         }
