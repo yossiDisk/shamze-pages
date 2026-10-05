@@ -291,6 +291,46 @@
     event_label: 'started_process'
   });
 
+  /* ----- פענוח ההפניה דרך השרת שלנו (Lambda) ----- */
+  // להחליף בכתובת ה-Function URL אחרי ההעלאה. כל עוד לא הוחלף — העמוד עובד בלי השרת (גיבוי).
+  const RESOLVER_URL = 'https://d2763wp2csy6rl4hr4gu2hdmwu0urvsg.lambda-url.eu-central-1.on.aws/';
+  const RESOLVER_MAX_AGE_MS = 5 * 60 * 1000;   // תוצאה ישנה מ-5 דקות — מבקשים מחדש
+  const ALLOWED_DEST_HOSTS = ['agw.skyscnr.com', 'skyscanner.pxf.io', 'www.skyscanner.co.il', 'www.skyscanner.net'];
+  const resolverEnabled = RESOLVER_URL.indexOf('REPLACE_ME') === -1
+        && flightUrl.hostname === 'fly.secretflights.co.il'
+        && new URLSearchParams(location.search).get('resolver') !== '0';   // ?resolver=0 לבדיקה/כיבוי
+  const resolveCache = {};
+
+  function resolveDeal(a, c, i) {
+    const key = a + '-' + c + '-' + i;
+    const cached = resolveCache[key];
+    if (cached && Date.now() - cached.startedAt < RESOLVER_MAX_AGE_MS) return cached.promise;
+
+    const q = new URL(flightUrl);
+    q.searchParams.set('adults', a);
+    q.searchParams.set('children', c);
+    q.searchParams.set('infants', i);
+
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 40000);
+    const promise = fetch(RESOLVER_URL + q.search, { signal: ctrl.signal })
+      .then(r => r.ok ? r.json() : Promise.reject(new Error('http_' + r.status)))
+      .then(d => {
+        let host = null;
+        try { host = new URL(d.url).hostname; } catch (e) {}
+        if (ALLOWED_DEST_HOSTS.indexOf(host) === -1) throw new Error('bad_url');
+        return d;
+      })
+      .finally(() => clearTimeout(timer));
+    promise.catch(() => {});   // מונע אזהרת unhandled בטעינה מוקדמת
+
+    resolveCache[key] = { promise: promise, startedAt: Date.now() };
+    return promise;
+  }
+
+  // מתחילים לחפש כבר עכשיו עם ברירת המחדל (מבוגר אחד), בזמן שהמשתמש בוחר נוסעים
+  if (resolverEnabled) resolveDeal(1, 0, 0);
+
   /* ----- כותרת + סיכום ----- */
   const header = document.getElementById('routeHeader');
   header.textContent = (origin && dest && outD && inD)
@@ -633,38 +673,53 @@
       if (pct >= 100) clearInterval(progInt);
     }, 200);
 
-    /* iframe hidden preload */
-    const hiddenIframe = document.createElement('iframe');
-    hiddenIframe.style.width = hiddenIframe.style.height = '0';
-    hiddenIframe.style.border = '0';
-    document.body.appendChild(hiddenIframe);
+    const clickedAt = Date.now();
+    let done = false;
 
-    let first = true;
-    hiddenIframe.onload = () => {
-      if (first) {
-        first = false;
-      } else {
-        clearInterval(interval);
-        gtag('event', 'process_completed', {
-          event_category: 'passenger_selection', 
-          event_label: 'redirected_to_booking'
-        });
-
-        setTimeout(() => { location.href = finalUrl; }, 100);
-      }
-    };
-
-    hiddenIframe.src = finalUrl;
-    
-    // backup timeout
-    setTimeout(() => { 
+    // מעבר יחיד — נשלח אירוע אחד בלבד, גם אם כמה מסלולים מנסים להעביר
+    function go(target, label, extra) {
+      if (done) return;
+      done = true;
       clearInterval(interval);
-      gtag('event', 'process_completed', {
-        event_category: 'passenger_selection', 
-        event_label: 'redirected_to_booking_timeout'
+      clearInterval(progInt);
+      progress.style.width = '100%';
+      gtag('event', 'process_completed', Object.assign({
+        event_category: 'passenger_selection',
+        event_label: label,
+        wait_ms: Date.now() - clickedAt,
+        transport_type: 'beacon'
+      }, extra || {}));
+      setTimeout(() => { location.href = target; }, 150);
+    }
+
+    // בלי שרת (או כבוי) — מעבר ישיר לטיסות סודיות, חיפוש אחד במקום שניים
+    if (!resolverEnabled) {
+      go(finalUrl, 'redirected_fallback', { resolve_result: 'disabled' });
+      return;
+    }
+
+    const a = passengers.adults, c = passengers.children, i = passengers.infants;
+    const prefetched = !!resolveCache[a + '-' + c + '-' + i];
+
+    resolveDeal(a, c, i).then(d => {
+      const info = {
+        prefetched: prefetched,
+        deal_price: d.price,
+        live_price: d.live_price,
+        booking_agent: d.agent || 'unknown'
+      };
+
+      // תמיד מעבירים מיד לאתר. שינוי מחיר נרשם רק ב-GA, בלי להציג למשתמש
+      const result = d.price_too_high ? 'price_up' : (d.benefit ? 'price_down' : 'ok');
+      go(d.url, 'redirected_direct', Object.assign(info, { resolve_result: result }));
+    }).catch(err => {
+      // השרת נכשל — גיבוי: מעבר ישיר לעמוד של טיסות סודיות
+      go(finalUrl, 'redirected_fallback', {
+        resolve_result: 'error',
+        error_reason: String((err && (err.name === 'AbortError' ? 'timeout' : err.message)) || err).slice(0, 60),
+        prefetched: prefetched
       });
-      setTimeout(() => { location.href = finalUrl; }, 100);
-    }, total);
+    });
   }
 
   validate();
