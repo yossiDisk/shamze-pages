@@ -7,6 +7,9 @@
   <title>תוצאות חיפוש</title>
 
   <script>
+    // הצגת טקסט דינמי בתוך HTML בלי שיתפרש כקוד (הגנה מ-XSS)
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
     // ===== GA GLOBAL =====
     const GA_MEASUREMENT_ID = 'G-PK1VZL0FDV';
     const GA_API_SECRET = '18bejCGgSeqXmtcUnvPoIQ';
@@ -759,7 +762,7 @@
         <div class="product-header-callout">
           <p class="instruction">בחר את התוצאה המתאימה ביותר</p>
           <div class="product-summary">
-            <strong>${query || 'מוצר לא ידוע'}</strong>
+            <strong>${query ? esc(query) : 'מוצר לא ידוע'}</strong>
             ${priceText ? `<span class="price">${priceText}</span>` : ''}
           </div>
         </div>
@@ -946,7 +949,7 @@
       if (!results || results.length === 0) {
         const noResultsHtml = `
           <div class="error-container" style="text-align:center;padding:20px;">
-            <p style="color:#666;">לא נמצאו תוצאות למוצר "${currentSearchQuery}"</p>
+            <p style="color:#666;">לא נמצאו תוצאות למוצר "${esc(currentSearchQuery)}"</p>
             <a id="retryButton" href="#" target="_blank" style="display:inline-block;margin:10px;padding:10px 20px;background-color:#1a73e8;color:#fff;text-decoration:none;border-radius:10px;">נסה בדרך אחרת</a>
           </div>`;
         displayErrorMessage(noResultsHtml);
@@ -1071,10 +1074,10 @@
             topContainer.innerHTML = `
               <section class="offers-hero" id="offersHero">
                 <div class="offers-hero-figure" title="הצעות מתייחסות למוצר שבתמונה">
-                  <img src="${heroImg || ''}" alt="תמונת מוצר" />
+                  <img src="${esc(heroImg)}" alt="תמונת מוצר" />
                 </div>
                 <div class="offers-hero-main">
-                  <h1 class="offers-hero-title">${product?.name || 'מוצר'}</h1>
+                  <h1 class="offers-hero-title">${esc(product?.name || 'מוצר')}</h1>
                   ${priceLine}
                 </div>
               </section>
@@ -1156,7 +1159,7 @@ const savingsText = numericPrice <= 0
           card.className = `offer-card ${isCheapest ? 'highlight-offer' : ''}`;
           card.innerHTML = `
             <div class="offer-details">
-              <span class="merchant">${offer.merchant}</span>
+              <span class="merchant">${esc(offer.merchant)}</span>
               <span class="price">₪${offer.price.toFixed(2)}</span>
             </div>
             ${isCheapest ? `<div class="cheapest-tag">🔥 הכי זול!</div>` : ''}
