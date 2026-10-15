@@ -316,9 +316,9 @@
     const promise = fetch(RESOLVER_URL + q.search, { signal: ctrl.signal })
       .then(r => r.ok ? r.json() : Promise.reject(new Error('http_' + r.status)))
       .then(d => {
-        let host = null;
-        try { host = new URL(d.url).hostname; } catch (e) {}
-        if (ALLOWED_DEST_HOSTS.indexOf(host) === -1) throw new Error('bad_url');
+        let proto = null;
+        try { proto = new URL(d.url).protocol; } catch (e) {}
+        if (proto !== 'https:') throw new Error('bad_url');
         return d;
       })
       .finally(() => clearTimeout(timer));
