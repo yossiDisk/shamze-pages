@@ -10,6 +10,14 @@
     <title>שם זה זול יותר - חסכו בקניות אונליין</title>
     <link rel="canonical" href="https://shamze.com/home.html">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J5RK908M0K"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-J5RK908M0K');
+    </script>
     <script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1" data-cmp-ab="2">
   (function () {
       var script = document.createElement("script");
@@ -42,7 +50,7 @@
 </head>
 <body class="bg-gray-100">
     <!-- SROK banner: iPhone / iPad only -->
-    <div id="srok-banner" class="bg-yellow-400 text-gray-900 px-4 py-3" hidden>
+    <div id="srok-banner" class="text-gray-900 px-4 py-3" style="background-color: #fbbf24" hidden>
         <div class="container mx-auto flex items-start gap-3">
             <div class="flex-1 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                 <div class="flex-1">
@@ -130,7 +138,7 @@
             <p class="text-xl mb-8">התוסף שלנו מציג לכם קופונים והשוואות מחירים בזמן אמת</p>
             <a href="https://chromewebstore.google.com/detail/%D7%A9%D7%9D-%D7%96%D7%94-%D7%96%D7%95%D7%9C-%D7%99%D7%95%D7%AA%D7%A8/neigoggljhfnodeneidndcflnclldnpm?hl=iw" 
                class="bg-green-500 text-white px-6 py-3 rounded-full text-xl font-bold hover:bg-green-600 transition duration-300 inline-block mb-4"
-               onclick="plausible('Download Extension')">
+               onclick="trackEvent('Download Extension')">
                 התקן את התוסף בחינם
             </a>
         </section>
@@ -251,13 +259,13 @@
             <div class="flex flex-col md:flex-row justify-center items-center gap-8">
                 <a href="https://chat.whatsapp.com/HVpVlib1K1UFAt9KuXNgfo" 
                    class="bg-green-500 text-white px-6 py-3 rounded-full text-xl font-bold hover:bg-green-600 transition duration-300"
-                   onclick="plausible('Join WhatsApp Group')"
+                   onclick="trackEvent('Join WhatsApp Group')"
                    target="_blank">
                     הצטרפו לקבוצת הוואטסאפ
                 </a>
                 <a href="https://yossidisk.github.io/Shamze/cupons.html" 
                    class="bg-green-500 text-white px-6 py-3 rounded-full text-xl font-bold hover:bg-green-600 transition duration-300"
-                   onclick="plausible('Visit Coupons Site')"
+                   onclick="trackEvent('Visit Coupons Site')"
                    target="_blank">
                     אתר הקופונים שלנו
                 </a>
@@ -345,12 +353,9 @@
     </footer>
 
     <script>
-        // Plausible Analytics setup
-        window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) };
-        
-        // Function to track events
+        // Function to track events (GA4 event names can't contain spaces)
         function trackEvent(eventName, props = {}) {
-            plausible(eventName, { props: props });
+            gtag('event', eventName.replace(/\s+/g, '_'), props);
         }
         
         // Track page view with source parameter
