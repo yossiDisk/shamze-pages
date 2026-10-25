@@ -4270,7 +4270,7 @@
         const shareBtn = document.getElementById('offersShare');
         let shareResetTimer = null;
         shareBtn.addEventListener('click', async () => {
-          const url = window.location.href;
+          const url = buildShareUrl(searchInput.value.trim(), id);
           safeGtag('offers_share', { product_id: id });
 
           if (navigator.share) {
@@ -4307,6 +4307,18 @@
 
         setProductStatus(`${product.name}: ${offers.length} חנויות, הכי זול ${formatIls(min)}`);
         safeGtag('offers_fetch_success', { product_id: id, offers_count: offers.length });
+      }
+
+      // קישור לשיתוף תמיד על הכתובת הציבורית (link rel="canonical"), ולא location.href -
+      // אחרת עמוד שנפתח מקובץ מקומי / localhost משתף קישור שלא נפתח אצל אחרים
+      const SHARE_BASE_URL = (document.querySelector('link[rel="canonical"]') || {}).href || 'https://shamze.com/cupons.html';
+
+      function buildShareUrl(query, pid) {
+        const url = new URL(SHARE_BASE_URL);
+        url.search = '';
+        if (query) url.searchParams.set('query', query);
+        if (pid) url.searchParams.set('pid', pid);
+        return url.toString();
       }
 
       function closeOffersPanel({ updateUrl = true } = {}) {
