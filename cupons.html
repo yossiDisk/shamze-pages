@@ -1320,7 +1320,7 @@
     .sk { background: linear-gradient(90deg, #eceff3 25%, #f7f8fa 37%, #eceff3 63%); background-size: 400% 100%; animation: sk-shimmer 1.3s infinite; border-radius: 8px; display: block; }
     @keyframes sk-shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
 
-    .offers-panel { background: #fff; border-radius: var(--card-radius); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); padding: 16px; display: none; text-align: right; }
+    .offers-panel { background: #fff; border-radius: var(--card-radius); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); padding: 16px; display: none; text-align: right; min-width: 0; overflow-x: hidden; }
     .offers-panel.open { display: block; }
     .offers-panel:focus { outline: none; }
     .offers-scrim, .sheet-grab { display: none; }
@@ -1344,8 +1344,8 @@
     .best-offer b { font-size: 20px; color: var(--primary-green); }
     .best-offer .save b { font-size: 15px; }
     .offers-meta { font-size: 13px; color: #64748b; }
-    .offer-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
-    .offer-row { display: flex; align-items: center; gap: 10px; border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px; text-decoration: none; color: inherit; min-height: 56px; background: #fff; }
+    .offer-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+    .offer-row { display: flex; align-items: center; gap: 10px; min-width: 0; border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px; text-decoration: none; color: inherit; min-height: 56px; background: #fff; }
     .offer-row:hover { border-color: var(--accent-green); }
     .offer-row.cheapest { border: 2px solid var(--accent-green); background: var(--light-green); }
     .offer-row img { width: 20px; height: 20px; flex: none; }
@@ -3882,6 +3882,9 @@
         }
 
         renderProductGrids(main, acc);
+        // prefetch רק לתוצאה הראשונה (קריאה ל-getDirectShoppingLink יקרה בשרת).
+        // שאר המוצרים נטענים רק בלחיצה
+        if (main.length) fetchOffers(main[0]).catch(() => { });
         setProductStatus(`נמצאו ${main.length} מוצרים${acc.length ? ` ועוד ${acc.length} אביזרים` : ''}. בחרו מוצר כדי לראות את כל המחירים.`);
 
         // קישור משותף: מסמנים את המוצר שב-URL, ומעדכנים את הפאנל בפרטים המלאים שלו
@@ -4066,11 +4069,6 @@
         offersCache.set(id, promise);
         promise.then(offers => updateCardFromOffers(product, offers)).catch(() => { });
         return promise;
-      }
-
-      function prefetchFromEvent(e) {
-        const card = e.target.closest && e.target.closest('.comparison-item[data-i]');
-        if (card && productMatches[+card.dataset.i]) fetchOffers(productMatches[+card.dataset.i]).catch(() => { });
       }
 
       function openOffersPanelById(id, opts) {
@@ -4462,9 +4460,6 @@
         }
 
         productList.addEventListener('click', onProductListClick);
-        // prefetch: ההצעות נטענות כבר כשמרחפים/נוגעים במוצר, כך שהפאנל נפתח מהר יותר
-        ['pointerenter', 'focusin', 'touchstart'].forEach(ev =>
-          productList.addEventListener(ev, prefetchFromEvent, { capture: true, passive: true }));
         offersScrim.addEventListener('click', () => closeOffersPanel());
         document.addEventListener('keydown', onSearchKeydown);
         window.addEventListener('popstate', onPopState);
