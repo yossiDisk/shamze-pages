@@ -474,35 +474,63 @@
     .recent-chip .chip-del { background: none; border: 0; color: #94a3b8; cursor: pointer; width: 32px; height: 32px; border-radius: 9999px; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; }
     .recent-chip .chip-del:hover { background: #f1f5f9; color: #475569; }
 
-    /* ===== קידום חשמל: שורה אחת ===== */
+    /* ===== קידום חשמל ===== */
     .elec-promo {
+      position: relative;
       display: flex;
       align-items: center;
-      gap: 10px;
-      max-width: 640px;
-      margin: 20px auto 0;
-      padding: 10px 14px;
-      background: var(--light-green);
-      border: 1px solid #a7f3d0;
-      color: #065f46;
-      border-radius: 12px;
-      font-size: 14px;
+      gap: 16px;
+      background: linear-gradient(135deg, #047857 0%, #059669 55%, #10b981 100%);
+      color: #fff;
+      border-radius: var(--card-radius);
+      padding: 18px 22px;
+      margin-bottom: 24px;
       cursor: pointer;
+      box-shadow: 0 12px 28px -14px rgba(5, 150, 105, 0.7);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       text-align: right;
-      transition: border-color 0.2s ease;
     }
-    .elec-promo:hover { border-color: var(--accent-green); }
-    .elec-promo-icon { flex: none; font-size: 18px; }
-    .elec-promo-text { flex: 1; min-width: 0; }
-    .elec-promo-arrow { flex: none; font-size: 18px; font-weight: 800; }
-    .elec-promo-close { flex: none; width: 32px; height: 32px; border: none; border-radius: 9999px; background: transparent; color: #047857; font-size: 14px; cursor: pointer; }
-    .elec-promo-close:hover { background: rgba(5, 150, 105, 0.12); }
+
+    .elec-promo:hover { transform: translateY(-2px); box-shadow: 0 18px 34px -16px rgba(5, 150, 105, 0.8); }
+    .elec-promo-icon { flex-shrink: 0; font-size: 34px; line-height: 1; }
+    .elec-promo-text { flex: 1; padding-left: 24px; }
+    .elec-promo-title { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
+    .elec-promo-desc { font-size: 14px; opacity: 0.92; }
+    .elec-promo-arrow { flex-shrink: 0; font-size: 22px; font-weight: 800; }
+
+    .elec-promo-close {
+      position: absolute;
+      top: 8px;
+      left: 10px;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 16px;
+      line-height: 1;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .elec-promo-close:hover { background: rgba(255, 255, 255, 0.35); }
+
+    @media (max-width: 768px) {
+      .elec-promo { padding: 16px 18px; gap: 12px; }
+      .elec-promo-icon { font-size: 28px; }
+      .elec-promo-title { font-size: 16px; }
+      .elec-promo-desc { font-size: 13px; }
+      .elec-promo-arrow { display: none; }
+    }
 
     @media (max-width: 768px) {
       .search-hero-title { font-size: 22px; }
       .search-hero-sub { font-size: 14px; margin-bottom: 12px; }
       .suggest-label { display: none; }
-      .elec-promo { font-size: 13px; }
     }
 
     /* ===== דף השוואת חשמל ===== */
@@ -1431,10 +1459,24 @@
 
       <!-- תוכן טאב מוצרים -->
       <div id="products-tab" class="tab-content active">
-        <!-- אזור חיפוש: כותרת קצרה, שדה חיפוש, ושורת הצעות אחת (חיפושים אחרונים, ואם אין - פופולריים) -->
-        <div class="search-hero">
+        <!-- כותרת, באנר החשמל, ואז שדה החיפוש ושורת הצעות אחת (חיפושים אחרונים, ואם אין - פופולריים) -->
+        <div class="search-hero search-hero-head">
           <h2 class="search-hero-title">מה מחפשים היום?</h2>
           <p class="search-hero-sub">משווים מחירים בכל החנויות ומוצאים קופונים</p>
+        </div>
+
+        <!-- חלונית קידום: השוואה בחשמל (מוסתרת בזמן חיפוש) -->
+        <div id="elecPromo" class="elec-promo" role="button" tabindex="0" aria-label="מעבר לטאב השוואה בחשמל">
+          <button id="elecPromoClose" class="elec-promo-close" type="button" aria-label="סגירת החלונית">✕</button>
+          <span class="elec-promo-icon">⚡</span>
+          <div class="elec-promo-text">
+            <div class="elec-promo-title">השוו וחסכו בחשבון החשמל בקלות!</div>
+            <div class="elec-promo-desc">בדיקה חינמית לפי הצריכה שלכם — מוצאים את הספק הזול ביותר וחוסכים בממוצע ₪457 בשנה. לחצו כאן ›</div>
+          </div>
+          <span class="elec-promo-arrow">›</span>
+        </div>
+
+        <div class="search-hero">
           <form id="searchForm" class="search-box" role="search" autocomplete="off">
             <label for="searchInput" class="sr-only">חיפוש מוצר או חנות</label>
             <svg class="search-box-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -1451,14 +1493,6 @@
             <span id="suggestLabel" class="suggest-label"></span>
             <div id="suggestChips" class="suggest-chips"></div>
           </div>
-        </div>
-
-        <!-- קידום חשמל: שורה אחת מתחת לחיפוש, מוסתר בזמן חיפוש -->
-        <div id="elecPromo" class="elec-promo" role="button" tabindex="0" aria-label="מעבר לטאב השוואה בחשמל">
-          <span class="elec-promo-icon" aria-hidden="true">⚡</span>
-          <span class="elec-promo-text"><b>חוסכים בחשבון החשמל?</b> בדיקה חינמית, ₪457 בשנה בממוצע</span>
-          <span class="elec-promo-arrow" aria-hidden="true">›</span>
-          <button id="elecPromoClose" class="elec-promo-close" type="button" aria-label="סגירת החלונית">✕</button>
         </div>
 
         <div id="loadingContainer" class="loading-container" style="display: none;">
