@@ -176,7 +176,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ===== chips (קטגוריות / חיפושים אחרונים) ===== */
+    /* ===== chips ===== */
     .chips-row {
       display: flex;
       flex-wrap: wrap;
@@ -210,18 +210,6 @@
       font-weight: 800;
     }
 
-    .chip .chip-count {
-      background: #f1f5f9;
-      color: #64748b;
-      border-radius: 9999px;
-      font-size: 11px;
-      padding: 1px 7px;
-      font-weight: 700;
-    }
-
-    .chip.active .chip-count { background: #d1fae5; color: var(--primary-green); }
-
-    .chip.recent-chip { background: #f8fafc; font-weight: 500; }
 
     /* ===== כרטיסי אתרים (קופונים) ===== */
     .sites-grid {
@@ -451,57 +439,66 @@
     .fav-btn:hover { transform: scale(1.12); border-color: #fca5a5; }
     .fav-btn.faved { background: #fef2f2; border-color: #fca5a5; }
 
-    /* ===== קידום חשמל ===== */
+    /* ===== אזור החיפוש ===== */
+    .search-hero { max-width: 640px; margin: 0 auto; text-align: center; }
+    .search-hero-title { font-size: 28px; font-weight: 800; color: #0f172a; margin: 0; line-height: 1.25; }
+    .search-hero-sub { color: #64748b; font-size: 15px; margin: 4px 0 16px; }
+
+    .search-box { position: relative; }
+    .search-box input {
+      width: 100%;
+      height: 56px;
+      padding: 0 48px 0 48px;
+      font-size: 17px;
+      font-family: 'Heebo', sans-serif;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: var(--card-shadow);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .search-box input:focus { border-color: var(--accent-green); box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.15); }
+    .search-box-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); width: 22px; height: 22px; color: #94a3b8; pointer-events: none; }
+    .search-box #clearSearch { position: absolute; left: 6px; top: 50%; transform: translateY(-50%); color: #94a3b8; cursor: pointer; }
+    .search-box #clearSearch:hover { color: #475569; }
+
+    /* שורת הצעות אחת: גלילה אופקית במובייל במקום כמה שורות של צ'יפים */
+    .suggest-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+    .suggest-label { flex: none; font-size: 13px; color: #64748b; font-weight: 600; }
+    .suggest-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 2px; }
+    .suggest-chips::-webkit-scrollbar { display: none; }
+    .suggest-chips .chip { flex: none; white-space: nowrap; min-height: 40px; }
+
+    /* ===== קידום חשמל: שורה אחת ===== */
     .elec-promo {
-      position: relative;
       display: flex;
       align-items: center;
-      gap: 16px;
-      background: linear-gradient(135deg, #047857 0%, #059669 55%, #10b981 100%);
-      color: #fff;
-      border-radius: var(--card-radius);
-      padding: 18px 22px;
-      margin-bottom: 24px;
+      gap: 10px;
+      max-width: 640px;
+      margin: 20px auto 0;
+      padding: 10px 14px;
+      background: var(--light-green);
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+      border-radius: 12px;
+      font-size: 14px;
       cursor: pointer;
-      box-shadow: 0 12px 28px -14px rgba(5, 150, 105, 0.7);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
       text-align: right;
+      transition: border-color 0.2s ease;
     }
-
-    .elec-promo:hover { transform: translateY(-2px); box-shadow: 0 18px 34px -16px rgba(5, 150, 105, 0.8); }
-    .elec-promo-icon { flex-shrink: 0; font-size: 34px; line-height: 1; }
-    .elec-promo-text { flex: 1; padding-left: 24px; }
-    .elec-promo-title { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
-    .elec-promo-desc { font-size: 14px; opacity: 0.92; }
-    .elec-promo-arrow { flex-shrink: 0; font-size: 22px; font-weight: 800; }
-
-    .elec-promo-close {
-      position: absolute;
-      top: 8px;
-      left: 10px;
-      width: 26px;
-      height: 26px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.2);
-      color: #fff;
-      font-size: 16px;
-      line-height: 1;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-
-    .elec-promo-close:hover { background: rgba(255, 255, 255, 0.35); }
+    .elec-promo:hover { border-color: var(--accent-green); }
+    .elec-promo-icon { flex: none; font-size: 18px; }
+    .elec-promo-text { flex: 1; min-width: 0; }
+    .elec-promo-arrow { flex: none; font-size: 18px; font-weight: 800; }
+    .elec-promo-close { flex: none; width: 32px; height: 32px; border: none; border-radius: 9999px; background: transparent; color: #047857; font-size: 14px; cursor: pointer; }
+    .elec-promo-close:hover { background: rgba(5, 150, 105, 0.12); }
 
     @media (max-width: 768px) {
-      .elec-promo { padding: 16px 18px; gap: 12px; }
-      .elec-promo-icon { font-size: 28px; }
-      .elec-promo-title { font-size: 16px; }
-      .elec-promo-desc { font-size: 13px; }
-      .elec-promo-arrow { display: none; }
+      .search-hero-title { font-size: 22px; }
+      .search-hero-sub { font-size: 14px; margin-bottom: 12px; }
+      .suggest-label { display: none; }
+      .elec-promo { font-size: 13px; }
     }
 
     /* ===== דף השוואת חשמל ===== */
@@ -1044,29 +1041,6 @@
 
     .coupon-details { margin-top: 10px; }
 
-    .popular-searches-container { margin-top: 20px; text-align: center; }
-
-    .popular-search-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .popular-search-button {
-      background-color: #fff;
-      border: 1px solid #e2e8f0;
-      padding: 10px 15px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-family: 'Heebo', sans-serif;
-      transition: all 0.3s;
-      font-size: 14px;
-    }
-
-    .popular-search-button:hover { border-color: var(--accent-green); color: var(--primary-green); box-shadow: var(--card-shadow); }
-
     .request-coupon-button, .email-input {
       margin: 6px;
       padding: 10px 16px;
@@ -1321,6 +1295,7 @@
     /* ===== חיפוש מוצרים במסך אחד: התאמות + פאנל הצעות ===== */
     #searchInput::-webkit-search-cancel-button { -webkit-appearance: none; display: none; }
     #clearSearch { display: none; background: none; border: 0; width: 44px; height: 44px; font-size: 16px; }
+    #products-tab.is-searching .elec-promo { display: none; }
 
     .product-section { margin-top: 16px; }
     .product-section-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -1444,7 +1419,7 @@
     <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
       <!-- טאבים -->
       <div class="tabs-container">
-        <button class="tab-button active" data-tab="products"><span class="tab-icon">🛒</span> השוואת מחירים</button>
+        <button class="tab-button active" data-tab="products"><span class="tab-icon">🛒</span> מוצרים</button>
         <button class="tab-button" data-tab="flights"><span class="tab-icon">✈️</span> טיסות</button>
         <button class="tab-button" data-tab="hotels"><span class="tab-icon">🏨</span> מלונות</button>
         <button class="tab-button" data-tab="electricity"><span class="tab-icon">⚡</span> חשמל</button>
@@ -1452,47 +1427,34 @@
 
       <!-- תוכן טאב מוצרים -->
       <div id="products-tab" class="tab-content active">
-        <h2 class="text-3xl font-bold text-center mb-8">חיפוש קופונים והשוואת מחירים</h2>
-
-        <!-- חלונית קידום: השוואה בחשמל -->
-        <div id="elecPromo" class="elec-promo" role="button" tabindex="0" aria-label="מעבר לטאב השוואה בחשמל">
-          <button id="elecPromoClose" class="elec-promo-close" type="button" aria-label="סגירת החלונית">✕</button>
-          <span class="elec-promo-icon">⚡</span>
-          <div class="elec-promo-text">
-            <div class="elec-promo-title">השוו וחסכו בחשבון החשמל בקלות!</div>
-            <div class="elec-promo-desc">בדיקה חינמית לפי הצריכה שלכם — מוצאים את הספק הזול ביותר וחוסכים בממוצע ₪457 בשנה. לחצו כאן ›</div>
+        <!-- אזור חיפוש: כותרת קצרה, שדה חיפוש, ושורת הצעות אחת (חיפושים אחרונים, ואם אין - פופולריים) -->
+        <div class="search-hero">
+          <h2 class="search-hero-title">מה מחפשים היום?</h2>
+          <p class="search-hero-sub">משווים מחירים בכל החנויות ומוצאים קופונים</p>
+          <form id="searchForm" class="search-box" role="search" autocomplete="off">
+            <label for="searchInput" class="sr-only">חיפוש מוצר או חנות</label>
+            <svg class="search-box-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            <input type="search" id="searchInput" enterkeyhint="search"
+              placeholder='מוצר או חנות, למשל "Dyson V15"'
+              role="combobox" aria-autocomplete="list" aria-controls="productList" aria-expanded="false">
+            <button type="button" id="clearSearch" aria-label="ניקוי החיפוש">✕</button>
+          </form>
+          <div id="suggestRow" class="suggest-row" style="display:none;">
+            <span id="suggestLabel" class="suggest-label"></span>
+            <div id="suggestChips" class="suggest-chips"></div>
           </div>
-          <span class="elec-promo-arrow">›</span>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl shadow-md">
-          <div class="max-w-md mx-auto">
-            <form id="searchForm" class="relative" role="search" autocomplete="off">
-              <label for="searchInput" class="sr-only">חיפוש קופון או מוצר</label>
-              <input type="search" id="searchInput" enterkeyhint="search"
-                class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                placeholder='לדוגמא "המשביר" או "אוזניות גיימינג"'
-                role="combobox" aria-autocomplete="list" aria-controls="productList" aria-expanded="false">
-              <button type="button" id="clearSearch" aria-label="ניקוי החיפוש"
-                class="absolute left-0 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600">✕</button>
-              <svg class="w-6 h-6 text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2" fill="none"
-                stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-              </svg>
-            </form>
-          </div>
-
-          <!-- חיפושים אחרונים של מוצרים -->
-          <div id="recentProductSearches" style="display:none;">
-            <div class="chips-row" id="recentProductChips"></div>
-          </div>
-
-          <!-- קטגוריות קופונים -->
-          <div id="categoriesSection" style="display:none;">
-            <p class="text-gray-500 text-sm mt-5 mb-0 font-bold">או גלשו בקופונים לפי קטגוריה:</p>
-            <div class="chips-row" id="categoryChips"></div>
-          </div>
+        <!-- קידום חשמל: שורה אחת מתחת לחיפוש, מוסתר בזמן חיפוש -->
+        <div id="elecPromo" class="elec-promo" role="button" tabindex="0" aria-label="מעבר לטאב השוואה בחשמל">
+          <span class="elec-promo-icon" aria-hidden="true">⚡</span>
+          <span class="elec-promo-text"><b>חוסכים בחשבון החשמל?</b> בדיקה חינמית, ₪457 בשנה בממוצע</span>
+          <span class="elec-promo-arrow" aria-hidden="true">›</span>
+          <button id="elecPromoClose" class="elec-promo-close" type="button" aria-label="סגירת החלונית">✕</button>
         </div>
 
         <div id="loadingContainer" class="loading-container" style="display: none;">
@@ -2114,7 +2076,6 @@
       let allSites = [];
       let searchedUrl = '';
       let currentResults = [];
-      let activeCategory = null;
 
       // משתנים לטיסות
       let citiesData = [];
@@ -3407,26 +3368,20 @@
         return window.matchMedia('(max-width: 899px)').matches;
       }
 
-      // --- הצגה/הסתרה של אזורי הגלישה (חיפושים אחרונים + קטגוריות) ---
-      // בזמן חיפוש מסתירים אותם כדי שהתוצאות יופיעו מיד מתחת לשורת החיפוש
+      // --- הצגה/הסתרה של אזור ההצעות ---
+      // בזמן חיפוש מסתירים את ההצעות ואת קידום החשמל כדי שהתוצאות יופיעו
+      // מיד מתחת לשורת החיפוש
       function shouldShowBrowseSections() {
         return !(searchInput && searchInput.value.trim() !== '');
       }
 
       function updateBrowseSectionsVisibility() {
         const show = shouldShowBrowseSections();
+        document.getElementById('products-tab').classList.toggle('is-searching', !show);
 
-        const recent = document.getElementById('recentProductSearches');
-        const recentChips = document.getElementById('recentProductChips');
-        if (recent) {
-          recent.style.display = (show && recentChips && recentChips.children.length > 0) ? 'block' : 'none';
-        }
-
-        const cats = document.getElementById('categoriesSection');
-        const catChips = document.getElementById('categoryChips');
-        if (cats) {
-          cats.style.display = (show && catChips && catChips.children.length > 0) ? 'block' : 'none';
-        }
+        const row = document.getElementById('suggestRow');
+        const chips = document.getElementById('suggestChips');
+        if (row) row.style.display = (show && chips && chips.children.length > 0) ? 'flex' : 'none';
       }
 
       // --- חיפושים אחרונים של מוצרים ---
@@ -3461,7 +3416,7 @@
         recentSaveTimer = setTimeout(() => {
           recentSaveTimer = null;
           saveRecentProductSearch(query);
-          renderRecentProductSearches();
+          renderSuggestions();
         }, 1500);
       }
 
@@ -3472,38 +3427,34 @@
         }
       }
 
-      function renderRecentProductSearches() {
-        try {
-          const list = JSON.parse(localStorage.getItem(RECENT_PRODUCT_KEY) || '[]');
-          const container = document.getElementById('recentProductSearches');
-          const chips = document.getElementById('recentProductChips');
+      // שורת הצעות אחת: החיפושים האחרונים של המשתמש, ואם אין - חיפושים פופולריים
+      const POPULAR_SEARCHES = ['Dyson V15', 'AirPods Pro', 'המשביר', 'Ali express', 'PlayStation 5', 'Golf'];
 
-          if (!list.length) { chips.innerHTML = ''; container.style.display = 'none'; return; }
+      function renderSuggestions() {
+        let recent = [];
+        try { recent = JSON.parse(localStorage.getItem(RECENT_PRODUCT_KEY) || '[]'); } catch (e) { }
+        const isRecent = recent.length > 0;
+        const list = (isRecent ? recent : POPULAR_SEARCHES).slice(0, 5);
 
-          chips.innerHTML = '';
+        document.getElementById('suggestLabel').textContent = isRecent ? '🕐 אחרונים:' : '🔥 פופולרי:';
+        const chips = document.getElementById('suggestChips');
+        chips.setAttribute('aria-label', isRecent ? 'חיפושים אחרונים' : 'חיפושים פופולריים');
+        chips.innerHTML = '';
 
-          const label = document.createElement('span');
-          label.className = 'chip recent-chip';
-          label.style.cursor = 'default';
-          label.style.border = 'none';
-          label.style.background = 'transparent';
-          label.textContent = '🕐 חיפושים אחרונים:';
-          chips.appendChild(label);
-
-          list.forEach(q => {
-            const chip = document.createElement('button');
-            chip.className = 'chip recent-chip';
-            chip.textContent = q;
-            chip.addEventListener('click', () => {
-              searchInput.value = q;
-              handleSearchInput({ immediate: true, push: true });
-              safeGtag('recent_search_click', { query: q });
-            });
-            chips.appendChild(chip);
+        list.forEach(q => {
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'chip';
+          chip.textContent = q;
+          chip.addEventListener('click', () => {
+            searchInput.value = q;
+            handleSearchInput({ immediate: true, push: true });
+            safeGtag(isRecent ? 'recent_search_click' : 'popular_search', { query: q });
           });
+          chips.appendChild(chip);
+        });
 
-          updateBrowseSectionsVisibility();
-        } catch (e) { }
+        updateBrowseSectionsVisibility();
       }
 
       // --- קטגוריות קופונים ---
@@ -3513,91 +3464,24 @@
           (site.cuponDetails && String(site.cuponDetails).trim() !== '')));
       }
 
-      function renderCategories() {
-        const counts = {};
-        allSites.filter(hasCouponInfo).forEach(site => {
-          const cat = (site.siteCategory || '').trim();
-          if (cat) counts[cat] = (counts[cat] || 0) + 1;
-        });
-
-        const cats = Object.entries(counts)
-          .filter(([, count]) => count >= 2)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 14);
-
-        if (!cats.length) return;
-
-        const chipsRow = document.getElementById('categoryChips');
-        chipsRow.innerHTML = '';
-
-        cats.forEach(([cat, count]) => {
-          const chip = document.createElement('button');
-          chip.className = 'chip';
-          chip.innerHTML = `${escapeHtml(cat)} <span class="chip-count">${count}</span>`;
-          chip.addEventListener('click', () => {
-            if (activeCategory === cat) {
-              activeCategory = null;
-              chip.classList.remove('active');
-              resultsContainer.innerHTML = '';
-              displayPopularSearches();
-              renderRecentProductSearches();
-              return;
-            }
-            activeCategory = cat;
-            chipsRow.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-            chip.classList.add('active');
-            showCategorySites(cat);
-            safeGtag('category_browse', { category: cat });
-          });
-          chipsRow.appendChild(chip);
-        });
-
-        updateBrowseSectionsVisibility();
-      }
-
-      function showCategorySites(category) {
-        searchInput.value = '';
-        if (clearSearch) clearSearch.style.display = 'none';
-        updateBrowseSectionsVisibility();
-        currentSearchQuery = '';
-        clearTimeout(productSearchTimer);
-        resetProductSearch();
-
-        // מציגים רק אתרים שיש לנו קופון/הטבה עבורם
-        const sites = allSites.filter(s => hasCouponInfo(s) && (s.siteCategory || '').trim() === category);
-        // אתרים עם קוד קופון קודם
-        sites.sort((a, b) => {
-          const aHas = a.cupon && a.cupon !== '' ? 0 : 1;
-          const bHas = b.cupon && b.cupon !== '' ? 0 : 1;
-          return aHas - bHas;
-        });
-
-        resultsContainer.innerHTML = `<h3 class="text-xl font-bold mt-2 w-full text-center">🏷️ ${escapeHtml(category)} — ${sites.length} אתרים עם הטבות</h3>`;
-        displaySiteCards(sites);
-      }
-
       // --- חיפוש ---
       // חיפוש הקופונים מקומי ומיידי ורץ על כל הקשה. ה-URL, אירוע GA וחיפוש
       // המוצרים רצים רק אחרי השהיה (commitSearch)
       function search(query) {
         currentSearchQuery = query;
-        activeCategory = null;
-        document.querySelectorAll('#categoryChips .chip').forEach(c => c.classList.remove('active'));
         showLoading();
         resultsContainer.innerHTML = '';
 
         if (query.trim() === '') {
           cancelPendingRecentSave();
           hideLoading();
-          displayPopularSearches();
-          renderRecentProductSearches();
+          renderSuggestions();
           updateBrowseSectionsVisibility();
           sortContainer.style.display = 'none';
           return;
         }
 
-        // בזמן חיפוש מסתירים את החיפושים האחרונים והקטגוריות כדי שהתוצאות
-        // יופיעו צמוד לשורת החיפוש
+        // בזמן חיפוש מסתירים את שורת ההצעות כדי שהתוצאות יופיעו צמוד לשורת החיפוש
         updateBrowseSectionsVisibility();
         sortContainer.style.display = 'none';
         scheduleRecentProductSearchSave(query);
@@ -3666,39 +3550,6 @@
 
         resultsContainer.appendChild(emailInput);
         resultsContainer.appendChild(submitButton);
-      }
-
-      function displayPopularSearches() {
-        const popularSearches = [
-          "Ali express", "Golf", "המשביר", "ACE",
-          "איירפודס", "NAUTICA", "בושם לגבר", "Toys R us"
-        ];
-
-        const container = document.createElement('div');
-        container.className = 'popular-searches-container';
-
-        const title = document.createElement('h3');
-        title.textContent = 'חיפושים נפוצים';
-        title.className = 'font-bold';
-        container.appendChild(title);
-
-        const buttonContainer = document.createElement('div');
-        buttonContainer.className = 'popular-search-buttons';
-
-        popularSearches.forEach(searchQuery => {
-          const button = document.createElement('button');
-          button.textContent = searchQuery;
-          button.className = 'popular-search-button';
-          button.addEventListener('click', () => {
-            searchInput.value = searchQuery;
-            safeGtag('popular_search', { query: searchQuery });
-            handleSearchInput({ immediate: true, push: true });
-          });
-          buttonContainer.appendChild(button);
-        });
-
-        container.appendChild(buttonContainer);
-        resultsContainer.appendChild(container);
       }
 
       // --- כרטיסי אתרים ---
@@ -4556,8 +4407,7 @@
           resetProductSearch();
           currentSearchQuery = '';
           resultsContainer.innerHTML = '';
-          displayPopularSearches();
-          renderRecentProductSearches();
+          renderSuggestions();
           updateBrowseSectionsVisibility();
           updateUrlWithSearchQuery('', { push });
           if (clearSearch) clearSearch.style.display = 'none';
@@ -4577,8 +4427,7 @@
 
       function initializeSearch() {
         checkAndLogSource();
-        renderCategories();
-        renderRecentProductSearches();
+        renderSuggestions();
 
         // כניסה מקישור (?query=...&pid=...): התוצאות נטענות מיד, בלי אנימציית הקלדה,
         // וההצעות של pid נטענות במקביל לחיפוש. search=true מקישורים ישנים כבר לא נדרש
@@ -4588,8 +4437,6 @@
         if (queryParam) {
           searchInput.value = queryParam;
           handleSearchInput({ immediate: true });
-        } else {
-          displayPopularSearches();
         }
         if (pendingPid) openOffersPanelById(pendingPid, { push: false, focus: false });
 
