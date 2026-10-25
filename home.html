@@ -41,6 +41,34 @@
     </style>
 </head>
 <body class="bg-gray-100">
+    <!-- SROK banner: iPhone / iPad only -->
+    <div id="srok-banner" class="bg-yellow-400 text-gray-900 px-4 py-3" hidden>
+        <div class="container mx-auto flex items-start gap-3">
+            <div class="flex-1 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                <div class="flex-1">
+                    <p class="font-bold text-lg leading-tight">באייפון? יש לנו גרסה בשבילך 📱</p>
+                    <p class="text-sm mt-1">SROK – אותו חיסכון, בתוך Safari. משווה מחירים וקופונים אוטומטית.</p>
+                </div>
+                <a id="srok-banner-cta" href="https://apps.apple.com/app/id6747339283"
+                   class="bg-green-600 text-white px-4 py-2 rounded-full font-bold hover:bg-green-700 transition duration-300 text-center self-start sm:self-auto whitespace-nowrap">
+                    להורדה חינם ב-App Store
+                </a>
+            </div>
+            <button id="srok-banner-close" class="text-2xl leading-none px-1 focus:outline-none" aria-label="סגירה">&times;</button>
+        </div>
+    </div>
+    <script>
+        // iPhone / iPod by UA; iPadOS reports itself as MacIntel with touch points
+        window.isIOSDevice = /iPhone|iPod|iPad/.test(navigator.userAgent) ||
+            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        (function () {
+            var dismissed = false;
+            try { dismissed = localStorage.getItem('srokBannerDismissed') === '1'; } catch (e) {}
+            if (window.isIOSDevice && !dismissed) {
+                document.getElementById('srok-banner').hidden = false;
+            }
+        })();
+    </script>
     <header class="bg-green-600 text-white p-4 sticky top-0 z-50">
         <div class="container mx-auto flex flex-wrap justify-between items-center">
             <div class="flex items-center w-full sm:w-auto justify-between">
@@ -443,6 +471,25 @@
                 });
             });
         });
+
+        // SROK banner (iOS only)
+        if (window.isIOSDevice) {
+            const srokUrl = 'https://apps.apple.com/app/id6747339283';
+            document.getElementById('srok-banner-cta').addEventListener('click', () => {
+                trackEvent('srok_banner_click', { placement: 'banner' });
+            });
+            document.getElementById('srok-banner-close').addEventListener('click', () => {
+                document.getElementById('srok-banner').hidden = true;
+                try { localStorage.setItem('srokBannerDismissed', '1'); } catch (e) {}
+                trackEvent('srok_banner_dismiss');
+            });
+            // Chrome extension can't be installed on iOS: point its CTAs at SROK instead
+            document.querySelectorAll('a[href*="chromewebstore.google.com"]').forEach(link => {
+                link.href = srokUrl;
+                link.textContent = 'הורידו את SROK בחינם';
+                link.onclick = () => trackEvent('srok_banner_click', { placement: link.closest('header') ? 'header' : 'hero' });
+            });
+        }
         </script>
     <style>
         #nav-menu {
