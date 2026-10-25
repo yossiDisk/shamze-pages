@@ -1318,6 +1318,75 @@
       z-index: 2;
     }
 
+    /* ===== חיפוש מוצרים במסך אחד: התאמות + פאנל הצעות ===== */
+    #searchInput::-webkit-search-cancel-button { -webkit-appearance: none; display: none; }
+    #clearSearch { display: none; background: none; border: 0; width: 44px; height: 44px; font-size: 16px; }
+
+    .product-section { margin-top: 16px; }
+    .product-section-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .product-status { color: #64748b; font-size: 14px; min-height: 20px; }
+    .product-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; }
+    .product-layout .comparison-result { margin-top: 10px; }
+
+    .comparison-item[role="option"] { cursor: pointer; }
+    .comparison-item[aria-selected="true"] { border: 2px solid var(--accent-green); background: var(--light-green); }
+    .comparison-item:focus-visible, .offer-row:focus-visible, .chip:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+    .price-note { display: block; font-size: 11px; color: #64748b; font-weight: 500; }
+
+    .acc-group-head { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; color: #64748b; font-size: 13px; }
+    .link-btn { background: none; border: 0; color: #2563eb; cursor: pointer; font-size: 13px; min-height: 44px; padding: 0 6px; font-family: inherit; }
+
+    .product-msg { background: #fff; border-radius: var(--card-radius); padding: 24px; text-align: center; color: #64748b; margin-top: 10px; }
+    .product-msg .chips-row { justify-content: center; }
+    .btn-primary, .btn-secondary { border: 0; border-radius: 12px; padding: 10px 18px; font-size: 15px; font-weight: 700; cursor: pointer; min-height: 44px; font-family: inherit; text-decoration: none; display: inline-block; }
+    .btn-primary { background: var(--primary-green); color: #fff; }
+    .btn-secondary { background: #e5e7eb; color: #1f2937; }
+
+    .sk { background: linear-gradient(90deg, #eceff3 25%, #f7f8fa 37%, #eceff3 63%); background-size: 400% 100%; animation: sk-shimmer 1.3s infinite; border-radius: 8px; display: block; }
+    @keyframes sk-shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+
+    .offers-panel { background: #fff; border-radius: var(--card-radius); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); padding: 16px; display: none; text-align: right; }
+    .offers-panel.open { display: block; }
+    .offers-panel:focus { outline: none; }
+    .offers-scrim, .sheet-grab { display: none; }
+    @media (min-width: 900px) {
+      .product-layout.has-sel { grid-template-columns: minmax(0, 1fr) 420px; }
+      .offers-panel { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow: auto; margin-top: 10px; }
+    }
+    @media (max-width: 899px) {
+      .offers-panel { position: fixed; inset: auto 0 0 0; max-height: 85vh; overflow: auto; border-radius: 20px 20px 0 0; z-index: 1000; transform: translateY(100%); transition: transform .25s ease; display: block; visibility: hidden; padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+      .offers-panel.open { transform: none; visibility: visible; }
+      .offers-scrim.open { display: block; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 999; }
+      .sheet-grab { display: block; width: 44px; height: 5px; border-radius: 3px; background: #d1d5db; margin: 0 auto 10px; }
+    }
+
+    .panel-head { display: flex; gap: 12px; align-items: flex-start; }
+    .panel-head img { width: 80px; height: 80px; object-fit: contain; border-radius: 12px; background: #f8fafc; flex: none; }
+    .panel-head h2 { font-size: 16px; font-weight: 700; margin: 0 0 4px; line-height: 1.35; }
+    .panel-head .panel-sub { color: #64748b; font-size: 13px; }
+    .panel-close { margin-inline-start: auto; border: 0; background: #f3f4f6; border-radius: 50%; width: 44px; height: 44px; font-size: 16px; cursor: pointer; flex: none; }
+    .best-offer { background: var(--light-green); border: 1px solid #bbf7d0; border-radius: 12px; padding: 10px 12px; margin: 12px 0; font-size: 14px; }
+    .best-offer b { font-size: 20px; color: var(--primary-green); }
+    .best-offer .save b { font-size: 15px; }
+    .offers-meta { font-size: 13px; color: #64748b; }
+    .offer-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
+    .offer-row { display: flex; align-items: center; gap: 10px; border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px; text-decoration: none; color: inherit; min-height: 56px; background: #fff; }
+    .offer-row:hover { border-color: var(--accent-green); }
+    .offer-row.cheapest { border: 2px solid var(--accent-green); background: var(--light-green); }
+    .offer-row img { width: 20px; height: 20px; flex: none; }
+    .offer-row .m { flex: 1; min-width: 0; font-weight: 600; font-size: 15px; }
+    .offer-row .m small { display: block; font-weight: 400; color: #64748b; font-size: 12px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .offer-row .p { font-weight: 800; font-size: 16px; flex: none; }
+    .offer-row .go { background: var(--primary-green); color: #fff; border-radius: 10px; padding: 8px 12px; font-size: 14px; font-weight: 700; white-space: nowrap; flex: none; }
+    .offer-tag { display: inline-block; background: #fef3c7; color: #92400e; border-radius: 6px; font-size: 11px; padding: 2px 6px; margin-inline-start: 6px; font-weight: 700; }
+    .panel-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    @media (max-width: 480px) { .offer-row { flex-wrap: wrap; } .offer-row img { display: none; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .sk { animation: none; }
+      .offers-panel { transition: none; }
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .flatpickr-calendar.static.open {
@@ -1398,18 +1467,20 @@
 
         <div class="bg-white p-6 rounded-2xl shadow-md">
           <div class="max-w-md mx-auto">
-            <div class="relative">
-              <input type="text" id="searchInput"
+            <form id="searchForm" class="relative" role="search" autocomplete="off">
+              <label for="searchInput" class="sr-only">חיפוש קופון או מוצר</label>
+              <input type="search" id="searchInput" enterkeyhint="search"
                 class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                placeholder='לדוגמא "המשביר" או "אוזניות גיימינג"'>
-              <span id="clearSearch"
-                class="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600">✕</span>
+                placeholder='לדוגמא "המשביר" או "אוזניות גיימינג"'
+                role="combobox" aria-autocomplete="list" aria-controls="productList" aria-expanded="false">
+              <button type="button" id="clearSearch" aria-label="ניקוי החיפוש"
+                class="absolute left-0 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600">✕</button>
               <svg class="w-6 h-6 text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2" fill="none"
-                stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
               </svg>
-            </div>
+            </form>
           </div>
 
           <!-- חיפושים אחרונים של מוצרים -->
@@ -1429,15 +1500,26 @@
           <p>מחפש מוצרים...</p>
         </div>
 
-        <div id="sortContainer" class="sort-container mt-4" style="display: none;">
-          <select id="sortSelect" class="sort-select">
-            <option value="default">מיון לפי</option>
-            <option value="price-asc">מחיר: מהנמוך לגבוה</option>
-            <option value="price-desc">מחיר: מהגבוה לנמוך</option>
-          </select>
-        </div>
-
         <div id="resultsContainer" class="button-container"></div>
+
+        <!-- השוואת מחירים: רצה אוטומטית אחרי הקלדה (500ms) או Enter, וההצעות נפתחות בפאנל באותו עמוד -->
+        <section id="productSection" class="product-section" aria-label="השוואת מחירים" style="display: none;">
+          <div class="product-section-head">
+            <div id="productStatus" class="product-status" role="status" aria-live="polite"></div>
+            <div id="sortContainer" class="sort-container" style="display: none;">
+              <select id="sortSelect" class="sort-select" aria-label="מיון התוצאות">
+                <option value="default">מיון לפי</option>
+                <option value="price-asc">מחיר: מהנמוך לגבוה</option>
+                <option value="price-desc">מחיר: מהגבוה לנמוך</option>
+              </select>
+            </div>
+          </div>
+          <div id="productLayout" class="product-layout">
+            <div id="productList"></div>
+            <div id="offersScrim" class="offers-scrim"></div>
+            <aside id="offersPanel" class="offers-panel" role="dialog" aria-modal="false" aria-labelledby="offersPanelTitle" tabindex="-1"></aside>
+          </div>
+        </section>
 
         <div id="socialLinksContainer" class="mt-4 mb-4 text-center" style="display: none;">
           <p class="text-gray-700 mb-2 font-bold">הצטרפו לעדכוני קופונים:</p>
@@ -1463,23 +1545,6 @@
           </div>
         </div>
 
-        <div id="compareButtonContainer" class="mt-6 text-center" style="display: none;">
-          <div id="estimatedPriceContainer" class="mb-4" style="display: none;">
-            <input type="number" id="estimatedPrice"
-              class="w-48 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
-              placeholder="הכנס מחיר משוער">
-          </div>
-          <button id="compareButton"
-            class="bg-green-500 text-white px-6 py-3 rounded-full font-bold hover:bg-green-600 transition duration-300 inline-flex items-center">
-            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
-              </path>
-            </svg>
-            השווה מחירים
-          </button>
-        </div>
       </div>
 
       <!-- תוכן טאב טיסות -->
@@ -2033,10 +2098,15 @@
       // ============================================================
       const searchInput = document.getElementById('searchInput');
       const clearSearch = document.getElementById('clearSearch');
+      const searchForm = document.getElementById('searchForm');
       const loadingContainer = document.getElementById('loadingContainer');
-      const compareButtonContainer = document.getElementById('compareButtonContainer');
-      const compareButton = document.getElementById('compareButton');
       const resultsContainer = document.getElementById('resultsContainer');
+      const productSection = document.getElementById('productSection');
+      const productLayout = document.getElementById('productLayout');
+      const productList = document.getElementById('productList');
+      const productStatus = document.getElementById('productStatus');
+      const offersPanel = document.getElementById('offersPanel');
+      const offersScrim = document.getElementById('offersScrim');
       const sortContainer = document.getElementById('sortContainer');
       const sortSelect = document.getElementById('sortSelect');
 
@@ -2314,6 +2384,14 @@
         if (hasFlightParams()) {
           switchToTab('flights');
           loadCitiesData().then(() => { loadFlightParamsFromUrl(); });
+          return;
+        }
+
+        // קישור ישיר לטאב: cupons.html?tab=electricity (או ?tab=חשמל)
+        const tab = getTabFromUrl();
+        if (tab) {
+          activateTab(tab);
+          safeGtag('tab_deeplink', { tab: tab });
         }
       }
 
@@ -2361,19 +2439,46 @@
         if (content) content.classList.add('active');
       }
 
+      // שמות שאפשר לשים ב-?tab= (באנגלית או בעברית)
+      const TAB_ALIASES = {
+        products: 'products', coupons: 'products', 'מוצרים': 'products', 'קופונים': 'products',
+        flights: 'flights', 'טיסות': 'flights',
+        hotels: 'hotels', 'מלונות': 'hotels',
+        electricity: 'electricity', electric: 'electricity', 'חשמל': 'electricity'
+      };
+
+      function getTabFromUrl() {
+        const tab = TAB_ALIASES[(getUrlParameter('tab') || '').trim().toLowerCase()] || '';
+        if (tab === 'hotels' && !ENABLE_HOTELS_TAB) return '';
+        return tab;
+      }
+
+      function activateTab(tabName) {
+        switchToTab(tabName);
+
+        if ((tabName === 'flights' || tabName === 'hotels') && citiesData.length === 0) {
+          loadCitiesData().then(() => {
+            if (tabName === 'flights') displayRecentSearches();
+          });
+        } else if (tabName === 'flights') {
+          displayRecentSearches();
+        }
+      }
+
+      // כתובת הדף משתקפת בטאב הפתוח, כך שאפשר להעתיק אותה ולשתף ישירות
+      function updateUrlForTab(tabName) {
+        const newurl = window.location.pathname + (tabName === 'products' ? '' : '?tab=' + tabName);
+        if (newurl === window.location.pathname + window.location.search) return;
+        try { window.history.pushState({ tab: tabName }, '', newurl); } catch (e) { }
+      }
+
       document.querySelectorAll('.tab-button').forEach(button => {
         button.addEventListener('click', () => {
           const tabName = button.dataset.tab;
-          switchToTab(tabName);
+          // רק במעבר לטאב אחר - לחיצה על הטאב הפתוח לא מוחקת חיפוש קיים מה-URL
+          if (!button.classList.contains('active')) updateUrlForTab(tabName);
+          activateTab(tabName);
           safeGtag('tab_switch', { tab: tabName });
-
-          if ((tabName === 'flights' || tabName === 'hotels') && citiesData.length === 0) {
-            loadCitiesData().then(() => {
-              if (tabName === 'flights') displayRecentSearches();
-            });
-          } else if (tabName === 'flights') {
-            displayRecentSearches();
-          }
         });
       });
 
@@ -2383,6 +2488,7 @@
       if (elecPromo) {
         const goToElectricity = () => {
           switchToTab('electricity');
+          updateUrlForTab('electricity');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         };
         elecPromo.addEventListener('click', goToElectricity);
@@ -3279,33 +3385,26 @@
         }
       }
 
-      function updateUrlWithSearchQuery(query) {
-        if (history.pushState) {
-          var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?query=' + encodeURIComponent(query);
-          window.history.pushState({ path: newurl }, '', newurl);
-        }
-      }
-
-      function animateTyping(text, callback, index = 0) {
-        if (index < text.length) {
-          searchInput.value += text[index];
-          setTimeout(() => animateTyping(text, callback, index + 1), 100);
-        } else {
-          search(text);
-          if (callback) callback();
-        }
+      // בהקלדה - replaceState (כדי ש"חזרה" לא תחזור אות אחרי אות).
+      // pushState רק ב-Enter, בבחירת מוצר ובסגירת הפאנל.
+      // ב-URL נשמרים רק query ו-pid (בלי product_token), כך שקישור משותף קצר ועובד
+      function updateUrlWithSearchQuery(query, { push = false, pid = null } = {}) {
+        const params = new URLSearchParams();
+        if (query) params.set('query', query);
+        if (pid) params.set('pid', pid);
+        const qs = params.toString();
+        const newurl = window.location.pathname + (qs ? '?' + qs : '');
+        if (newurl === window.location.pathname + window.location.search) return;
+        try {
+          window.history[push ? 'pushState' : 'replaceState']({ query, pid }, '', newurl);
+        } catch (e) { }
       }
 
       function showLoading() { loadingContainer.style.display = 'block'; }
       function hideLoading() { loadingContainer.style.display = 'none'; }
 
-      function updateCompareButton(query) {
-        if (query.trim()) {
-          compareButton.innerHTML = `🔎 השוואת מחירים עבור "${escapeHtml(query)}"`;
-          compareButtonContainer.style.display = 'block';
-        } else {
-          compareButtonContainer.style.display = 'none';
-        }
+      function isMobileViewport() {
+        return window.matchMedia('(max-width: 899px)').matches;
       }
 
       // --- הצגה/הסתרה של אזורי הגלישה (חיפושים אחרונים + קטגוריות) ---
@@ -3397,7 +3496,7 @@
             chip.textContent = q;
             chip.addEventListener('click', () => {
               searchInput.value = q;
-              handleSearchInput();
+              handleSearchInput({ immediate: true, push: true });
               safeGtag('recent_search_click', { query: q });
             });
             chips.appendChild(chip);
@@ -3461,8 +3560,8 @@
         if (clearSearch) clearSearch.style.display = 'none';
         updateBrowseSectionsVisibility();
         currentSearchQuery = '';
-        compareButtonContainer.style.display = 'none';
-        sortContainer.style.display = 'none';
+        clearTimeout(productSearchTimer);
+        resetProductSearch();
 
         // מציגים רק אתרים שיש לנו קופון/הטבה עבורם
         const sites = allSites.filter(s => hasCouponInfo(s) && (s.siteCategory || '').trim() === category);
@@ -3478,13 +3577,14 @@
       }
 
       // --- חיפוש ---
+      // חיפוש הקופונים מקומי ומיידי ורץ על כל הקשה. ה-URL, אירוע GA וחיפוש
+      // המוצרים רצים רק אחרי השהיה (commitSearch)
       function search(query) {
         currentSearchQuery = query;
         activeCategory = null;
         document.querySelectorAll('#categoryChips .chip').forEach(c => c.classList.remove('active'));
         showLoading();
         resultsContainer.innerHTML = '';
-        updateUrlWithSearchQuery(query);
 
         if (query.trim() === '') {
           cancelPendingRecentSave();
@@ -3517,10 +3617,7 @@
 
           hideLoading();
           displaySearchResults(filteredSites);
-          updateCompareButton(query);
         }
-
-        safeGtag('Search', { query: query });
       }
 
       function searchByUrl(url) {
@@ -3528,7 +3625,6 @@
 
         if (matchingSite) {
           displaySearchResults([matchingSite], true);
-          updateCompareButton(matchingSite.siteName);
         } else {
           displayNoCouponMessage(url);
         }
@@ -3596,7 +3692,7 @@
           button.addEventListener('click', () => {
             searchInput.value = searchQuery;
             safeGtag('popular_search', { query: searchQuery });
-            handleSearchInput();
+            handleSearchInput({ immediate: true, push: true });
           });
           buttonContainer.appendChild(button);
         });
@@ -3667,9 +3763,7 @@
       function displaySearchResults(results, isUrlSearch = false) {
         resultsContainer.innerHTML = '';
         if (!results.length) {
-          resultsContainer.innerHTML = `
-            <p class="text-gray-600">אין לנו כרגע קופון לחיפוש הזה — אבל אפשר להשוות מחירים למוצר עצמו 👇</p>
-          `;
+          // אין קופון - השוואת המחירים למוצר מוצגת מתחת (productSection)
           const socialLinksContainer = document.getElementById('socialLinksContainer');
           socialLinksContainer.style.display = 'none';
           return;
@@ -3742,137 +3836,588 @@
       }
 
       // --- השוואת מחירים למוצרים ---
-      function performPriceComparison(query) {
-        showLoading();
-        sortContainer.style.display = 'none';
+      // החיפוש רץ מעצמו 500ms אחרי ההקלדה (או מיד ב-Enter). קריאה קודמת מבוטלת
+      // (AbortController) ותוצאות נשמרות במטמון לפי שאילתה.
+      // לחיצה על מוצר פותחת את כל המחירים בפאנל באותו עמוד, במקום לשונית חדשה
+      // אל redirectPages/urlNotFound.html (שנשאר בשביל התוסף וקישורים ישנים)
+      const PRODUCT_SEARCH_API = 'https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search';
+      const OFFERS_API = 'https://vpfi5d6dw9.execute-api.il-central-1.amazonaws.com/default/getDirectShoppingLink';
+      const PRODUCT_SEARCH_DELAY = 500;
+      const PRODUCT_POPULAR = ['Dyson V15', 'iPhone 17 Pro', 'AirPods Pro', 'PlayStation 5', 'מכונת קפה'];
 
-        let urlString = `https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search?query=${encodeURIComponent(query)}&items=20&wideSearch=true`;
-
-        const estimatedPrice = document.getElementById('estimatedPrice').value;
-        if (estimatedPrice) {
-          const minPrice = Math.floor(estimatedPrice * 0.5);
-          const maxPrice = Math.floor(estimatedPrice * 1.5);
-          urlString += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
-        }
-
-        fetch(urlString)
-          .then(response => response.json())
-          .then(data => {
-            hideLoading();
-            if (data.length === 0) {
-              resultsContainer.innerHTML = '<p>לא נמצאו תוצאות להשוואת מחירים</p>';
-            } else {
-              currentResults = data;
-              displayComparisonResults(data);
-              sortContainer.style.display = 'block';
-            }
-
-            safeGtag('price_comparison', {
-              query: query,
-              estimated_price: estimatedPrice || 'none'
-            });
-          })
-          .catch(error => {
-            console.error('Error:', error);
-            hideLoading();
-            resultsContainer.innerHTML = '<p>אירעה שגיאה בהשוואת המחירים</p>';
-          });
-      }
+      const productSearchCache = new Map();
+      const offersCache = new Map();
+      let productSearchTimer = null;
+      let productSearchCtrl = null;
+      let productQuery = '';
+      let productMatches = [];      // ראשיים + אביזרים, לפי האינדקס שב-data-i
+      let originalMainMatches = [];
+      let accessoryMatches = [];
+      let selectedProduct = null;
+      let panelReturnFocus = null;
+      let pendingPid = null;        // pid מקישור משותף, עד שההתאמות נטענות
 
       function parsePriceNumber(priceStr) {
         return parseFloat(String(priceStr || '').replace(/[^\d.]/g, '')) || 0;
+      }
+
+      function formatIls(n) {
+        return '₪' + Number(n).toLocaleString('he-IL', { maximumFractionDigits: 2 });
       }
 
       function productFavId(product) {
         return `product|${product.name}|${product.site}`;
       }
 
-      function displayComparisonResults(results) {
-        resultsContainer.innerHTML = '<div class="comparison-result"></div>';
-        const comparisonContainer = resultsContainer.querySelector('.comparison-result');
+      function productId(product) {
+        if (!product) return '';
+        if (product.LinkParams && product.LinkParams.value) return String(product.LinkParams.value);
+        try { return new URL(product.urlAff).searchParams.get('product_id') || ''; } catch (e) { return ''; }
+      }
 
-        const prices = results.map(p => parsePriceNumber(p.price)).filter(p => p > 0);
+      // שאילתה שהיא בדיוק שם של אתר עם קופון (למשל "המשביר") - לא מחפשים מוצרים
+      function isExactSiteName(query) {
+        const q = normalizeSiteName(query);
+        return allSites.some(site => site && hasCouponInfo(site) && normalizeSiteName(site.siteName) === q);
+      }
+
+      function shouldSearchProducts(query) {
+        return query.length >= 2 && !query.toLowerCase().startsWith('http') && !isExactSiteName(query);
+      }
+
+      function scheduleProductSearch(query) {
+        clearTimeout(productSearchTimer);
+        productSearchTimer = setTimeout(() => commitSearch(query), PRODUCT_SEARCH_DELAY);
+      }
+
+      // נקרא אחרי שהמשתמש סיים להקליד / לחץ Enter: מעדכן URL, שולח GA ומפעיל חיפוש מוצרים
+      function commitSearch(query, { push = false } = {}) {
+        clearTimeout(productSearchTimer);
+        query = query.trim();
+        if (selectedProduct && !pendingPid && query !== productQuery) closeOffersPanel({ updateUrl: false });
+        updateUrlWithSearchQuery(query, { push, pid: pendingPid || (selectedProduct && productId(selectedProduct)) });
+        if (!query) return;
+        safeGtag('Search', { query: query });
+
+        if (shouldSearchProducts(query)) {
+          runProductSearch(query);
+        } else {
+          resetProductSearch();
+        }
+      }
+
+      async function runProductSearch(query) {
+        if (productSearchCtrl) productSearchCtrl.abort();
+        productQuery = query;
+        productSection.style.display = 'block';
+
+        if (productSearchCache.has(query)) {
+          renderProductMatches(query, productSearchCache.get(query));
+          return;
+        }
+
+        renderProductSkeleton(query);
+        productSearchCtrl = new AbortController();
+
+        try {
+          const url = `${PRODUCT_SEARCH_API}?query=${encodeURIComponent(query)}&items=20&wideSearch=true`;
+          const response = await fetch(url, { signal: productSearchCtrl.signal });
+          if (!response.ok) throw new Error('HTTP ' + response.status);
+          const data = await response.json();
+          const results = Array.isArray(data) ? data : [];
+          productSearchCache.set(query, results);
+          if (query !== productQuery) return;
+          renderProductMatches(query, results);
+          safeGtag('price_comparison', { query: query, results_count: results.length });
+        } catch (error) {
+          if (error.name === 'AbortError') return;
+          console.error('Error:', error);
+          if (query !== productQuery) return;
+          renderProductError(query);
+        }
+      }
+
+      function resetProductSearch() {
+        if (productSearchCtrl) productSearchCtrl.abort();
+        productQuery = '';
+        productMatches = [];
+        originalMainMatches = [];
+        accessoryMatches = [];
+        currentResults = [];
+        closeOffersPanel({ updateUrl: false });
+        productList.innerHTML = '';
+        setProductStatus('');
+        productSection.style.display = 'none';
+        sortContainer.style.display = 'none';
+        searchInput.setAttribute('aria-expanded', 'false');
+      }
+
+      function setProductStatus(text) {
+        productStatus.textContent = text;
+      }
+
+      // פריט נחשב אביזר אם יש בשם מילת מפתח, או שהמחיר שלו נמוך בהרבה מהחציון
+      // (מגן ב-₪61 בחיפוש אייפון). כך תג "המחיר הזול ביותר" לא נופל על אביזר
+      const ACCESSORY_RE = /\b(case|cover|filter|charger|cable|strap|holder|rack|spare|replacement|compatible|for)\b|כיסוי|מגן|מטען|כבל|רצועה|מתקן|פילטר|מסנן|תואם/i;
+
+      function classifyResults(results) {
+        const prices = results.map(r => parsePriceNumber(r.price)).filter(Boolean).sort((a, b) => a - b);
+        const median = prices.length ? prices[Math.floor(prices.length / 2)] : 0;
+        const max = prices.length ? prices[prices.length - 1] : 0;
+        const main = [], acc = [], seen = new Set();
+
+        results.forEach(r => {
+          const id = productId(r) || `${r.name}|${r.site}`;
+          if (seen.has(id)) return;
+          seen.add(id);
+          const price = parsePriceNumber(r.price);
+          const isAccessory = ACCESSORY_RE.test(r.name || '') ||
+            (median && price && price < median * 0.35) ||
+            (max && price && price < max * 0.1);
+          (isAccessory ? acc : main).push(r);
+        });
+
+        return { main, acc };
+      }
+
+      function renderProductSkeleton(query) {
+        setProductStatus(`מחפשים מחירים ל"${query}"… (בדרך כלל 3–4 שניות)`);
+        sortContainer.style.display = 'none';
+        productList.setAttribute('aria-busy', 'true');
+        productList.innerHTML = `<div class="comparison-result" aria-hidden="true">${Array.from({ length: 4 }).map(() => `
+          <div class="comparison-item">
+            <span class="sk" style="height:150px"></span>
+            <span class="sk" style="height:14px;width:85%"></span>
+            <span class="sk" style="height:14px;width:55%"></span>
+            <span class="sk" style="height:36px;margin-top:auto"></span>
+          </div>`).join('')}</div>`;
+      }
+
+      function popularChipsHTML() {
+        return `<div class="chips-row">${PRODUCT_POPULAR.slice(0, 4).map(p =>
+          `<button type="button" class="chip" data-q="${escapeHtml(p)}">${escapeHtml(p)}</button>`).join('')}</div>`;
+      }
+
+      function renderProductError(query) {
+        productList.setAttribute('aria-busy', 'false');
+        productList.innerHTML = `
+          <div class="product-msg" role="alert">
+            לא הצלחנו לטעון את השוואת המחירים. בדקו את החיבור ונסו שוב.<br>
+            <button type="button" class="btn-primary" id="productRetry" style="margin-top:10px">נסו שוב</button>
+          </div>`;
+        setProductStatus('');
+        document.getElementById('productRetry').addEventListener('click', () => runProductSearch(query));
+      }
+
+      function renderProductMatches(query, results) {
+        productList.setAttribute('aria-busy', 'false');
+        const { main, acc } = classifyResults(results);
+        originalMainMatches = main;
+        accessoryMatches = acc;
+        sortSelect.value = 'default';
+
+        if (!main.length && !acc.length) {
+          productMatches = [];
+          currentResults = [];
+          searchInput.setAttribute('aria-expanded', 'false');
+          sortContainer.style.display = 'none';
+          setProductStatus('');
+          productList.innerHTML = `
+            <div class="product-msg">
+              לא מצאנו מחירים ל"<b>${escapeHtml(query)}</b>". נסו שם קצר יותר או דגם באנגלית.
+              ${popularChipsHTML()}
+            </div>`;
+          return;
+        }
+
+        renderProductGrids(main, acc);
+        setProductStatus(`נמצאו ${main.length} מוצרים${acc.length ? ` ועוד ${acc.length} אביזרים` : ''}. בחרו מוצר כדי לראות את כל המחירים.`);
+
+        // קישור משותף: מסמנים את המוצר שב-URL, ומעדכנים את הפאנל בפרטים המלאים שלו
+        const wanted = pendingPid;
+        pendingPid = null;
+        if (wanted) {
+          const match = productMatches.find(p => productId(p) === wanted);
+          if (match && selectedProduct && selectedProduct.shared) openOffersPanel(match, { push: false, focus: false });
+          else markSelectedCard();
+        }
+      }
+
+      function renderProductGrids(main, acc) {
+        productMatches = [...main, ...acc];
+        currentResults = main;
+        searchInput.setAttribute('aria-expanded', productMatches.length ? 'true' : 'false');
+        sortContainer.style.display = main.length > 1 ? 'block' : 'none';
+
+        // תג "המחיר הזול ביותר" מחושב רק על ההתאמות הראשיות
+        const prices = main.map(p => parsePriceNumber(p.price)).filter(p => p > 0);
         const minPrice = prices.length ? Math.min(...prices) : 0;
 
-        results.forEach(product => {
-          const productDiv = document.createElement('div');
-          productDiv.className = 'comparison-item';
+        const accOpen = !!document.getElementById('accList') && !document.getElementById('accList').hidden;
+        let html = `<div class="comparison-result" id="matchesList" role="listbox" aria-label="מוצרים שנמצאו">${main.map((p, i) => productCardHTML(p, i, minPrice > 0 && parsePriceNumber(p.price) === minPrice)).join('')}</div>`;
+        if (acc.length) {
+          html += `
+            <div class="acc-group-head">
+              <span>אביזרים ומוצרים קשורים (${acc.length})</span>
+              <button type="button" class="link-btn" id="accToggle" aria-expanded="${accOpen}" aria-controls="accList">${accOpen ? 'הסתר' : 'הצג'}</button>
+            </div>
+            <div class="comparison-result" id="accList" role="listbox" aria-label="אביזרים" ${accOpen ? '' : 'hidden'}>${acc.map((p, j) => productCardHTML(p, main.length + j, false)).join('')}</div>`;
+        }
+        productList.innerHTML = html;
 
-          const siteInfo = resolveProductSiteInfo(product);
-          const productNumPrice = parsePriceNumber(product.price);
-          const isBest = minPrice > 0 && productNumPrice === minPrice;
-          const favId = productFavId(product);
-          const faved = isFavorite(favId);
-          const productUrl = `${product.urlAff}${product.product_token ? `&product_token=${product.product_token}` : ''}`;
+        const accToggle = document.getElementById('accToggle');
+        if (accToggle) {
+          accToggle.addEventListener('click', () => {
+            const list = document.getElementById('accList');
+            list.hidden = !list.hidden;
+            accToggle.textContent = list.hidden ? 'הצג' : 'הסתר';
+            accToggle.setAttribute('aria-expanded', String(!list.hidden));
+          });
+        }
 
-          let productContent = `
+        productMatches.forEach((p, i) => {
+          const cached = offersCache.get(productId(p));
+          if (cached) cached.then(offers => updateCardFromOffers(p, offers)).catch(() => { });
+        });
+        markSelectedCard();
+
+        const socialLinksContainer = document.getElementById('socialLinksContainer');
+        socialLinksContainer.style.display = 'block';
+      }
+
+      function productCardHTML(product, index, isBest) {
+        const siteInfo = resolveProductSiteInfo(product);
+        const favId = productFavId(product);
+        const faved = isFavorite(favId);
+
+        let html = `
+          <div class="comparison-item" role="option" tabindex="0" aria-selected="false" data-i="${index}" data-pid="${escapeHtml(productId(product))}">
             ${isBest ? '<div class="best-price-ribbon">🔥 המחיר הזול ביותר</div>' : ''}
             <div class="product-img-wrap">
-              ${product.image ? `<img src="${product.image}" alt="${escapeHtml(product.name)}" loading="lazy" onerror="this.style.display='none'">` : '<span style="font-size: 40px;">🛍️</span>'}
+              ${product.image ? `<img src="${escapeHtml(product.image)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '<span style="font-size: 40px;">🛍️</span>'}
             </div>
             <h3>${escapeHtml(product.name)}</h3>
             <div class="comparison-price-row">
-              <span class="price-pill">${escapeHtml(product.price)}</span>
-              <button class="fav-btn ${faved ? 'faved' : ''}" data-fav-id="${favId}" title="שמירה למועדפים">${faved ? '❤️' : '🤍'}</button>
+              <span><span class="price-note">בחנות זו</span><span class="price-pill">${escapeHtml(product.price)}</span></span>
+              <button type="button" class="fav-btn ${faved ? 'faved' : ''}" data-fav-id="${escapeHtml(favId)}" title="שמירה למועדפים" aria-label="שמירה למועדפים">${faved ? '❤️' : '🤍'}</button>
             </div>
-            <span class="comparison-site-name">🏬 ${escapeHtml(product.site)}</span>
-          `;
+            <span class="comparison-site-name">🏬 ${escapeHtml(product.site)}</span>`;
 
-          if (siteInfo && siteInfo.cupon && siteInfo.cupon !== "") {
-            productContent += `
-              <div class="coupon-code-box" style="font-size: 13px;">
-                <span>${escapeHtml(siteInfo.cupon)}</span>
-                <button class="coupon-share-btn comparison-coupon-share" type="button" aria-label="שיתוף ההטבה">${SHARE_ICON_SVG}</button>
-              </div>
-              ${siteInfo.cuponDetails ? `<p class="site-coupon-details">${escapeHtml(siteInfo.cuponDetails)}</p>` : ''}
-            `;
+        if (siteInfo && siteInfo.cupon && siteInfo.cupon !== "") {
+          html += `
+            <div class="coupon-code-box" style="font-size: 13px;">
+              <span>${escapeHtml(siteInfo.cupon)}</span>
+              <button class="coupon-share-btn comparison-coupon-share" type="button" aria-label="שיתוף ההטבה">${SHARE_ICON_SVG}</button>
+            </div>
+            ${siteInfo.cuponDetails ? `<p class="site-coupon-details">${escapeHtml(siteInfo.cuponDetails)}</p>` : ''}`;
+        }
+
+        html += `<button type="button" class="site-go-btn" tabindex="-1">השוואת מחירים ›</button></div>`;
+        return html;
+      }
+
+      function productUrlFor(product) {
+        return `${product.urlAff}${product.product_token ? `&product_token=${product.product_token}` : ''}`;
+      }
+
+      // אחרי שההצעות נטענו (prefetch) - "בחנות זו" מתחלף ב"החל מ-₪X"
+      function updateCardFromOffers(product, offers) {
+        if (!offers || !offers.length) return;
+        const id = productId(product);
+        const card = id && productList.querySelector(`.comparison-item[data-pid="${CSS.escape(id)}"]`);
+        if (!card) return;
+        const listed = parsePriceNumber(product.price);
+        const min = offers[0].price;
+        const note = card.querySelector('.price-note');
+        if (note && listed && min < listed) note.textContent = `בחנות זו · החל מ-${formatIls(min)}`;
+      }
+
+      function markSelectedCard() {
+        const id = selectedProduct ? productId(selectedProduct) : '';
+        productList.querySelectorAll('.comparison-item[data-i]').forEach(card => {
+          card.setAttribute('aria-selected', String(!!id && card.dataset.pid === id));
+        });
+      }
+
+      function onProductListClick(e) {
+        const chip = e.target.closest('[data-q]');
+        if (chip) {
+          searchInput.value = chip.dataset.q;
+          handleSearchInput({ immediate: true, push: true });
+          safeGtag('popular_search', { query: chip.dataset.q });
+          return;
+        }
+
+        const card = e.target.closest('.comparison-item[data-i]');
+        if (!card) return;
+        const product = productMatches[+card.dataset.i];
+        if (!product) return;
+
+        if (e.target.closest('.fav-btn')) {
+          e.stopPropagation();
+          toggleFavorite({
+            id: productFavId(product),
+            type: 'product',
+            title: product.name,
+            subtitle: product.site,
+            price: product.price,
+            url: productUrlFor(product)
+          });
+          refreshVisibleFavButtons();
+          return;
+        }
+
+        if (e.target.closest('.comparison-coupon-share')) {
+          e.stopPropagation();
+          const siteInfo = resolveProductSiteInfo(product);
+          if (siteInfo) {
+            shareCoupon({
+              siteName: siteInfo.siteName || product.site,
+              coupon: siteInfo.cupon,
+              details: siteInfo.cuponDetails,
+              url: productUrlFor(product)
+            }, e);
           }
+          return;
+        }
 
-          productContent += `<button class="site-go-btn">עבור לאתר ›</button>`;
+        openOffersPanel(product);
+      }
 
-          productDiv.innerHTML = productContent;
+      // --- פאנל "כל המחירים" ---
+      function fetchOffers(product) {
+        const id = productId(product);
+        if (!id) return Promise.resolve([]);
+        if (offersCache.has(id)) return offersCache.get(id);
 
-          productDiv.querySelector('h3').addEventListener('click', () => {
-            goToProduct(productUrl, product.site, product.name);
+        const params = new URLSearchParams({ product_id: id, list: 'true' });
+        if (product.price) params.set('expectedPrice', product.price);
+        if (product.site) params.set('expectedMerchant', product.site);
+        if (product.product_token) params.set('product_token', product.product_token);
+
+        const promise = fetch(`${OFFERS_API}?${params.toString()}`)
+          .then(response => {
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+            return response.json();
+          })
+          .then(data => {
+            if (!data || data.status !== 'ok' || !Array.isArray(data.offers)) return [];
+            return data.offers
+              .map(o => Object.assign({}, o, { price: Number(o.price) }))
+              .filter(o => o.price > 0 && /^https?:\/\//i.test(String(o.link || '')))
+              .sort((a, b) => a.price - b.price);
+          })
+          .catch(error => {
+            offersCache.delete(id);
+            throw error;
           });
-          productDiv.querySelector('.product-img-wrap').addEventListener('click', () => {
-            goToProduct(productUrl, product.site, product.name);
-          });
-          productDiv.querySelector('.site-go-btn').addEventListener('click', () => {
-            goToProduct(productUrl, product.site, product.name);
-          });
 
-          const shareBtn = productDiv.querySelector('.comparison-coupon-share');
-          if (shareBtn && siteInfo) {
-            shareBtn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              shareCoupon({
-                siteName: siteInfo.siteName || product.site,
-                coupon: siteInfo.cupon,
-                details: siteInfo.cuponDetails,
-                url: productUrl
-              }, e);
+        offersCache.set(id, promise);
+        promise.then(offers => updateCardFromOffers(product, offers)).catch(() => { });
+        return promise;
+      }
+
+      function prefetchFromEvent(e) {
+        const card = e.target.closest && e.target.closest('.comparison-item[data-i]');
+        if (card && productMatches[+card.dataset.i]) fetchOffers(productMatches[+card.dataset.i]).catch(() => { });
+      }
+
+      function openOffersPanelById(id, opts) {
+        const known = productMatches.find(p => productId(p) === id);
+        openOffersPanel(known || { name: 'טוען מוצר…', shared: true, LinkParams: { value: id } }, opts);
+      }
+
+      async function openOffersPanel(product, { push = true, focus = true } = {}) {
+        const id = productId(product);
+        if (focus && !offersPanel.contains(document.activeElement)) panelReturnFocus = document.activeElement;
+        selectedProduct = product;
+        markSelectedCard();
+        productSection.style.display = 'block';
+        updateUrlWithSearchQuery(searchInput.value.trim(), { push, pid: id });
+
+        if (!product.shared) {
+          safeGtag('product_click', { site: product.site, product: product.name, query: currentSearchQuery });
+        }
+
+        offersPanel.innerHTML = `
+          <div class="sheet-grab" aria-hidden="true"></div>
+          <div class="panel-head">
+            ${product.image ? `<img src="${escapeHtml(product.image)}" alt="">` : ''}
+            <div>
+              <h2 id="offersPanelTitle">${escapeHtml(product.name)}</h2>
+              ${product.price ? `<div class="panel-sub">מחיר בתוצאות: ${escapeHtml(product.price)} · ${escapeHtml(product.site || '')}</div>` : ''}
+            </div>
+            <button type="button" class="panel-close" id="offersPanelClose" aria-label="סגירה">✕</button>
+          </div>
+          <div id="offersPanelBody" aria-live="polite" aria-busy="true">
+            <div class="best-offer"><span class="sk" style="height:22px;width:60%"></span></div>
+            <ul class="offer-list">${Array.from({ length: 3 }).map(() => `
+              <li class="offer-row"><span class="sk" style="height:16px;flex:1"></span><span class="sk" style="width:60px;height:16px"></span></li>`).join('')}</ul>
+            <p class="offers-meta" style="margin-top:8px">בודקים מחירים בחנויות…</p>
+          </div>`;
+
+        offersPanel.classList.add('open');
+        offersScrim.classList.add('open');
+        productLayout.classList.add('has-sel');
+        if (isMobileViewport()) document.body.style.overflow = 'hidden';
+        document.getElementById('offersPanelClose').addEventListener('click', () => closeOffersPanel());
+        if (focus) offersPanel.focus({ preventScroll: true });
+
+        try {
+          const offers = await fetchOffers(product);
+          if (selectedProduct !== product) return;
+          renderOffersInPanel(product, offers);
+        } catch (error) {
+          if (selectedProduct !== product) return;
+          safeGtag('offers_fetch_error', { product_id: id, error_message: error.message });
+          const body = document.getElementById('offersPanelBody');
+          body.setAttribute('aria-busy', 'false');
+          body.innerHTML = `
+            <div class="product-msg" role="alert">
+              לא הצלחנו לטעון את המחירים.<br>
+              <button type="button" class="btn-primary" id="offersRetry" style="margin-top:10px">נסו שוב</button>
+            </div>`;
+          document.getElementById('offersRetry').addEventListener('click', () => openOffersPanel(product, { push: false }));
+        }
+      }
+
+      function renderOffersInPanel(product, offers) {
+        const body = document.getElementById('offersPanelBody');
+        body.setAttribute('aria-busy', 'false');
+        const id = productId(product);
+
+        if (!offers.length) {
+          safeGtag('offers_empty', { product_id: id });
+          body.innerHTML = `
+            <div class="product-msg">
+              לא נמצאו כרגע חנויות נוספות למוצר הזה.<br>
+              ${product.urlAff ? `<a class="btn-primary" style="margin-top:10px" href="${escapeHtml(productUrlFor(product))}" target="_blank" rel="noopener">לחנות שבתוצאה ›</a>` : ''}
+            </div>`;
+          setProductStatus('לא נמצאו חנויות נוספות');
+          return;
+        }
+
+        // קישור משותף: הכותרת נלקחת מההצעה הראשונה
+        if (product.shared && offers[0].title) {
+          product.name = offers[0].title;
+          document.getElementById('offersPanelTitle').textContent = product.name;
+        }
+
+        const min = offers[0].price;
+        const max = offers[offers.length - 1].price;
+        const listed = parsePriceNumber(product.price);
+        const save = listed > min ? listed - min : (max > min ? max - min : 0);
+
+        body.innerHTML = `
+          <div class="best-offer">
+            הכי זול: <b>${formatIls(min)}</b> ב-${escapeHtml(offers[0].merchant || '')}
+            ${save ? `<div class="save" style="margin-top:4px">חוסכים עד <b>${formatIls(save)}</b> לעומת ${listed > min ? 'המחיר בתוצאה' : 'החנות היקרה'}</div>` : ''}
+          </div>
+          <div class="offers-meta">${offers.length} חנויות · ממוין מהזול ליקר</div>
+          <ul class="offer-list">${offers.map((o, k) => {
+            let host = '';
+            try { host = new URL(o.link).hostname.replace(/^www\./, ''); } catch (e) { }
+            return `<li><a class="offer-row ${k === 0 ? 'cheapest' : ''}" href="${escapeHtml(o.link)}" target="_blank" rel="noopener sponsored" data-merchant="${escapeHtml(o.merchant || '')}" data-price="${o.price}">
+              ${host ? `<img src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}" alt="">` : ''}
+              <span class="m">${escapeHtml(o.merchant || host || 'חנות')}${k === 0 ? '<span class="offer-tag">🔥 הכי זול</span>' : ''}<small>${escapeHtml(o.title || '')}</small></span>
+              <span class="p">${formatIls(o.price)}</span><span class="go">לחנות ›</span></a></li>`;
+          }).join('')}</ul>
+          <div class="panel-actions">
+            <button type="button" class="btn-secondary" id="offersShare">🔗 שיתוף</button>
+            <button type="button" class="btn-secondary" id="offersBack">→ חזרה לתוצאות</button>
+          </div>`;
+
+        body.querySelectorAll('.offer-row').forEach(link => {
+          link.addEventListener('click', () => {
+            safeGtag('offer_click', {
+              product_id: id,
+              merchant: link.dataset.merchant,
+              price: link.dataset.price,
+              query: currentSearchQuery
             });
-          }
-
-          productDiv.querySelector('.fav-btn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleFavorite({
-              id: favId,
-              type: 'product',
-              title: product.name,
-              subtitle: product.site,
-              price: product.price,
-              url: productUrl
-            });
-            refreshVisibleFavButtons();
           });
-
-          comparisonContainer.appendChild(productDiv);
         });
 
-        const socialLinksContainer = document.getElementById('socialLinksContainer');
-        socialLinksContainer.style.display = results.length > 0 ? 'block' : 'none';
+        document.getElementById('offersShare').addEventListener('click', async () => {
+          const url = window.location.href;
+          safeGtag('offers_share', { product_id: id });
+          try {
+            if (navigator.share) await navigator.share({ title: product.name, text: `${product.name} ב-${formatIls(min)}`, url });
+            else { await navigator.clipboard.writeText(url); setProductStatus('הקישור הועתק'); }
+          } catch (e) { }
+        });
+        document.getElementById('offersBack').addEventListener('click', () => closeOffersPanel());
+
+        setProductStatus(`${product.name}: ${offers.length} חנויות, הכי זול ${formatIls(min)}`);
+        safeGtag('offers_fetch_success', { product_id: id, offers_count: offers.length });
+      }
+
+      function closeOffersPanel({ updateUrl = true } = {}) {
+        if (!selectedProduct && !offersPanel.classList.contains('open')) return;
+        offersPanel.classList.remove('open');
+        offersScrim.classList.remove('open');
+        productLayout.classList.remove('has-sel');
+        document.body.style.overflow = '';
+        selectedProduct = null;
+        markSelectedCard();
+        if (updateUrl) updateUrlWithSearchQuery(searchInput.value.trim(), { push: true });
+        if (panelReturnFocus && document.contains(panelReturnFocus) && panelReturnFocus.focus) panelReturnFocus.focus();
+        panelReturnFocus = null;
+      }
+
+      // חצים ↑↓ בין ההתאמות, Enter/רווח לפתיחה, Esc לסגירת הפאנל
+      function onSearchKeydown(e) {
+        if (e.key === 'Escape' && offersPanel.classList.contains('open')) {
+          e.preventDefault();
+          closeOffersPanel();
+          return;
+        }
+
+        const inList = e.target.closest && e.target.closest('#productList');
+        if (e.target !== searchInput && !inList) return;
+
+        const card = inList && e.target.closest('.comparison-item[data-i]');
+        if (card && e.target === card && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          openOffersPanel(productMatches[+card.dataset.i]);
+          return;
+        }
+
+        if (!['ArrowDown', 'ArrowUp'].includes(e.key) || !productMatches.length) return;
+        const cards = [...productList.querySelectorAll('.comparison-item[data-i]')].filter(el => el.offsetParent);
+        if (!cards.length) return;
+        let k = cards.indexOf(card);
+        if (e.target === searchInput) {
+          if (e.key !== 'ArrowDown') return;
+          k = -1;
+        }
+        k = e.key === 'ArrowDown' ? Math.min(k + 1, cards.length - 1) : k - 1;
+        e.preventDefault();
+        if (k < 0) searchInput.focus(); else cards[k].focus();
+      }
+
+      function onPopState() {
+        if (hasFlightParams()) return;
+        const tab = getTabFromUrl();
+        if (tab && tab !== 'products') {
+          activateTab(tab);
+          return;
+        }
+        switchToTab('products');
+        const query = getUrlParameter('query');
+        const pid = getUrlParameter('pid');
+
+        if (searchInput.value.trim() !== query) {
+          pendingPid = pid || null;
+          closeOffersPanel({ updateUrl: false });
+          searchInput.value = query;
+          handleSearchInput({ immediate: true });
+          if (pid) openOffersPanelById(pid, { push: false });
+          return;
+        }
+
+        if (!pid) closeOffersPanel({ updateUrl: false });
+        else if (!selectedProduct || productId(selectedProduct) !== pid) openOffersPanelById(pid, { push: false });
       }
 
       function goToProduct(url, siteName, productName) {
@@ -4001,19 +4546,26 @@
         }
       }
 
-      function handleSearchInput() {
+      // immediate: Enter / לחיצה על צ'יפ / כניסה מקישור. אחרת חיפוש המוצרים
+      // מחכה 500ms מההקשה האחרונה
+      function handleSearchInput({ immediate = false, push = false } = {}) {
         const query = searchInput.value.trim();
         if (query === '') {
           cancelPendingRecentSave();
+          clearTimeout(productSearchTimer);
+          resetProductSearch();
+          currentSearchQuery = '';
           resultsContainer.innerHTML = '';
           displayPopularSearches();
           renderRecentProductSearches();
           updateBrowseSectionsVisibility();
-          compareButtonContainer.style.display = 'none';
+          updateUrlWithSearchQuery('', { push });
           if (clearSearch) clearSearch.style.display = 'none';
         } else {
           search(query);
           if (clearSearch) clearSearch.style.display = 'inline';
+          if (immediate) commitSearch(query, { push });
+          else scheduleProductSearch(query);
         }
       }
 
@@ -4028,44 +4580,68 @@
         renderCategories();
         renderRecentProductSearches();
 
+        // כניסה מקישור (?query=...&pid=...): התוצאות נטענות מיד, בלי אנימציית הקלדה,
+        // וההצעות של pid נטענות במקביל לחיפוש. search=true מקישורים ישנים כבר לא נדרש
         const queryParam = getUrlParameter('query');
-        const searchParam = getUrlParameter('search');
+        pendingPid = getUrlParameter('pid') || null;
 
         if (queryParam) {
-          searchInput.value = '';
-          animateTyping(queryParam, () => {
-            if (searchParam === 'true') {
-              performPriceComparison(queryParam);
-            }
-          });
+          searchInput.value = queryParam;
+          handleSearchInput({ immediate: true });
         } else {
           displayPopularSearches();
         }
+        if (pendingPid) openOffersPanelById(pendingPid, { push: false, focus: false });
 
-        searchInput.addEventListener('input', handleSearchInput);
+        searchInput.addEventListener('input', () => {
+          pendingPid = null;
+          handleSearchInput();
+        });
+
+        searchForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          pendingPid = null;
+          handleSearchInput({ immediate: true, push: true });
+          safeGtag('search_submit', { query: searchInput.value.trim() });
+          if (isMobileViewport()) searchInput.blur();
+        });
 
         if (clearSearch) {
           clearSearch.addEventListener('click', function () {
             searchInput.value = '';
-            handleSearchInput();
-            this.style.display = 'none';
+            handleSearchInput({ push: true });
+            searchInput.focus();
           });
         }
 
-        compareButton.addEventListener('click', () => performPriceComparison(currentSearchQuery));
+        productList.addEventListener('click', onProductListClick);
+        // prefetch: ההצעות נטענות כבר כשמרחפים/נוגעים במוצר, כך שהפאנל נפתח מהר יותר
+        ['pointerenter', 'focusin', 'touchstart'].forEach(ev =>
+          productList.addEventListener(ev, prefetchFromEvent, { capture: true, passive: true }));
+        offersScrim.addEventListener('click', () => closeOffersPanel());
+        document.addEventListener('keydown', onSearchKeydown);
+        window.addEventListener('popstate', onPopState);
 
         sortSelect.addEventListener('change', function () {
-          const sortedResults = [...currentResults].sort((a, b) => {
+          if (this.value === 'default') {
+            renderProductGrids(originalMainMatches, accessoryMatches);
+            return;
+          }
+          const sortedResults = [...originalMainMatches].sort((a, b) => {
             const priceA = parsePriceNumber(a.price);
             const priceB = parsePriceNumber(b.price);
             return this.value === 'price-asc' ? priceA - priceB : priceB - priceA;
           });
-          displayComparisonResults(sortedResults);
+          renderProductGrids(sortedResults, accessoryMatches);
         });
       }
 
       // אתחול העמוד
       initializePageFromUrl();
+
+      // קישור משותף עם pid: מתחילים לטעון את ההצעות כבר עכשיו, במקביל לטעינת האתרים
+      const initialPid = getUrlParameter('pid');
+      if (initialPid && !hasFlightParams()) fetchOffers({ LinkParams: { value: initialPid } }).catch(() => { });
 
       // טעינת נתוני אתרים
       fetch("https://o0rmue7xt0.execute-api.il-central-1.amazonaws.com/dev/sites")
