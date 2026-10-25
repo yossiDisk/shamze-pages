@@ -1388,6 +1388,9 @@
     .offer-row .go { background: var(--primary-green); color: #fff; border-radius: 10px; padding: 8px 12px; font-size: 14px; font-weight: 700; white-space: nowrap; flex: none; }
     .offer-tag { display: inline-block; background: #fef3c7; color: #92400e; border-radius: 6px; font-size: 11px; padding: 2px 6px; margin-inline-start: 6px; font-weight: 700; }
     .panel-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .btn-secondary.is-done { background: var(--light-green); color: var(--primary-green); }
+    .share-fallback { margin-top: 10px; font-size: 13px; color: #64748b; }
+    .share-fallback input { display: block; width: 100%; margin-top: 4px; padding: 10px; font-size: 14px; border: 1px solid #cbd5e1; border-radius: 10px; background: #f8fafc; color: #1f2937; }
     @media (max-width: 480px) { .offer-row { flex-wrap: wrap; } .offer-row img { display: none; } }
 
     @media (prefers-reduced-motion: reduce) {
@@ -4245,6 +4248,10 @@
           <div class="panel-actions">
             <button type="button" class="btn-secondary" id="offersShare">🔗 שיתוף</button>
             <button type="button" class="btn-secondary" id="offersBack">→ חזרה לתוצאות</button>
+          </div>
+          <div id="shareFallback" class="share-fallback" hidden>
+            <label for="shareFallbackInput">לא הצלחנו להעתיק אוטומטית. העתיקו את הקישור:</label>
+            <input type="text" id="shareFallbackInput" readonly dir="ltr">
           </div>`;
 
         body.querySelectorAll('.offer-row').forEach(link => {
@@ -4258,13 +4265,43 @@
           });
         });
 
-        document.getElementById('offersShare').addEventListener('click', async () => {
+        // שיתוף: חלון השיתוף של המכשיר, ואם אין - העתקה ללוח עם משוב על הכפתור עצמו.
+        // אם גם ההעתקה נכשלת - מציגים את הקישור בשדה מסומן להעתקה ידנית
+        const shareBtn = document.getElementById('offersShare');
+        let shareResetTimer = null;
+        shareBtn.addEventListener('click', async () => {
           const url = window.location.href;
           safeGtag('offers_share', { product_id: id });
+
+          if (navigator.share) {
+            try {
+              await navigator.share({ title: product.name, text: `${product.name} ב-${formatIls(min)}`, url });
+              return;
+            } catch (e) {
+              if (e && e.name === 'AbortError') return;   // המשתמש סגר את חלון השיתוף
+            }
+          }
+
           try {
-            if (navigator.share) await navigator.share({ title: product.name, text: `${product.name} ב-${formatIls(min)}`, url });
-            else { await navigator.clipboard.writeText(url); setProductStatus('הקישור הועתק'); }
-          } catch (e) { }
+            if (!navigator.clipboard || !navigator.clipboard.writeText) throw new Error('no clipboard');
+            await navigator.clipboard.writeText(url);
+            document.getElementById('shareFallback').hidden = true;
+            shareBtn.textContent = '✓ הקישור הועתק';
+            shareBtn.classList.add('is-done');
+            clearTimeout(shareResetTimer);
+            shareResetTimer = setTimeout(() => {
+              shareBtn.textContent = '🔗 שיתוף';
+              shareBtn.classList.remove('is-done');
+            }, 1500);
+          } catch (e) {
+            safeGtag('offers_share_copy_failed', { product_id: id });
+            const fallback = document.getElementById('shareFallback');
+            const input = document.getElementById('shareFallbackInput');
+            input.value = url;
+            fallback.hidden = false;
+            input.focus();
+            input.select();
+          }
         });
         document.getElementById('offersBack').addEventListener('click', () => closeOffersPanel());
 
