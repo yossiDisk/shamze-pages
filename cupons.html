@@ -469,6 +469,10 @@
     .suggest-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 2px; }
     .suggest-chips::-webkit-scrollbar { display: none; }
     .suggest-chips .chip { flex: none; white-space: nowrap; min-height: 40px; }
+    .suggest-chips .recent-chip { padding: 0 0 0 4px; gap: 0; cursor: default; }
+    .recent-chip .chip-text { background: none; border: 0; font: inherit; color: inherit; cursor: pointer; padding: 8px 12px 8px 4px; }
+    .recent-chip .chip-del { background: none; border: 0; color: #94a3b8; cursor: pointer; width: 32px; height: 32px; border-radius: 9999px; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; }
+    .recent-chip .chip-del:hover { background: #f1f5f9; color: #475569; }
 
     /* ===== קידום חשמל: שורה אחת ===== */
     .elec-promo {
@@ -3442,19 +3446,48 @@
         chips.innerHTML = '';
 
         list.forEach(q => {
-          const chip = document.createElement('button');
-          chip.type = 'button';
-          chip.className = 'chip';
-          chip.textContent = q;
-          chip.addEventListener('click', () => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.textContent = q;
+          btn.addEventListener('click', () => {
             searchInput.value = q;
             handleSearchInput({ immediate: true, push: true });
             safeGtag(isRecent ? 'recent_search_click' : 'popular_search', { query: q });
           });
+
+          if (!isRecent) {
+            btn.className = 'chip';
+            chips.appendChild(btn);
+            return;
+          }
+
+          // חיפוש אחרון: צ'יפ עם ✕ למחיקה. כשנמחק האחרון חוזרים לחיפושים הפופולריים
+          const chip = document.createElement('span');
+          chip.className = 'chip recent-chip';
+          btn.className = 'chip-text';
+          const del = document.createElement('button');
+          del.type = 'button';
+          del.className = 'chip-del';
+          del.textContent = '✕';
+          del.setAttribute('aria-label', `מחיקת "${q}" מהחיפושים האחרונים`);
+          del.addEventListener('click', () => {
+            removeRecentProductSearch(q);
+            renderSuggestions();
+            safeGtag('recent_search_delete', { query: q });
+          });
+          chip.appendChild(btn);
+          chip.appendChild(del);
           chips.appendChild(chip);
         });
 
         updateBrowseSectionsVisibility();
+      }
+
+      function removeRecentProductSearch(query) {
+        try {
+          const list = JSON.parse(localStorage.getItem(RECENT_PRODUCT_KEY) || '[]');
+          localStorage.setItem(RECENT_PRODUCT_KEY, JSON.stringify(list.filter(item => item !== query)));
+        } catch (e) { }
       }
 
       // --- קטגוריות קופונים ---
