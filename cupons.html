@@ -484,7 +484,8 @@
       color: #fff;
       border-radius: var(--card-radius);
       padding: 18px 22px;
-      margin-bottom: 24px;
+      max-width: 720px;
+      margin: 0 auto 24px;
       cursor: pointer;
       box-shadow: 0 12px 28px -14px rgba(5, 150, 105, 0.7);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -1459,12 +1460,6 @@
 
       <!-- תוכן טאב מוצרים -->
       <div id="products-tab" class="tab-content active">
-        <!-- כותרת, באנר החשמל, ואז שדה החיפוש ושורת הצעות אחת (חיפושים אחרונים, ואם אין - פופולריים) -->
-        <div class="search-hero search-hero-head">
-          <h2 class="search-hero-title">מה מחפשים היום?</h2>
-          <p class="search-hero-sub">משווים מחירים בכל החנויות ומוצאים קופונים</p>
-        </div>
-
         <!-- חלונית קידום: השוואה בחשמל (מוסתרת בזמן חיפוש) -->
         <div id="elecPromo" class="elec-promo" role="button" tabindex="0" aria-label="מעבר לטאב השוואה בחשמל">
           <button id="elecPromoClose" class="elec-promo-close" type="button" aria-label="סגירת החלונית">✕</button>
@@ -1474,6 +1469,12 @@
             <div class="elec-promo-desc">בדיקה חינמית לפי הצריכה שלכם — מוצאים את הספק הזול ביותר וחוסכים בממוצע ₪457 בשנה. לחצו כאן ›</div>
           </div>
           <span class="elec-promo-arrow">›</span>
+        </div>
+
+        <!-- כותרת, ואז שדה החיפוש ושורת הצעות אחת (חיפושים אחרונים, ואם אין - פופולריים) -->
+        <div class="search-hero search-hero-head">
+          <h2 class="search-hero-title">מה מחפשים היום?</h2>
+          <p class="search-hero-sub">משווים מחירים בכל החנויות ומוצאים קופונים</p>
         </div>
 
         <div class="search-hero">
@@ -1502,7 +1503,7 @@
 
         <div id="resultsContainer" class="button-container"></div>
 
-        <!-- השוואת מחירים: רצה אוטומטית אחרי הקלדה (500ms) או Enter, וההצעות נפתחות בפאנל באותו עמוד -->
+        <!-- השוואת מחירים: רצה אוטומטית אחרי הקלדה (800ms, אם אין אתר תואם) או Enter, וההצעות נפתחות בפאנל באותו עמוד -->
         <section id="productSection" class="product-section" aria-label="השוואת מחירים" style="display: none;">
           <div class="product-section-head">
             <div id="productStatus" class="product-status" role="status" aria-live="polite"></div>
@@ -3754,13 +3755,14 @@
       }
 
       // --- השוואת מחירים למוצרים ---
-      // החיפוש רץ מעצמו 500ms אחרי ההקלדה (או מיד ב-Enter). קריאה קודמת מבוטלת
+      // החיפוש רץ מעצמו 800ms אחרי ההקלדה (או מיד ב-Enter), רק אם אין אתר עם קופון
+      // שהשם שלו תואם לשאילתה. קריאה קודמת מבוטלת
       // (AbortController) ותוצאות נשמרות במטמון לפי שאילתה.
       // לחיצה על מוצר פותחת את כל המחירים בפאנל באותו עמוד, במקום לשונית חדשה
       // אל redirectPages/urlNotFound.html (שנשאר בשביל התוסף וקישורים ישנים)
       const PRODUCT_SEARCH_API = 'https://kufu51g8uk.execute-api.il-central-1.amazonaws.com/stag/search';
       const OFFERS_API = 'https://vpfi5d6dw9.execute-api.il-central-1.amazonaws.com/default/getDirectShoppingLink';
-      const PRODUCT_SEARCH_DELAY = 500;
+      const PRODUCT_SEARCH_DELAY = 800;
       const PRODUCT_POPULAR = ['Dyson V15', 'iPhone 17 Pro', 'AirPods Pro', 'PlayStation 5', 'מכונת קפה'];
 
       const productSearchCache = new Map();
@@ -3793,14 +3795,16 @@
         try { return new URL(product.urlAff).searchParams.get('product_id') || ''; } catch (e) { return ''; }
       }
 
-      // שאילתה שהיא בדיוק שם של אתר עם קופון (למשל "המשביר") - לא מחפשים מוצרים
-      function isExactSiteName(query) {
+      // יש אתר עם קופון שהשם שלו מכיל את השאילתה ("המש" -> המשביר) - מציגים את
+      // הקופון ולא שולפים מוצרים (הקריאה לשרת יקרה). התאמה רק לפי שם האתר ולא לפי
+      // פרטי ההטבה, אחרת מילה כמו "אוזניות" בתיאור קופון הייתה חוסמת חיפוש מוצרים
+      function hasSiteNameMatch(query) {
         const q = normalizeSiteName(query);
-        return allSites.some(site => site && hasCouponInfo(site) && normalizeSiteName(site.siteName) === q);
+        return allSites.some(site => site && hasCouponInfo(site) && normalizeSiteName(site.siteName).includes(q));
       }
 
       function shouldSearchProducts(query) {
-        return query.length >= 2 && !query.toLowerCase().startsWith('http') && !isExactSiteName(query);
+        return query.length >= 2 && !query.toLowerCase().startsWith('http') && !hasSiteNameMatch(query);
       }
 
       function scheduleProductSearch(query) {
@@ -4463,7 +4467,7 @@
       }
 
       // immediate: Enter / לחיצה על צ'יפ / כניסה מקישור. אחרת חיפוש המוצרים
-      // מחכה 500ms מההקשה האחרונה
+      // מחכה 800ms מההקשה האחרונה
       function handleSearchInput({ immediate = false, push = false } = {}) {
         const query = searchInput.value.trim();
         if (query === '') {
@@ -4479,6 +4483,8 @@
         } else {
           search(query);
           if (clearSearch) clearSearch.style.display = 'inline';
+          // יש תוצאת אתר - מסתירים מיד תוצאות מוצרים קודמות במקום להמתין להשהיה
+          if (!shouldSearchProducts(query)) resetProductSearch();
           if (immediate) commitSearch(query, { push });
           else scheduleProductSearch(query);
         }
