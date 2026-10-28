@@ -484,7 +484,6 @@
       background: linear-gradient(135deg, #047857 0%, #059669 55%, #10b981 100%);
       color: #fff;
       border-radius: var(--card-radius);
-      padding: 18px 22px;
       max-width: 720px;
       margin: 0 auto 24px;
       cursor: pointer;
@@ -494,10 +493,27 @@
     }
 
     .elec-promo:hover { transform: translateY(-2px); box-shadow: 0 18px 34px -16px rgba(5, 150, 105, 0.8); }
+    .elec-promo-main {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+      width: 100%;
+      padding: 18px 22px;
+      margin: 0;
+      background: none;
+      border: none;
+      border-radius: inherit;
+      font: inherit;
+      color: inherit;
+      text-align: start;
+      cursor: pointer;
+    }
+    .elec-promo-main:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
     .elec-promo-icon { flex-shrink: 0; font-size: 34px; line-height: 1; }
     .elec-promo-text { flex: 1; padding-left: 24px; }
-    .elec-promo-title { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
-    .elec-promo-desc { font-size: 14px; opacity: 0.92; }
+    .elec-promo-title { display: block; font-size: 18px; font-weight: 800; margin-bottom: 2px; }
+    .elec-promo-desc { display: block; font-size: 14px; opacity: 0.92; }
     .elec-promo-arrow { flex-shrink: 0; font-size: 22px; font-weight: 800; }
 
     .elec-promo-close {
@@ -522,7 +538,7 @@
     .elec-promo-close:hover { background: rgba(255, 255, 255, 0.35); }
 
     @media (max-width: 768px) {
-      .elec-promo { padding: 16px 18px; gap: 12px; }
+      .elec-promo-main { padding: 16px 18px; gap: 12px; }
       .elec-promo-icon { font-size: 28px; }
       .elec-promo-title { font-size: 16px; }
       .elec-promo-desc { font-size: 13px; }
@@ -1465,14 +1481,16 @@
       <!-- תוכן טאב מוצרים -->
       <div id="products-tab" class="tab-content active">
         <!-- חלונית קידום: השוואה בחשמל (מוסתרת בזמן חיפוש) -->
-        <div id="elecPromo" class="elec-promo" role="button" tabindex="0" aria-label="מעבר לטאב השוואה בחשמל">
+        <div id="elecPromo" class="elec-promo">
+          <button id="elecPromoOpen" type="button" class="elec-promo-main">
+            <span class="elec-promo-icon" aria-hidden="true">⚡</span>
+            <span class="elec-promo-text">
+              <span class="elec-promo-title">השוו וחסכו בחשבון החשמל בקלות!</span>
+              <span class="elec-promo-desc">בדיקה חינמית לפי הצריכה שלכם — מוצאים את הספק הזול ביותר וחוסכים בממוצע ₪457 בשנה. לחצו כאן ›</span>
+            </span>
+            <span class="elec-promo-arrow" aria-hidden="true">›</span>
+          </button>
           <button id="elecPromoClose" class="elec-promo-close" type="button" aria-label="סגירת החלונית">✕</button>
-          <span class="elec-promo-icon">⚡</span>
-          <div class="elec-promo-text">
-            <div class="elec-promo-title">השוו וחסכו בחשבון החשמל בקלות!</div>
-            <div class="elec-promo-desc">בדיקה חינמית לפי הצריכה שלכם — מוצאים את הספק הזול ביותר וחוסכים בממוצע ₪457 בשנה. לחצו כאן ›</div>
-          </div>
-          <span class="elec-promo-arrow">›</span>
         </div>
 
         <!-- כותרת, ואז שדה החיפוש ושורת הצעות אחת (חיפושים אחרונים, ואם אין - פופולריים) -->
@@ -2488,6 +2506,7 @@
 
       // חלונית קידום חשמל
       const elecPromo = document.getElementById('elecPromo');
+      const elecPromoOpen = document.getElementById('elecPromoOpen');
       const elecPromoClose = document.getElementById('elecPromoClose');
       if (elecPromo) {
         const goToElectricity = () => {
@@ -2495,16 +2514,10 @@
           updateUrlForTab('electricity');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         };
-        elecPromo.addEventListener('click', goToElectricity);
-        elecPromo.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            goToElectricity();
-          }
-        });
-        elecPromoClose.addEventListener('click', (e) => {
-          e.stopPropagation();
+        elecPromoOpen.addEventListener('click', goToElectricity);
+        elecPromoClose.addEventListener('click', () => {
           elecPromo.style.display = 'none';
+          searchInput.focus();
         });
       }
 
