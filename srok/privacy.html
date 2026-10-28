@@ -109,6 +109,10 @@
       margin-top: 2rem;
     }
 
+    @media (prefers-color-scheme: light) {
+      .updated-at a { color: #2471a3; }
+    }
+
     .error-box {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -127,7 +131,10 @@
       <div class="subtitle">SROK</div>
     </header>
     <main id="content"></main>
-    <div class="updated-at" id="updatedAt"></div>
+    <footer>
+      <div class="updated-at" id="updatedAt"></div>
+      <p class="updated-at" style="margin-top: 0.5rem;"><a href="https://shamze.com/accessibility.html">הצהרת נגישות</a></p>
+    </footer>
   </div>
 
   <script>
