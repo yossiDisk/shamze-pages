@@ -47,6 +47,19 @@
             height: 100%;
         }
     </style>
+    <style>
+    /* פוטר: רשימת קישורים - 2x2 במובייל, שורה אחת עם מפרידים מ-640px */
+    .footer-links { list-style: none; margin: 0 auto; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; max-width: 20rem; }
+    .footer-links li { display: flex; align-items: center; justify-content: center; }
+    .footer-links a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 0.75rem; color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: rgba(255, 255, 255, 0.7); }
+    .footer-links a:hover, .footer-links a:focus-visible { text-decoration-thickness: 2px; text-decoration-color: #fff; }
+    .footer-links a:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+    .footer-sep { display: none; }
+    @media (min-width: 640px) {
+      .footer-links { display: flex; flex-wrap: wrap; justify-content: center; max-width: none; gap: 0; }
+      .footer-sep { display: inline; padding: 0 0.25rem; }
+    }
+    </style>
 </head>
 <body class="bg-gray-100">
     <!-- SROK banner: iPhone / iPad only -->
@@ -58,7 +71,7 @@
                     <p class="text-sm mt-1">SROK – אותו חיסכון, בתוך Safari. משווה מחירים וקופונים אוטומטית.</p>
                 </div>
                 <a id="srok-banner-cta" href="https://apps.apple.com/app/id6747339283"
-                   class="bg-green-600 text-white px-4 py-2 rounded-full font-bold hover:bg-green-700 transition duration-300 text-center self-start sm:self-auto whitespace-nowrap">
+                   class="bg-green-700 text-white px-4 py-2 rounded-full font-bold hover:bg-green-800 transition duration-300 text-center self-start sm:self-auto whitespace-nowrap">
                     להורדה חינם ב-App Store
                 </a>
             </div>
@@ -77,7 +90,7 @@
             }
         })();
     </script>
-    <header class="bg-green-600 text-white p-4 sticky top-0 z-50">
+    <header class="bg-green-700 text-white p-4 sticky top-0 z-50">
         <div class="container mx-auto flex flex-wrap justify-between items-center">
             <div class="flex items-center w-full sm:w-auto justify-between">
                 <div class="flex items-center">
@@ -89,19 +102,19 @@
                 </button>
             </div>
             <nav id="nav-menu" class="hidden sm:flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 sm:space-x-reverse w-full sm:w-auto mt-4 sm:mt-0">
-                <a href="#features" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto text-center">יתרונות</a>
-                <a href="#how-it-works" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto text-center">איך זה עובד</a>
-                <a href="#media" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto text-center">מדיה</a>
-                <a href="#testimonials" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto text-center">המלצות</a>
-                <a href="#community" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto text-center">קהילה</a>
-                <a href="#stores" class="hover:bg-green-700 px-2 py-1 w-full sm:w-auto text-center">חנויות נתמכות</a>
+                <a href="#features" class="hover:bg-green-800 px-2 py-1 w-full sm:w-auto text-center">יתרונות</a>
+                <a href="#how-it-works" class="hover:bg-green-800 px-2 py-1 w-full sm:w-auto text-center">איך זה עובד</a>
+                <a href="#media" class="hover:bg-green-800 px-2 py-1 w-full sm:w-auto text-center">מדיה</a>
+                <a href="#testimonials" class="hover:bg-green-800 px-2 py-1 w-full sm:w-auto text-center">המלצות</a>
+                <a href="#community" class="hover:bg-green-800 px-2 py-1 w-full sm:w-auto text-center">קהילה</a>
+                <a href="#stores" class="hover:bg-green-800 px-2 py-1 w-full sm:w-auto text-center">חנויות נתמכות</a>
                 <div class="flex flex-col sm:flex-row w-full sm:w-auto mt-4 sm:mt-0 space-y-2 sm:space-y-0 sm:space-x-2 sm:space-x-reverse">
                     <a href="https://yossidisk.github.io/Shamze/cupons.html" 
-                       class="bg-yellow-400 text-green-600 px-4 py-2 rounded-full font-bold hover:bg-yellow-300 transition duration-300 text-center">
+                       class="bg-yellow-400 text-green-900 px-4 py-2 rounded-full font-bold hover:bg-yellow-300 transition duration-300 text-center">
                         מצא הנחה
                     </a>
                     <a href="https://chromewebstore.google.com/detail/%D7%A9%D7%9D-%D7%96%D7%94-%D7%96%D7%95%D7%9C-%D7%99%D7%95%D7%AA%D7%A8/neigoggljhfnodeneidndcflnclldnpm?hl=iw" 
-                       class="bg-white text-green-600 px-4 py-2 rounded-full font-bold hover:bg-green-100 transition duration-300 text-center">
+                       class="bg-white text-green-700 px-4 py-2 rounded-full font-bold hover:bg-green-100 transition duration-300 text-center">
                         התקן עכשיו
                     </a>
                 </div>
@@ -137,7 +150,7 @@
             <h2 class="text-4xl font-bold mb-4">חסכו מאות שקלים בכל קנייה אונליין</h2>
             <p class="text-xl mb-8">התוסף שלנו מציג לכם קופונים והשוואות מחירים בזמן אמת</p>
             <a href="https://chromewebstore.google.com/detail/%D7%A9%D7%9D-%D7%96%D7%94-%D7%96%D7%95%D7%9C-%D7%99%D7%95%D7%AA%D7%A8/neigoggljhfnodeneidndcflnclldnpm?hl=iw" 
-               class="bg-green-500 text-white px-6 py-3 rounded-full text-xl font-bold hover:bg-green-600 transition duration-300 inline-block mb-4"
+               class="track-cta bg-green-700 text-white px-6 py-3 rounded-full text-xl font-bold hover:bg-green-800 transition duration-300 inline-block mb-4"
                onclick="trackEvent('Download Extension')">
                 התקן את התוסף בחינם
             </a>
@@ -198,12 +211,12 @@
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-bold mb-4">TheMarker</h3>
                     <p>"שם זה זול יותר": התוסף לדפדפן שיחסוך לכם מאות שקלים בקניית מתנות לחג</p>
-                    <a href="https://www.themarker.com/captain-internet/2023-09-20/ty-article/.premium/0000018a-b2c7-d13d-a98f-fbf79e340000" class="text-green-600 hover:underline mt-2 inline-block" target="_blank">קרא עוד</a>
+                    <a href="https://www.themarker.com/captain-internet/2023-09-20/ty-article/.premium/0000018a-b2c7-d13d-a98f-fbf79e340000" class="text-green-700 hover:underline mt-2 inline-block" target="_blank">קרא עוד</a>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-bold mb-4">Geektime</h3>
                     <p>מ-KSP ועד סופרפארם: תוסף ישראלי חדש יעזור לכם לחסוך כסף בקנייה הבאה</p>
-                    <a href="https://www.geektime.co.il/new-extension-will-make-your-online-shopping-a-little-easier/" class="text-green-600 hover:underline mt-2 inline-block" target="_blank">קרא עוד</a>
+                    <a href="https://www.geektime.co.il/new-extension-will-make-your-online-shopping-a-little-easier/" class="text-green-700 hover:underline mt-2 inline-block" target="_blank">קרא עוד</a>
                 </div>
             </div>
         </section>
@@ -258,13 +271,13 @@
             <h2 class="text-3xl font-bold text-center mb-8">הצטרפו לקהילה שלנו</h2>
             <div class="flex flex-col md:flex-row justify-center items-center gap-8">
                 <a href="https://chat.whatsapp.com/HVpVlib1K1UFAt9KuXNgfo" 
-                   class="bg-green-500 text-white px-6 py-3 rounded-full text-xl font-bold hover:bg-green-600 transition duration-300"
+                   class="track-cta bg-green-700 text-white px-6 py-3 rounded-full text-xl font-bold hover:bg-green-800 transition duration-300"
                    onclick="trackEvent('Join WhatsApp Group')"
                    target="_blank">
                     הצטרפו לקבוצת הוואטסאפ
                 </a>
                 <a href="https://yossidisk.github.io/Shamze/cupons.html" 
-                   class="bg-green-500 text-white px-6 py-3 rounded-full text-xl font-bold hover:bg-green-600 transition duration-300"
+                   class="track-cta bg-green-700 text-white px-6 py-3 rounded-full text-xl font-bold hover:bg-green-800 transition duration-300"
                    onclick="trackEvent('Visit Coupons Site')"
                    target="_blank">
                     אתר הקופונים שלנו
@@ -340,15 +353,17 @@
 
     <footer class="bg-gray-800 text-white mt-16 py-8">
         <div class="container mx-auto text-center">
-            <div class="flex flex-wrap justify-center mb-4">
-                <a href="./legal/privacy.html" class="mx-2 hover:underline">מדיניות פרטיות</a>
-                <a href="./legal/terms.html" class="mx-2 hover:underline">תנאי שימוש</a>
-                <a href="accessibility.html" class="mx-2 hover:underline">הצהרת נגישות</a>
-
-                <a href="mailto:shamzezolyoter@gmail.com" class="mx-2 hover:underline">צור קשר</a>
-            </div>
-            <p>&copy; 2024 שם זה זול יותר - כל הזכויות שמורות</p>
+            <nav aria-label="קישורים בתחתית העמוד">
+              <ul class="footer-links">
+                <li><a href="./legal/privacy.html">מדיניות פרטיות</a></li>
+                <li><span class="footer-sep" aria-hidden="true">·</span><a href="./legal/terms.html">תנאי שימוש</a></li>
+                <li><span class="footer-sep" aria-hidden="true">·</span><a href="accessibility.html">הצהרת נגישות</a></li>
+                <li><span class="footer-sep" aria-hidden="true">·</span><a href="mailto:shamzezolyoter@gmail.com">צור קשר</a></li>
+              </ul>
+            </nav>
+            <p class="mt-4 text-sm">&copy; <span data-current-year>2026</span> שם זה זול יותר - כל הזכויות שמורות</p>
         </div>
+        <script>document.querySelectorAll('[data-current-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });</script>
         
     </footer>
 
@@ -458,7 +473,7 @@
         });
         
         // Button click tracking
-        document.querySelectorAll('button, .bg-green-500, .bg-yellow-400').forEach(button => {
+        document.querySelectorAll('button, .track-cta, .bg-yellow-400').forEach(button => {
             button.addEventListener('click', function() {
                 trackEvent('Button Click', { 
                     text: this.textContent.trim(),
